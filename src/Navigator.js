@@ -6,6 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack'
 import Login from './screens/Login'
 import PegarCarro from './screens/PegarCarro'
 import Relatorio from './screens/Relatorio'
+import ConcluirViagem from './screens/ConcluirViagem'
 
 const MenuRoutes = {
     Home: {
@@ -13,6 +14,13 @@ const MenuRoutes = {
         screen: PegarCarro,
         navigationOptions: {
             title: 'Tela inicial'
+        }
+    },
+    ConcluirViagem: {
+        name: 'ConcluirViagem',
+        screen: ConcluirViagem,
+        navigationOptions: {
+            title: 'Conclusão de viagem'
         }
     },
     Auth: {

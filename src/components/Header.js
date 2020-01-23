@@ -1,18 +1,31 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View, Text, StyleSheet} from 'react-native'
+import functions from '../functions'
 
 export default props => {
-    const date = new Date().getDate() 
-    const month = new Date().getMonth() + 1
-    const year = new Date().getFullYear()
-    const hours = new Date().getHours()
-    const min = new Date().getMinutes()
-
-    const data = date + '/' + month + '/' + year + ' ' + hours + 'h' + min
+    
     return (
-        <View>
-            <Text>Bem vindo, {props.username}</Text>
-            <Text>{data}</Text>
+        <View style={styles.container}>
+            <View style={styles.rowContainer}>
+                <Text style={styles.user}>Bem vindo, {props.username}</Text>
+                <Text>{functions.getDateString()}</Text>
+            </View>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    rowContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    user: {
+        fontSize: 14
+    }
+})

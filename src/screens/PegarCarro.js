@@ -1,52 +1,69 @@
 import React from 'react'
-import { View, Text, Button } from 'react-native'
-import VeiculosSelect from '../components/VeiculosSelect'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+
 import Header from '../components/Header'
+import DisposicaoVeiculos from '../components/DisposicaoVeiculos'
+import VeiculoAtual from '../components/VeiculoAtual'
+import comumStyles from '../styles'
+import FormSelectVeiculo from '../components/FormSelectVeiculo'
+
+import functions from '../functions'
 
 export default class PegarCarro extends React.Component {
 
     state = {
-        temCarro: false
+        temCarro: true,
+        dataSaida: functions.getDateString()
+    }
+
+    entregarCarro = () => {
+        this.props.navigation.navigate('ConcluirViagem')
+        this.setState({temCarro: false})
+    }
+
+    pegarCarro = () => {
+        this.setState({
+            temCarro: true,
+            dataSaida: functions.getDateString()
+        })
     }
 
     render () {
-
-        const disposicaoVeiculos = 
-            <View>
-                <Text>Disposição atual</Text>
-                <Text>Deusinho - Ranger</Text>
-                <Text>Romário - Spin</Text>
-                <Text>Zezin - Van</Text>
-            </View>
-
-        const formVeiculo = 
-            <View>
-                <Text>Veículos disponíveis:</Text>
-                <Text>Ao escolher um veículo será registrado o momento da saída</Text>
-                <VeiculosSelect />
-                <Button 
-                    title='Pegar' />
-                {disposicaoVeiculos}
-            </View>
-
-        const listVeiculos = 
-            <View>
-                <Text>NÃO ULTRAPASSE EM LUGAR INDEVIDO</Text>
-                <Text>Veiculo com você: </Text>
-                <Text>     - Gol 01 - Saída às 20/01/2020 06h00</Text>
-                <Button title='Entregar' />
-                <Text>Ao entregar o veículo você deverá informar a quilometragem atual</Text>
-                {disposicaoVeiculos}
-            </View>
-
-        const veiculos = (this.state.temCarro) ? listVeiculos : formVeiculo
+        const veiculos = (this.state.temCarro) ? 
+            <VeiculoAtual concluirViagem={() => this.entregarCarro()} dataSaida={this.state.dataSaida}/> : 
+            <FormSelectVeiculo iniciarViagem={() => this.pegarCarro()} />
 
         return (
-            <View>
+            <View style={styles.container}>
                 <Header username='Suzélio' />
 
-                {veiculos}                
+                <Text style={styles.textAlert}>NÃO ULTRAPASSE EM LUGAR INDEVIDO</Text>
+
+                {veiculos}
+
+                <DisposicaoVeiculos />
+
+                <TouchableOpacity style={comumStyles.btn}
+                    onPress={() => this.props.navigation.navigate('Viagens')} >
+                    <Text style={comumStyles.btnText}>Pesquisar</Text>
+                </TouchableOpacity>
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 5
+    },
+    textAlert: {
+        color: '#fff',
+        backgroundColor: '#f00',
+        padding: 5,
+        margin: 2,
+        borderRadius: 5,
+        textAlign: 'center',
+        fontWeight: "bold"
+    }
+})
