@@ -1,6 +1,5 @@
 import React from 'react'
-import { createAppContainer,
-        createSwitchNavigator } from 'react-navigation'
+import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
 import Login from './screens/Login'
@@ -42,4 +41,4 @@ const MenuConfig = {
 const MenuNavigator = createStackNavigator(MenuRoutes, MenuConfig)
 
 
-export default MenuNavigator
+export default createAppContainer(MenuNavigator)

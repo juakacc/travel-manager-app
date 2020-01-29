@@ -1,5 +1,6 @@
 import React from 'react'
 import {View, Text, StyleSheet} from 'react-native'
+import functions from '../functions'
 
 export default class DisposicaoVeiculos extends React.Component {
 
@@ -16,7 +17,7 @@ export default class DisposicaoVeiculos extends React.Component {
             method: 'GET'
         }
 
-        fetch('http://192.168.31.20:8080/viagens/nao-concluidas', options)
+        fetch(functions.getAddress() + 'viagens/nao-concluidas', options)
             .then(res => res.json())
             .then(res => {
                 this.setState({

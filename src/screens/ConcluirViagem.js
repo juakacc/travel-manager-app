@@ -1,17 +1,53 @@
 import React from 'react'
-import {Text, View} from 'react-native'
+import {Text, View, StyleSheet, Alert} from 'react-native'
 import {Input} from 'react-native-elements'
-import { StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native'
 
-import comumStyles from '../styles' 
-import { Alert } from 'react-native'
+import Botao from '../components/Botao'
+import functions from '../functions'
+import moment from 'moment'
 
 export default class ConcluirViagem extends React.Component {
 
+    state = {
+        viagem: null,
+        descricao: '',
+        quilometragem: 0
+    }
+
+    componentDidMount() {
+        this.setState({ viagem: this.props.navigation.state.params.viagem })
+    }
+
     concluir = () => {
-        Alert.alert('concluindo viagem...')
-        this.props.navigation.navigate('Home')
+        const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm')
+
+        fetch(functions.getAddress() + 'viagens/concluir/' + this.state.viagem.id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "viagem": {
+                    "saida": this.state.viagem.saida,
+                    "chegada": dataAtual,
+                    "descricao": this.state.descricao,
+                    "veiculo": {
+                        "id": this.state.viagem.veiculo.id
+                    },
+                    "motorista": {
+                        "id": this.state.viagem.motorista.id
+                    }
+                },
+                "quilometragem": this.state.quilometragem
+            })
+        })
+        .then(res => res.text())
+        .then(res => {
+            console.log(res)
+            Alert.alert('Viagem concluída com sucesso')
+            // this.props.navigation.navigate('Home')
+        })
+        .catch(err => Alert.alert(err.message))
     }
 
     render() {
@@ -23,18 +59,16 @@ export default class ConcluirViagem extends React.Component {
                     label='Quilometragem'
                     placeholder='KM atual'
                     errorStyle={{ color: 'red' }}
-                    errorMessage='Teste de validação'
-                    />
+                    errorMessage='Teste de validação' 
+                    onChangeText={a => this.setState({ quilometragem: a })} />
                 
                 <Input 
                     label='Comentário'
-                    placeholder='Comentário sobre a viagem (opcional)'
-                />
+                    placeholder='Comentário sobre a viagem (opcional)' 
+                    onChangeText={a => this.setState({ descricao: a })}/>
 
-                <TouchableOpacity style={comumStyles.btn}
-                    onPress={() => this.concluir()}>
-                    <Text style={comumStyles.btnText}>Concluir Viagem</Text>
-                </TouchableOpacity>
+                <Botao onPress={() => this.concluir()}
+                    title='Concluir Viagem' />
             </View>
         )
     }

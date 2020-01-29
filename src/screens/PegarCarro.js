@@ -1,41 +1,103 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 
 import Header from '../components/Header'
 import DisposicaoVeiculos from '../components/DisposicaoVeiculos'
 import VeiculoAtual from '../components/VeiculoAtual'
-import comumStyles from '../styles'
 import FormSelectVeiculo from '../components/FormSelectVeiculo'
 
 import functions from '../functions'
+import moment from 'moment'
+import Botao from '../components/Botao'
 
 export default class PegarCarro extends React.Component {
+    _isMounted = false
 
     state = {
-        temCarro: true,
+        motorista: {
+            id: null,
+            nome: '',
+            apelido: ''
+        },
+        viagem: null,
         dataSaida: functions.getDateString()
     }
 
-    entregarCarro = () => {
-        this.props.navigation.navigate('ConcluirViagem')
-        this.setState({temCarro: false})
+    componentDidMount() {
+        this._isMounted = true
+
+        fetch(functions.getAddress() + 'motoristas/' + 2, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (this._isMounted) {
+                this.setState({ motorista: res })
+                this.getViagem()
+            }
+        })
+        .catch(err => console.log('caiu no getMotorista: ' + err.message))
     }
 
-    pegarCarro = () => {
+    componentWillUnmount() {
+        this._isMounted = false
+    }
+
+    entregarCarro = () => {
+        this.props.navigation.navigate('ConcluirViagem', { viagem: this.state.viagem })
+    }
+
+    pegarVeiculo = veiculoId => {
         this.setState({
-            temCarro: true,
             dataSaida: functions.getDateString()
+        })
+
+        const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm')
+
+        fetch(functions.getAddress() + 'viagens', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "saida": dataAtual,
+                "veiculo": {
+                    "id": veiculoId
+                },
+                "motorista": {
+                    "id": this.state.motorista.id
+                }
+            })
+        })
+        .then(res => res.json())
+        .then(res => {
+            this.setState({ viagem: res })
+        })
+        .catch(error => console.log(error.message))
+    }
+
+    getViagem = () => {
+        fetch(functions.getAddress() + 'viagens/nao-concluidas/' + this.state.motorista.id, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(res => {
+            this.setState({ viagem: res })
+        })
+        .catch(err => {
+            console.log(err.message)
+            this.setState({ viagem: null })
         })
     }
 
     render () {
-        const veiculos = (this.state.temCarro) ? 
-            <VeiculoAtual concluirViagem={() => this.entregarCarro()} dataSaida={this.state.dataSaida}/> : 
-            <FormSelectVeiculo iniciarViagem={() => this.pegarCarro()} />
+        const veiculos = (this.state.viagem != null) ? 
+            <VeiculoAtual concluirViagem={() => this.entregarCarro()} viagem={this.state.viagem}/> : 
+            <FormSelectVeiculo iniciarViagem={veiculoId => this.pegarVeiculo(veiculoId)} />
 
         return (
             <View style={styles.container}>
-                <Header username='Suzélio' />
+                <Header username={this.state.motorista.nome} />
 
                 <Text style={styles.textAlert}>NÃO ULTRAPASSE EM LUGAR INDEVIDO</Text>
 
@@ -43,10 +105,8 @@ export default class PegarCarro extends React.Component {
 
                 <DisposicaoVeiculos />
 
-                <TouchableOpacity style={comumStyles.btn}
-                    onPress={() => this.props.navigation.navigate('Viagens')} >
-                    <Text style={comumStyles.btnText}>Pesquisar</Text>
-                </TouchableOpacity>
+                <Botao onPress={() => this.props.navigation.navigate('Viagens')}
+                    title='Pesquisar'/>
             </View>
         )
     }

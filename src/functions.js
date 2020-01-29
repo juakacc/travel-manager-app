@@ -1,14 +1,13 @@
+import moment from "moment"
+
 const functions = {
     
     getDateString: () => {
-        const date = new Date().getDate() 
-        const month = new Date().getMonth() + 1
-        const year = new Date().getFullYear()
-        const hours = new Date().getHours()
-        const min = new Date().getMinutes()
+        return moment().format('DD/MM/YYYY HH[h]mm')
+    },
 
-        const data = date + '/' + month + '/' + year + ' ' + hours + 'h' + min
-        return data
+    getAddress: () => {
+        return 'http://192.168.31.20:8080/'
     }
 }
 

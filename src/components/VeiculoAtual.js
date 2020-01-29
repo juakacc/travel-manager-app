@@ -1,19 +1,17 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import comumStyles from '../styles'
+import { View, Text, StyleSheet } from 'react-native'
+import Botao from './Botao'
 
 export default props => {
     
     return (
             <View style={styles.container}>
                 <Text style={styles.title}>Veículo que está com você: </Text>
-                <Text style={styles.veiculo}>Gol 01</Text>
-                <Text style={styles.saida}>Saída às {props.dataSaida}</Text>
+                <Text style={styles.veiculo}>{props.viagem.veiculo.nome}</Text>
+                <Text style={styles.saida}>Saída às {props.viagem.saida}</Text>
 
-                <TouchableOpacity style={comumStyles.btn}
-                    onPress={props.concluirViagem} >
-                    <Text style={comumStyles.btnText}>Entregar veículo</Text>
-                </TouchableOpacity>
+                <Botao onPress={props.concluirViagem}
+                    title='Entregar veículo'/>
                 <Text style={styles.txtInfo}>Ao entregar o veículo você deverá informar a quilometragem atual</Text>
             </View>
         )
