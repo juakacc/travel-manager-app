@@ -1,13 +1,14 @@
 import React from 'react'
 import {View, Text, StyleSheet} from 'react-native'
 import functions from '../functions'
+import { connect } from 'react-redux'
 
-export default props => {
+const header = props => {
     
     return (
         <View style={styles.container}>
             <View style={styles.rowContainer}>
-                <Text style={styles.user}>Bem vindo, {props.username}</Text>
+                <Text style={styles.user}>Bem vindo, {props.nome}</Text>
                 <Text>{functions.getDateString()}</Text>
             </View>
         </View>
@@ -29,3 +30,11 @@ const styles = StyleSheet.create({
         fontSize: 14
     }
 })
+
+const mapStateToProps = ({user}) => {
+    return {
+        nome: user.nome
+    }
+}
+
+export default connect(mapStateToProps, null)(header)

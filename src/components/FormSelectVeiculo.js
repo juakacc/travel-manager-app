@@ -17,6 +17,8 @@ export default class FormSelectVeiculo extends React.Component {
     enviarVeiculo = () => {
         console.log('form: ' + this.state.selecionado)
         this.props.iniciarViagem(this.state.selecionado)
+
+        // action iniciar viagem
     }
 
     getVeiculos = () => {
