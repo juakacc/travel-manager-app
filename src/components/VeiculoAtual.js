@@ -2,19 +2,21 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Botao from './Botao'
 
-export default props => {
-    
-    return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Veículo que está com você: </Text>
-                <Text style={styles.veiculo}>{props.viagem.veiculo.nome}</Text>
-                <Text style={styles.saida}>Saída às {props.viagem.saida}</Text>
+export default class VeiculoAtual extends React.Component {
 
-                <Botao onPress={props.concluirViagem}
-                    title='Entregar veículo'/>
-                <Text style={styles.txtInfo}>Ao entregar o veículo você deverá informar a quilometragem atual</Text>
-            </View>
-        )
+    render() {    
+        return (
+                <View style={styles.container}>
+                    <Text style={styles.title}>Veículo que está com você: </Text>
+                    <Text style={styles.veiculo}>{this.props.viagem.veiculo.nome}</Text>
+                    <Text style={styles.saida}>Saída às {this.props.viagem.saida}</Text>
+
+                    <Botao onPress={() => this.props.navigation.navigate('ConcluirViagem')}
+                        title='Entregar veículo'/>
+                    <Text style={styles.txtInfo}>Ao entregar o veículo você deverá informar a quilometragem atual</Text>
+                </View>
+            )
+    }
 }
 
 const styles = StyleSheet.create({

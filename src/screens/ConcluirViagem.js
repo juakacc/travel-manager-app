@@ -3,51 +3,60 @@ import {Text, View, StyleSheet, Alert} from 'react-native'
 import {Input} from 'react-native-elements'
 
 import Botao from '../components/Botao'
-import functions from '../functions'
 import moment from 'moment'
 
-export default class ConcluirViagem extends React.Component {
+import { connect } from 'react-redux'
+import { concluirViagem } from '../store/actions/viagem'
+
+class ConcluirViagem extends React.Component {
 
     state = {
-        viagem: null,
         descricao: '',
-        quilometragem: 0
+        quilometragem: 0,
+        errQuilometragem: ''
     }
 
-    componentDidMount() {
-        this.setState({ viagem: this.props.navigation.state.params.viagem })
+    isValid = viagem => {
+        return this.state.errQuilometragem == '' && viagem.quilometragem > 0
     }
 
     concluir = () => {
         const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm')
-
-        fetch(functions.getAddress() + 'viagens/concluir/' + this.state.viagem.id, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "viagem": {
-                    "saida": this.state.viagem.saida,
-                    "chegada": dataAtual,
-                    "descricao": this.state.descricao,
-                    "veiculo": {
-                        "id": this.state.viagem.veiculo.id
-                    },
-                    "motorista": {
-                        "id": this.state.viagem.motorista.id
-                    }
+        const viagem = {
+            'id': this.props.viagem.id,
+            "viagem": {
+                "saida": this.props.viagem.saida,
+                "chegada": dataAtual,
+                "descricao": this.state.descricao,
+                "veiculo": {
+                    "id": this.props.viagem.veiculo.id
                 },
-                "quilometragem": this.state.quilometragem
+                "motorista": {
+                    "id": this.props.motorista.id
+                }
+            },
+            "quilometragem": this.state.quilometragem
+        }
+        if (this.isValid(viagem)) {
+            this.props.onConcluirViagem(viagem)
+            this.props.navigation.navigate('Home')
+        } else {
+            Alert.alert('Preencha os dados corretamente')
+        }        
+    }
+
+    setQuilometragem = q => {
+        if(isNaN(q) || q <= 0) {
+            this.setState({ 
+                errQuilometragem: 'Insira uma quilometragem válida!',
+                quilometragem: 0
             })
-        })
-        .then(res => res.text())
-        .then(res => {
-            console.log(res)
-            Alert.alert('Viagem concluída com sucesso')
-            // this.props.navigation.navigate('Home')
-        })
-        .catch(err => Alert.alert(err.message))
+        } else {
+            this.setState({
+                errQuilometragem: '',
+                quilometragem: q
+            })
+        }
     }
 
     render() {
@@ -58,13 +67,14 @@ export default class ConcluirViagem extends React.Component {
                     keyboardType='numeric'
                     label='Quilometragem'
                     placeholder='KM atual'
-                    errorStyle={{ color: 'red' }}
-                    errorMessage='Teste de validação' 
-                    onChangeText={a => this.setState({ quilometragem: a })} />
+                    errorMessage={this.state.errQuilometragem}
+                    returnKeyType='next'
+                    onChangeText={a => this.setQuilometragem(a)} />
                 
                 <Input 
                     label='Comentário'
                     placeholder='Comentário sobre a viagem (opcional)' 
+                    returnKeyType='done'
                     onChangeText={a => this.setState({ descricao: a })}/>
 
                 <Botao onPress={() => this.concluir()}
@@ -72,8 +82,23 @@ export default class ConcluirViagem extends React.Component {
             </View>
         )
     }
-
 }
+
+const mapStateToProps = ({user, viagem}) => {
+    console.log(viagem.viagem)
+    return {
+        motorista: user,
+        viagem: viagem.viagem
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onConcluirViagem: viagem => dispatch(concluirViagem(viagem))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConcluirViagem)
 
 const styles = StyleSheet.create({
     container: {

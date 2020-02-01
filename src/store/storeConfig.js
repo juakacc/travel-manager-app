@@ -3,15 +3,16 @@ import thunk from "redux-thunk";
 
 import userReducer from './reducers/user'
 import messageReducer from './reducers/mensagem'
+import viagemReducer from './reducers/viagem'
 
 const reducers = combineReducers({
-    // onde ficarao os reducers
     user: userReducer,
+    viagem: viagemReducer,
     message: messageReducer
 })
 
 const storeConfig = () => {
-    return createStore(reducers, compose(applyMiddleware(thunk)))
+    return createStore(reducers, applyMiddleware(thunk))
 }
 
 export default storeConfig

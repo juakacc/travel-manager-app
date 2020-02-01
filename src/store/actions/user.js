@@ -1,5 +1,7 @@
 import { USER_LOGGED_IN } from "./actionTypes"
+import functions from "../../functions"
 
+import { loadViagem } from './viagem'
 
 export const userLogged = user => {
     return {
@@ -15,6 +17,15 @@ export const userLoggout = () => {
 }
 
 export const login = user => {
-    // fazer a solicitacao na api
-    
+    return dispatch => {
+        fetch(functions.getAddress() + 'motoristas/' + 1, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(res => {
+            dispatch(userLogged(res))
+            dispatch(loadViagem(res))
+        })
+        .catch(err => console.log(err.message))
+    }
 }
