@@ -6,7 +6,10 @@ import DatePicker from 'react-native-datepicker'
 import Botao from '../components/Botao'
 import moment from 'moment'
 
-export default class Relatorio extends React.Component {
+import { connect } from 'react-redux'
+import { filtrarViagens } from '../store/actions/viagem'
+
+class Relatorio extends React.Component {
 
     state = {
         // date:"2016-05-15",
@@ -16,6 +19,7 @@ export default class Relatorio extends React.Component {
 
     pesquisar = () => {
         console.log(this.state.datetime)
+        this.props.onFiltrarViagens(this.state.datetime)
     }
 
     render () {
@@ -27,8 +31,6 @@ export default class Relatorio extends React.Component {
                     <UltimasViagens />
 
                     <Text style={styles.title}>Realize uma filtragem:</Text>
-
-                    {/* <VeiculosSelect /> */}
 
                     <DatePicker
                         style={{width: 200}}
@@ -53,11 +55,31 @@ export default class Relatorio extends React.Component {
 
                     <Botao onPress={() => this.pesquisar()}
                         title='Pesquisar' />
+
+                    {this.props.viagens_filtradas.map(item => {return (
+                        <View key={item.id}>
+                            <Text>{item.veiculo.nome} - {item.motorista.nome}</Text>
+                        </View>
+                    )})}
                 </View>
             </View>
         )
     }
 }
+
+const mapStateToProps = ({viagem}) => {
+    return {
+        viagens_filtradas: viagem.viagens_filtradas
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFiltrarViagens: date => dispatch(filtrarViagens(date))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Relatorio)
 
 const styles = StyleSheet.create({
     container: {

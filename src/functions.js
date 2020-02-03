@@ -7,7 +7,7 @@ const functions = {
     },
 
     getAddress: () => {
-        return 'http://192.168.43.89:8080/'
+        return 'http://192.168.100.20:8080/'
     }
 }
 

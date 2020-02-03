@@ -1,9 +1,10 @@
-import { INICIAR_VIAGEM, CONCLUIR_VIAGEM, SET_VIAGEM, LOAD_VIAGENS_NAO_CONCLUIDAS, LOAD_VIAGENS_CONCLUIDAS } from "../actions/actionTypes"
+import { INICIAR_VIAGEM, CONCLUIR_VIAGEM, SET_VIAGEM, LOAD_VIAGENS_NAO_CONCLUIDAS, LOAD_VIAGENS_CONCLUIDAS, SET_VIAGENS_FILTRADAS } from "../actions/actionTypes"
 
 const initialState = {
     viagem: null,
     viagens_concluidas: [],
-    viagens_nao_concluidas: []
+    viagens_nao_concluidas: [],
+    viagens_filtradas: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -29,6 +30,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 viagens_concluidas: action.payload
+            }
+        case SET_VIAGENS_FILTRADAS:
+            return {
+                ...state,
+                viagens_filtradas: action.payload
             }
         default:
             return state

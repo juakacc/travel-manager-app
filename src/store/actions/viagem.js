@@ -1,4 +1,4 @@
-import { INICIAR_VIAGEM, CONCLUIR_VIAGEM, SET_VIAGEM, LOAD_VIAGENS_NAO_CONCLUIDAS, LOAD_VIAGENS_CONCLUIDAS } from "./actionTypes"
+import { INICIAR_VIAGEM, CONCLUIR_VIAGEM, SET_VIAGEM, LOAD_VIAGENS_NAO_CONCLUIDAS, LOAD_VIAGENS_CONCLUIDAS, SET_VIAGENS_FILTRADAS } from "./actionTypes"
 import functions from "../../functions"
 import { Alert } from "react-native"
 
@@ -108,6 +108,26 @@ export const loadViagensNaoConcluidas = () => {
         .then(res => res.json())
         .then(res => {
             dispatch(setViagensNaoConcluidas(res))
+        })
+        .catch(err => console.log(err))
+    }
+}
+
+export const setViagensFiltradas = viagens => {
+    return {
+        type: SET_VIAGENS_FILTRADAS,
+        payload: viagens
+    }
+}
+
+export const filtrarViagens = date => {
+    return dispatch => {
+        fetch(functions.getAddress() + 'viagens?date=' + date, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(res => {
+            dispatch(setViagensFiltradas(res))
         })
         .catch(err => console.log(err))
     }
