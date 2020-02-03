@@ -1,20 +1,42 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
+import { connect } from 'react-redux'
+import { loadViagensConcluidas } from '../store/actions/viagem'
 
-export default props => {
-    return (
-        <View>
-            <Text style={styles.title}>Últimas viagens finalizadas:</Text>
+class UltimasViagens extends React.Component {
 
-            <Text>Gol 01 - Romário - 90 KM</Text>
-            <Text>Gol 01 - Romário - 90 KM</Text>
-            <Text>Gol 01 - Romário - 90 KM</Text>
-            <Text>Gol 01 - Romário - 90 KM</Text>
-            <Text>Gol 01 - Romário - 90 KM</Text>
-        </View>
-    )
+    componentDidMount() {
+        this.props.onLoadViagens()
+    }
+
+    render() {
+        return (
+            <View>
+                <Text style={styles.title}>Últimas viagens finalizadas:</Text>
+                {this.props.viagens.map(item => {return (
+                    <View key={item.id}>
+                        <Text>{item.veiculo.nome} - {item.motorista.nome}</Text>
+                    </View>
+                )})}
+            </View>
+        )
+    }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadViagens: () => dispatch(loadViagensConcluidas())
+    }
+}
+
+const mapStateToProps = ({viagem}) => {
+    return {
+        viagens: viagem.viagens_concluidas
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UltimasViagens)
 
 const styles = StyleSheet.create({
     title: {

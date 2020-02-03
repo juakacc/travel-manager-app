@@ -1,5 +1,6 @@
-import { INICIAR_VIAGEM, CONCLUIR_VIAGEM, SET_VIAGEM } from "./actionTypes"
+import { INICIAR_VIAGEM, CONCLUIR_VIAGEM, SET_VIAGEM, LOAD_VIAGENS_NAO_CONCLUIDAS, LOAD_VIAGENS_CONCLUIDAS } from "./actionTypes"
 import functions from "../../functions"
+import { Alert } from "react-native"
 
 export const viagemIniciada = viagem => {
     return {
@@ -20,6 +21,7 @@ export const iniciarViagem = viagem => {
         .then(res => res.json())
         .then(res => {
             dispatch(loadViagem(res.motorista))
+            dispatch(loadViagensNaoConcluidas())
         })
         .catch(error => console.log('INICIAR_VIAGEM: ' + error.message))
     }
@@ -42,7 +44,6 @@ export const concluirViagem = viagem => {
         })
         .then(res => res.text())
         .then(res => {
-            console.log(res)
             dispatch(viagemConcluida())
             Alert.alert('Viagem concluída com sucesso')
         })
@@ -69,5 +70,45 @@ export const loadViagem = motorista => {
         .catch(err => {
             console.log('CARREGAR_VIAGEM: ' + err.message)
         })
+    }
+}
+
+export const setViagensNaoConcluidas = viagens => {
+    return {
+        type: LOAD_VIAGENS_NAO_CONCLUIDAS,
+        payload: viagens
+    }
+}
+
+export const setViagensConcluidas = viagens => {
+    return {
+        type: LOAD_VIAGENS_CONCLUIDAS,
+        payload: viagens
+    }
+}
+
+export const loadViagensConcluidas = () => {
+    return dispatch => {
+        fetch(functions.getAddress() + 'viagens/concluidas', {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(res => {
+            dispatch(setViagensConcluidas(res))
+        })
+        .catch(err => console.log(err))
+    }
+}
+
+export const loadViagensNaoConcluidas = () => {
+    return dispatch => {
+        fetch(functions.getAddress() + 'viagens/nao-concluidas', {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(res => {
+            dispatch(setViagensNaoConcluidas(res))
+        })
+        .catch(err => console.log(err))
     }
 }

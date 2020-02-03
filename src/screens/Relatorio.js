@@ -1,29 +1,34 @@
 import React from 'react'
-import {View, Text, Button, TouchableOpacity, StyleSheet} from 'react-native'
-import VeiculosSelect from '../components/VeiculosSelect'
+import {View, Text, StyleSheet} from 'react-native'
 import Header from '../components/Header'
-import comumStyles from '../styles'
 import UltimasViagens from '../components/UltimasViagens'
 import DatePicker from 'react-native-datepicker'
+import Botao from '../components/Botao'
+import moment from 'moment'
 
 export default class Relatorio extends React.Component {
 
     state = {
-        date:"2016-05-15",
-        datetime: '2016-05-05 20:00'
+        // date:"2016-05-15",
+        // datetime: '2016-05-05 20:00'
+        datetime: moment().format('YYYY-MM-DD[T]HH:mm')
+    }
+
+    pesquisar = () => {
+        console.log(this.state.datetime)
     }
 
     render () {
         return (
             <View style={styles.container}>
-                <Header username='Suzélio' />
+                <Header />
 
                 <View>                    
                     <UltimasViagens />
 
                     <Text style={styles.title}>Realize uma filtragem:</Text>
 
-                    <VeiculosSelect />
+                    {/* <VeiculosSelect /> */}
 
                     <DatePicker
                         style={{width: 200}}
@@ -46,9 +51,8 @@ export default class Relatorio extends React.Component {
                         minuteInterval={10}
                         onDateChange={(datetime) => {this.setState({datetime: datetime})}} />
 
-                    <TouchableOpacity style={comumStyles.btn}>
-                        <Text style={comumStyles.btnText}>Pesquisar</Text>
-                    </TouchableOpacity>
+                    <Botao onPress={() => this.pesquisar()}
+                        title='Pesquisar' />
                 </View>
             </View>
         )

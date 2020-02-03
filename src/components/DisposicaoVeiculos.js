@@ -1,29 +1,13 @@
 import React from 'react'
 import {View, Text, StyleSheet} from 'react-native'
-import functions from '../functions'
 
-export default class DisposicaoVeiculos extends React.Component {
+import { connect } from 'react-redux'
+import { loadViagensNaoConcluidas } from '../store/actions/viagem'
 
-    state = {
-        viagens: []
-    }
+class DisposicaoVeiculos extends React.Component {
 
     componentDidMount() {
-        this.carregarViagens()
-    }
-
-    carregarViagens = () => {
-        const options = {
-            method: 'GET'
-        }
-
-        fetch(functions.getAddress() + 'viagens/nao-concluidas', options)
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    viagens: res
-                })
-            })
+        this.props.loadViagens()
     }
 
     render() {
@@ -31,7 +15,7 @@ export default class DisposicaoVeiculos extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.title}>Disposição atual dos veículos:</Text>
 
-                {this.state.viagens.map(viagem => {
+                {this.props.viagens.map(viagem => {
                     return (
                         <View key={viagem.id}>
                             <Text style={styles.motorista}>{viagem.motorista.apelido}</Text>
@@ -43,6 +27,20 @@ export default class DisposicaoVeiculos extends React.Component {
         )
     }
 }
+
+const mapStateToProps = ({viagem}) => {
+    return {
+        viagens: viagem.viagens_nao_concluidas
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        loadViagens: () => dispatch(loadViagensNaoConcluidas())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DisposicaoVeiculos)
 
 const styles = StyleSheet.create({
     container: {
