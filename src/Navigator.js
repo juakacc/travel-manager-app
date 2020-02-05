@@ -6,6 +6,7 @@ import Login from './screens/Login'
 import PegarCarro from './screens/PegarCarro'
 import Relatorio from './screens/Relatorio'
 import ConcluirViagem from './screens/ConcluirViagem'
+import LoginOuApp from './screens/LoginOuApp'
 
 const MenuRoutes = {
     Home: {
@@ -31,11 +32,15 @@ const MenuRoutes = {
         name: 'Viagens',
         screen: Relatorio,
         navigationOptions: {title: 'Viagens'}
+    },
+    LoginOuApp: {
+        name: 'LoginOuApp',
+        screen: LoginOuApp
     }
 }
 
 const MenuConfig = {
-    initialRouteName: 'Auth'
+    initialRouteName: 'LoginOuApp'
 }
 
 const MenuNavigator = createStackNavigator(MenuRoutes, MenuConfig)

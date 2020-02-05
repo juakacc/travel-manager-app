@@ -1,5 +1,13 @@
-import { INICIAR_VIAGEM, CONCLUIR_VIAGEM, SET_VIAGEM, LOAD_VIAGENS_NAO_CONCLUIDAS, LOAD_VIAGENS_CONCLUIDAS, SET_VIAGENS_FILTRADAS } from "./actionTypes"
-import { Alert } from "react-native"
+import { 
+    INICIAR_VIAGEM, 
+    CONCLUIR_VIAGEM, 
+    SET_VIAGEM, 
+    LOAD_VIAGENS_NAO_CONCLUIDAS, 
+    LOAD_VIAGENS_CONCLUIDAS, 
+    SET_VIAGENS_FILTRADAS 
+} from "./actionTypes"
+import { setMensagem } from './mensagem'
+
 import axios from 'axios'
 
 export const viagemIniciada = viagem => {
@@ -41,7 +49,10 @@ export const concluirViagem = viagem => {
         })
         .then(res => {
             dispatch(viagemConcluida())
-            Alert.alert('Viagem concluída com sucesso')
+            dispatch(setMensagem({
+                title: '',
+                message: 'Viagem concluída com sucesso'
+            }))
         })
         .catch(err => console.log('VIAGEM', err))
     }

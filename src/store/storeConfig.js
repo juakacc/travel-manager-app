@@ -8,7 +8,7 @@ import viagemReducer from './reducers/viagem'
 const reducers = combineReducers({
     user: userReducer,
     viagem: viagemReducer,
-    message: messageReducer
+    mensagem: messageReducer
 })
 
 const storeConfig = () => {
