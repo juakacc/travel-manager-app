@@ -1,6 +1,6 @@
 import { INICIAR_VIAGEM, CONCLUIR_VIAGEM, SET_VIAGEM, LOAD_VIAGENS_NAO_CONCLUIDAS, LOAD_VIAGENS_CONCLUIDAS, SET_VIAGENS_FILTRADAS } from "./actionTypes"
-import functions from "../../functions"
 import { Alert } from "react-native"
+import axios from 'axios'
 
 export const viagemIniciada = viagem => {
     return {
@@ -10,20 +10,18 @@ export const viagemIniciada = viagem => {
 }
 
 export const iniciarViagem = viagem => {
-    return dispatch => {
-        fetch(functions.getAddress() + 'viagens', {
-            method: 'POST',
+    return (dispatch, getState) => {
+        axios.post('viagens', JSON.stringify(viagem), {
             headers: {
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(viagem)
+                'Authorization': 'Bearer ' + getState().user.token
+            }
         })
-        .then(res => res.json())
         .then(res => {
-            dispatch(loadViagem(res.motorista))
+            dispatch(loadViagem(res.data.motorista))
             dispatch(loadViagensNaoConcluidas())
         })
-        .catch(error => console.log('INICIAR_VIAGEM: ' + error.message))
+        .catch(err => console.log('VIAGEM', err))        
     }
 }
 
@@ -34,20 +32,18 @@ export const viagemConcluida = () => {
 }
 
 export const concluirViagem = viagem => {
-    return dispatch => {
-        fetch(functions.getAddress() + 'viagens/concluir/' + viagem.id, {
-            method: 'PUT',
+    return (dispatch, getState) => {
+        axios.put(`viagens/concluir/${viagem.id}`, JSON.stringify(viagem), {
             headers: {
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(viagem)
+                'Authorization': 'Bearer ' + getState().user.token
+            }
         })
-        .then(res => res.text())
         .then(res => {
             dispatch(viagemConcluida())
             Alert.alert('Viagem concluída com sucesso')
         })
-        .catch(err => console.log('CONCLUIR_VIAGEM: ' + err.message))
+        .catch(err => console.log('VIAGEM', err))
     }
 }
 
@@ -59,17 +55,16 @@ export const setViagem = viagem => {
 }
 
 export const loadViagem = motorista => {
-    return dispatch => {
-        fetch(functions.getAddress() + 'viagens/nao-concluidas/' + motorista.id, {
-            method: 'GET'
+    return (dispatch, getState) => {
+        axios.get(`viagens/nao-concluidas/${motorista.id}`, {
+            headers: {
+                'Authorization': 'Bearer ' + getState().user.token
+            }
         })
-        .then(res => res.json())
         .then(res => {
-            dispatch(setViagem(res))
+            dispatch(setViagem(res.data))
         })
-        .catch(err => {
-            console.log('CARREGAR_VIAGEM: ' + err.message)
-        })
+        .catch(err => console.log('VIAGEM: ', err))
     }
 }
 
@@ -88,28 +83,30 @@ export const setViagensConcluidas = viagens => {
 }
 
 export const loadViagensConcluidas = () => {
-    return dispatch => {
-        fetch(functions.getAddress() + 'viagens/concluidas', {
-            method: 'GET'
+    return (dispatch, getState) => {
+        axios.get('viagens/concluidas', {
+            headers: {
+                'Authorization': 'Bearer ' + getState().user.token
+            }
         })
-        .then(res => res.json())
         .then(res => {
-            dispatch(setViagensConcluidas(res))
+            dispatch(setViagensConcluidas(res.data))
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log('VIAGEM', err))        
     }
 }
 
 export const loadViagensNaoConcluidas = () => {
-    return dispatch => {
-        fetch(functions.getAddress() + 'viagens/nao-concluidas', {
-            method: 'GET'
+    return (dispatch, getState) => {
+        axios.get('viagens/nao-concluidas', {
+            headers: {
+                'Authorization': 'Bearer ' + getState().user.token
+            }
         })
-        .then(res => res.json())
         .then(res => {
-            dispatch(setViagensNaoConcluidas(res))
+            dispatch(setViagensNaoConcluidas(res.data))
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log('VIAGEM', err))
     }
 }
 
@@ -121,14 +118,15 @@ export const setViagensFiltradas = viagens => {
 }
 
 export const filtrarViagens = date => {
-    return dispatch => {
-        fetch(functions.getAddress() + 'viagens?date=' + date, {
-            method: 'GET'
+    return (dispatch, getState) => {
+        axios.get(`viagens?date=${date}`, {
+            headers: {
+                'Authorization': 'Bearer ' + getState().user.token
+            }
         })
-        .then(res => res.json())
         .then(res => {
-            dispatch(setViagensFiltradas(res))
+            dispatch(setViagensFiltradas(res.data))
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log('VIAGEM', err))
     }
 }

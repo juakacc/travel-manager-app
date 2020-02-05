@@ -35,7 +35,7 @@ const MenuRoutes = {
 }
 
 const MenuConfig = {
-    initialRouteName: 'Home'
+    initialRouteName: 'Auth'
 }
 
 const MenuNavigator = createStackNavigator(MenuRoutes, MenuConfig)

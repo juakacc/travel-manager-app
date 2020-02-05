@@ -7,7 +7,7 @@ import { loadViagensNaoConcluidas } from '../store/actions/viagem'
 class DisposicaoVeiculos extends React.Component {
 
     componentDidMount() {
-        this.props.loadViagens()
+        this.props.onLoadViagens()
     }
 
     render() {
@@ -36,7 +36,7 @@ const mapStateToProps = ({viagem}) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadViagens: () => dispatch(loadViagensNaoConcluidas())
+        onLoadViagens: () => dispatch(loadViagensNaoConcluidas())
     }
 }
 
