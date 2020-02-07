@@ -30,7 +30,7 @@ class PegarCarro extends React.Component {
     render () {
         return (
             <View style={styles.container}>
-                <Header />
+                <Header navigation={this.props.navigation} />
                 <Text style={styles.textAlert}>NÃO ULTRAPASSE EM LUGAR INDEVIDO</Text>
 
                 <ViagemAtual navigation={this.props.navigation} />

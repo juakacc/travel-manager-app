@@ -1,11 +1,23 @@
 import React from 'react'
 import { ActivityIndicator, View, StyleSheet } from 'react-native'
 
-export default class LoginOuApp extends React.Component {
+import { userLogged } from '../store/actions/user'
+import AsyncStorage from "@react-native-community/async-storage"
+import { connect } from 'react-redux'
 
-    componentDidMount = () => {
-        setTimeout(() => {
-            this.props.navigation.navigate('Auth')
+class LoginOuApp extends React.Component {
+
+    componentDidMount = () => {        
+        setTimeout(async () => {
+            const json = await AsyncStorage.getItem('userData')
+            const userData = JSON.parse(json) || {}
+
+            if (userData.token) {
+                this.props.onUserLogged(userData)
+                this.props.navigation.navigate('Home')
+            } else {
+                this.props.navigation.navigate('Auth')
+            }
         }, 1000)
     }
 
@@ -17,6 +29,14 @@ export default class LoginOuApp extends React.Component {
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onUserLogged: user => dispatch(userLogged(user))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(LoginOuApp)
 
 const styles = StyleSheet.create({
     container: {

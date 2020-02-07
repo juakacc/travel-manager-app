@@ -1,18 +1,39 @@
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, Button} from 'react-native'
 import functions from '../functions'
-import { connect } from 'react-redux'
 
-const header = props => {
-    
-    return (
-        <View style={styles.container}>
-            <View style={styles.rowContainer}>
-                <Text style={styles.user}>Bem vindo, {props.nome}</Text>
-                <Text>{functions.getDateString()}</Text>
+import { connect } from 'react-redux'
+import { userLoggout } from '../store/actions/user'
+
+class Header extends React.Component {
+
+    state = {
+        date: functions.getDateString()
+    }
+
+    componentDidUpdate() {
+        this.setState({
+            date: functions.getDateString()
+        })
+    }
+
+    sair = () => {
+        this.props.onLogout()
+        this.props.navigation.navigate('LoginOuApp')
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.user}>Bem vindo, {this.props.nome}</Text>
+                    <Button title='SAIR' onPress={this.sair} />
+                    <Text>{ this.state.date }</Text>
+                </View>
             </View>
-        </View>
-    )
+        )
+    }    
+    
 }
 
 const styles = StyleSheet.create({
@@ -37,4 +58,10 @@ const mapStateToProps = ({user}) => {
     }
 }
 
-export default connect(mapStateToProps, null)(header)
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogout: () => dispatch(userLoggout())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

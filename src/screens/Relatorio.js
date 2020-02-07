@@ -1,57 +1,88 @@
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, Button} from 'react-native'
 import Header from '../components/Header'
 import UltimasViagens from '../components/UltimasViagens'
-import DatePicker from 'react-native-datepicker'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import Botao from '../components/Botao'
 import moment from 'moment'
+
+import functions from '../functions'
 
 import { connect } from 'react-redux'
 import { filtrarViagens } from '../store/actions/viagem'
 
 class Relatorio extends React.Component {
-
+    
     state = {
-        // date:"2016-05-15",
-        // datetime: '2016-05-05 20:00'
-        datetime: moment().format('YYYY-MM-DD[T]HH:mm')
+        date: new Date(moment().format('YYYY-MM-DD[T]HH:mm')),
+        datetime: moment().format('YYYY-MM-DD[T]HH:mm'),
+        mode: 'date',
+        show: false,
+
+        pre_made_date: '',
+        pre_made_time: ''
     }
 
     pesquisar = () => {
-        console.log(this.state.datetime)
+        console.log('DateTime', this.state.datetime)
         this.props.onFiltrarViagens(this.state.datetime)
     }
 
+    setDate = (event, date) => {
+        date = date || this.state.date;
+
+        if (this.state.mode == 'date') {
+            let dd = moment(date).format('YYYY-MM-DD')
+            this.setState({
+                mode: 'time',
+                pre_made_date: dd
+            })
+        } else {
+            let tt = moment(date).format('HH:mm:ss')
+            let combine = this.state.pre_made_date + "T" + tt
+            console.log('COMBINE', combine)
+
+            this.setState({
+                show: false,
+                pre_made_time: tt,
+                date: new Date(moment(combine)),
+                datetime: combine
+            })
+        }
+    }
+    
+    showDatepicker = () => {
+        this.setState({
+            show: true,
+            mode: 'date'
+        })
+    }
+
     render () {
+        const { show, date, mode } = this.state
+        
         return (
             <View style={styles.container}>
-                <Header />
+                <Header navigation={this.props.navigation} />
 
                 <View>                    
                     <UltimasViagens />
 
                     <Text style={styles.title}>Realize uma filtragem:</Text>
 
-                    <DatePicker
-                        style={{width: 200}}
-                        date={this.state.datetime}
-                        mode="datetime"
-                        format="YYYY-MM-DD HH:mm"
-                        confirmBtnText="Confirmar"
-                        cancelBtnText="Cancelar"
-                        customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: {
-                                marginLeft: 36
-                            }
-                        }}
-                        minuteInterval={10}
-                        onDateChange={(datetime) => {this.setState({datetime: datetime})}} />
+                    <View>
+                        <View>
+                            <Button onPress={this.showDatepicker} 
+                                title={functions.getDateString(this.state.datetime)} />
+                        </View>
+                        { show && <DateTimePicker 
+                            value={date}
+                            mode={mode}
+                            is24Hour={true}
+                            display="default"
+                            onChange={this.setDate} />
+                        }
+                    </View>
 
                     <Botao onPress={() => this.pesquisar()}
                         title='Pesquisar' />

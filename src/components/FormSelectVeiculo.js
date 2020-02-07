@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Picker } from 'react-native'
 import Botao from './Botao'
 import functions from '../functions'
 
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { iniciarViagem } from '../store/actions/viagem'
 import moment from 'moment'
@@ -33,20 +34,17 @@ class FormSelectVeiculo extends React.Component {
         this.props.onIniciarViagem(viagem)
     }
 
-    getVeiculos = () => {
-        fetch(functions.getAddress() + 'veiculos/disponiveis', {
-            method: 'GET'
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (res.length > 0) {
-                this.setState({
-                    veiculos: res,
-                    veiculoSelec: res[0].id
+    getVeiculos = async () => {
+        await axios.get('veiculos/disponiveis')
+                .then(res => {
+                    if (res.data.length > 0) {
+                        this.setState({
+                            veiculos: res.data,
+                            veiculoSelec: res.data[0].id
+                        })
+                    }
                 })
-            }
-        })
-        .catch(er => console.log(er.message))
+                .catch(er => console.log('GET_VEICULOS', er.message))        
     }
 
     render() {
