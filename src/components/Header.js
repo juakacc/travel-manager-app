@@ -19,7 +19,7 @@ class Header extends React.Component {
 
     sair = () => {
         this.props.onLogout()
-        this.props.navigation.navigate('LoginOuApp')
+        this.props.navigation.navigate('Auth')
     }
 
     render() {
@@ -27,13 +27,12 @@ class Header extends React.Component {
             <View style={styles.container}>
                 <View style={styles.rowContainer}>
                     <Text style={styles.user}>Bem vindo, {this.props.nome}</Text>
-                    <Button title='SAIR' onPress={this.sair} />
+                    <Button title='SAIR' onPress={() => {this.sair()}} />
                     <Text>{ this.state.date }</Text>
                 </View>
             </View>
         )
     }    
-    
 }
 
 const styles = StyleSheet.create({

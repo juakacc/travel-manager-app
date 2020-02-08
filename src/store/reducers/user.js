@@ -8,11 +8,11 @@ const initialState = {
     isLoading: false
 }
 
-const reducer = (state = initialState, action) => {
+const reducer = (prevState = initialState, action) => {
     switch(action.type) {
         case USER_LOGGED_IN:
             return {
-                ...state,
+                ...prevState,
                 id: action.payload.id,
                 nome: action.payload.nome,
                 apelido: action.payload.apelido,
@@ -24,16 +24,16 @@ const reducer = (state = initialState, action) => {
             }
         case LOADING_USER:
             return {
-                ...state,
+                ...prevState,
                 isLoading: true
             }
         case USER_LOADED:
             return {
-                ...state,
+                ...prevState,
                 isLoading: false
             }
         default:
-            return state
+            return prevState
     }
 }
 

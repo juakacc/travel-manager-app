@@ -24,8 +24,8 @@ class Relatorio extends React.Component {
     }
 
     pesquisar = () => {
-        console.log('DateTime', this.state.datetime)
-        this.props.onFiltrarViagens(this.state.datetime)
+        console.log('DateTime', moment(this.state.datetime).format('YYYY-MM-DD[T]HH:mm'))
+        this.props.onFiltrarViagens(moment(this.state.datetime).format('YYYY-MM-DD[T]HH:mm'))
     }
 
     setDate = (event, date) => {

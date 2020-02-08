@@ -5,7 +5,7 @@ import { userLogged } from '../store/actions/user'
 import AsyncStorage from "@react-native-community/async-storage"
 import { connect } from 'react-redux'
 
-class LoginOuApp extends React.Component {
+class Splash extends React.Component {
 
     componentDidMount = () => {        
         setTimeout(async () => {
@@ -14,7 +14,7 @@ class LoginOuApp extends React.Component {
 
             if (userData.token) {
                 this.props.onUserLogged(userData)
-                this.props.navigation.navigate('Home')
+                this.props.navigation.navigate('App')
             } else {
                 this.props.navigation.navigate('Auth')
             }
@@ -36,7 +36,7 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(LoginOuApp)
+export default connect(null, mapDispatchToProps)(Splash)
 
 const styles = StyleSheet.create({
     container: {
