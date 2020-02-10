@@ -9,22 +9,12 @@ import Botao from '../components/Botao'
 import { connect } from 'react-redux'
 import { login } from '../store/actions/user'
 import { iniciarViagem } from '../store/actions/viagem'
+import { Icon } from 'react-native-vector-icons/FontAwesome'
 
 class PegarCarro extends React.Component {
-    _isMounted = false
-
+    
     state = {
         viagem: null
-    }
-
-    componentDidMount() {
-        this._isMounted = true
-        if (this._isMounted)
-            this.props.onLogin({id: 1})
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false
     }
 
     render () {

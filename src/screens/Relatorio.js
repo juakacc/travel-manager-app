@@ -12,6 +12,10 @@ import { connect } from 'react-redux'
 import { filtrarViagens } from '../store/actions/viagem'
 
 class Relatorio extends React.Component {
+
+    // componentDidMount() {
+    //     this.props.navigation.openDrawer();
+    // }
     
     state = {
         date: new Date(moment().format('YYYY-MM-DD[T]HH:mm')),
