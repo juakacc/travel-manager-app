@@ -1,9 +1,17 @@
 import moment from "moment"
 
 const functions = {
-    
-    getDateString: (date = moment()) => {
+
+    getDateTimeString: (date = moment()) => {
         return moment(date).format('DD/MM/YYYY HH[h]mm')
+    },
+
+    getDateString: (date = moment()) => {
+        return moment(date).format('DD/MM/YYYY')
+    },
+
+    getTimeString: (time = moment()) => {
+        return moment(time).format('HH[h]mm')
     },
 
     getAddress: () => {

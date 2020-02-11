@@ -1,6 +1,6 @@
 import React from 'react'
 import {Text, View, StyleSheet, Alert} from 'react-native'
-import {Input} from 'react-native-elements'
+import { Input } from 'react-native-elements'
 
 import Botao from '../components/Botao'
 import moment from 'moment'

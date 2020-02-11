@@ -15,32 +15,23 @@ class DisposicaoVeiculos extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.title}>Disposição atual dos veículos:</Text>
 
-                {this.props.viagens.map(viagem => {
-                    return (
-                        <View key={viagem.id}>
-                            <Text style={styles.motorista}>{viagem.motorista.apelido}</Text>
-                            <Text style={styles.veiculo}>- {viagem.veiculo.nome} -</Text>
-                        </View>
-                    )
-                })}
+                {this.props.viagens.length > 0 ? 
+                    this.props.viagens.map(viagem => {
+                        return (
+                            <View key={viagem.id}>
+                                <Text style={styles.motorista}>{viagem.motorista.apelido}</Text>
+                                <Text style={styles.veiculo}>- {viagem.veiculo.nome} -</Text>
+                            </View>
+                        )
+                    }) : 
+                    <View>
+                        <Text style={styles.txtSemViagem}>Todos os veículos estão disponíveis</Text>
+                    </View>
+                }
             </View>
         )
     }
 }
-
-const mapStateToProps = ({viagem}) => {
-    return {
-        viagens: viagem.viagens_nao_concluidas
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onLoadViagens: () => dispatch(loadViagensNaoConcluidas())
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DisposicaoVeiculos)
 
 const styles = StyleSheet.create({
     container: {
@@ -58,5 +49,22 @@ const styles = StyleSheet.create({
     veiculo: {
         color: '#777',
         fontSize: 11
+    },
+    txtSemViagem: {
+        marginTop: 10
     }
 })
+
+const mapStateToProps = ({viagem}) => {
+    return {
+        viagens: viagem.viagens_nao_concluidas
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadViagens: () => dispatch(loadViagensNaoConcluidas())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DisposicaoVeiculos)

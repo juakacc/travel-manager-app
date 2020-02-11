@@ -51,20 +51,24 @@ class FormSelectVeiculo extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Veículos disponíveis:</Text>
-                
-                <Picker
-                    selectedValue={this.state.veiculoSelec}
-                    onValueChange={(itemValue, itemIndex) => {
-                        this.setState({veiculoSelec: itemValue})
-                    }}>
-                    {this.state.veiculos.map(item => {
-                        return (<Picker.Item label={item.nome} value={item.id} key={item.id}/>) 
-                    })}
-                </Picker>
 
-                <Botao onPress={this.enviarVeiculo}
-                    title='Pegar Veículo' />
-                <Text style={styles.txtInfo}>Ao escolher um veículo será registrado o momento da saída</Text>
+                {this.state.veiculos.length > 0 ?
+                <View>
+                    <Picker
+                        selectedValue={this.state.veiculoSelec}
+                        onValueChange={(itemValue, itemIndex) => {
+                            this.setState({veiculoSelec: itemValue})
+                        }}>
+                        {this.state.veiculos.map(item => {
+                            return (<Picker.Item label={item.nome} value={item.id} key={item.id}/>) 
+                        })}
+                    </Picker>
+
+                    <Botao onPress={this.enviarVeiculo} title='Pegar Veículo' name='key' />
+                    <Text style={styles.txtInfo}>Ao escolher um veículo será registrado o momento da saída</Text>
+                </View> : 
+                    <Text style={styles.txtSemVeiculo}>Nenhum veículo disponível no momento. Aguarde até que um esteja disponível</Text>
+                }
             </View>
         )
     }
@@ -106,5 +110,9 @@ const styles = StyleSheet.create({
     txtInfo: {
         textAlign: 'center',
         color: '#f00'
+    },
+    txtSemVeiculo: {
+        margin: 10,
+        textAlign: 'center'
     }
 })

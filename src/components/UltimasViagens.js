@@ -14,11 +14,15 @@ class UltimasViagens extends React.Component {
         return (
             <View>
                 <Text style={styles.title}>Últimas viagens finalizadas:</Text>
-                {this.props.viagens.map(item => {return (
+
+                {this.props.viagens.length > 0 ?
+                this.props.viagens.map(item => {return (
                     <View key={item.id}>
                         <Text>{item.veiculo.nome} - {item.motorista.nome}</Text>
                     </View>
-                )})}
+                )}) :
+                    <Text style={styles.txtSemRegistro}>Nenhum registro encontrado</Text>
+                }
             </View>
         )
     }
@@ -42,5 +46,9 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 15
+    },
+    txtSemRegistro: {
+        margin: 10,
+        textAlign: 'center'
     }
 })

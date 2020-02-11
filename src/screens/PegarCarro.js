@@ -26,9 +26,6 @@ class PegarCarro extends React.Component {
                 <ViagemAtual navigation={this.props.navigation} />
 
                 <DisposicaoVeiculos />
-
-                <Botao onPress={() => this.props.navigation.navigate('Viagens')}
-                    title='Pesquisar'/>
             </View>
         )
     }

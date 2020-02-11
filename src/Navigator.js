@@ -7,6 +7,7 @@ import ConcluirViagem from './screens/ConcluirViagem'
 import Splash from './screens/LoginOuApp'
 import CadastrarPessoa from './screens/CadastrarPessoa'
 import CadastrarVeiculo from './screens/CadastrarVeiculo'
+import Logout from './screens/Logout'
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
@@ -17,10 +18,17 @@ import { Text, View } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { TouchableHighlight } from 'react-native-gesture-handler'
-import Botao from './components/Botao'
 
-const ViagemNav = createStackNavigator({
+// Header to StackNavigator
+const Header = () => {
+    return (
+        <View>
+            <Text style={{ fontSize: 24 }}><Icon name="road" size={30} color="#a50" /> Viagens PMO</Text>
+        </View>
+    )
+}
+
+const ViagemStackNavigator = createStackNavigator({
     Viagem: {
         screen: PegarCarro
     },
@@ -32,9 +40,9 @@ const ViagemNav = createStackNavigator({
     headerMode: "none"
 })
 
-const AppNavigator = createBottomTabNavigator({
+const HomeBottomTabNavigator = createBottomTabNavigator({
     Home: { 
-        screen: ViagemNav,
+        screen: ViagemStackNavigator,
         navigationOptions: {
             title: 'Viagens',
             tabBarIcon: ({tintColor}) => 
@@ -51,6 +59,8 @@ const AppNavigator = createBottomTabNavigator({
     }
 })
 
+
+// Add button options in header
 class NavigationDrawerStruture extends React.Component {
 
     onPressE = () => {
@@ -67,30 +77,99 @@ class NavigationDrawerStruture extends React.Component {
     }
 }
 
-const StackNavigator = createStackNavigator({
+class BotaoVoltar extends React.Component {
+
+    onPressE = () => {
+        this.props.navigationProps.navigate('Home')
+    }
+
+    render() {
+        return (
+            <Ionicons 
+                name='ios-arrow-back' size={30}
+                style={{ marginLeft:15 }}
+                onPress={this.onPressE} />
+        )
+    }
+}
+
+const HomeStackNavigator = createStackNavigator({
     App: {
-        screen: AppNavigator
+        screen: HomeBottomTabNavigator
     }
 }, {
-    initialRouteName: 'App',
+    headerLayoutPreset: 'center',
     defaultNavigationOptions: ({ navigation }) => ({
-        headerTitle: () => <Text style={{fontSize: 24, marginLeft: 10}}><Icon name="road" size={30} color="#a50" /> Viagens PMO</Text>,
+        headerTitle: () => <Header />,
         headerRight: <NavigationDrawerStruture navigationProps={navigation} />
+    })
+})
+
+const LogoutStackNavigator = createStackNavigator({
+    Logout: {
+        screen: Logout
+    }
+}, {
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: ({ navigation }) => ({
+        headerTitle: () => <Header />,
+        headerLeft: <BotaoVoltar navigationProps={navigation} />
+    })
+})
+
+const CadastrarPessoaStack = createStackNavigator({
+    Screen: {
+        screen: CadastrarPessoa
+    }
+}, {
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: ({ navigation }) => ({
+        headerTitle: () => <Header />,
+        headerLeft: <BotaoVoltar navigationProps={navigation} />
+    })
+})
+
+const CadastrarVeiculoStack = createStackNavigator({
+    Screen: {
+        screen: CadastrarVeiculo
+    }
+}, {
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: ({ navigation }) => ({
+        headerTitle: () => <Header />,
+        headerLeft: <BotaoVoltar navigationProps={navigation} />
     })
 })
 
 const DrawerNavigator = createDrawerNavigator({
     Home: {
-        title: 'Início',
-        screen: StackNavigator
+        screen: HomeStackNavigator,
+        navigationOptions: {
+            drawerLabel: 'Tela Inicial',
+            drawerIcon: ({ tintColor }) => (<Ionicons name='ios-home' size={25} color={tintColor} />)
+        }
     },
     CadastrarPessoa: {
-        screen: CadastrarPessoa
+        screen: CadastrarPessoaStack,
+        navigationOptions: {
+            drawerLabel: 'Cadastrar Pessoa',
+            drawerIcon: ({ tintColor }) => (<Ionicons name='ios-person-add' size={25} color={tintColor} />)
+        }
     },
     CadastrarVeiculo: {
-        screen: CadastrarVeiculo
+        screen: CadastrarVeiculoStack,
+        navigationOptions: {
+            drawerLabel: 'Cadastrar Veículo',
+            drawerIcon: ({ tintColor }) => (<Ionicons name='ios-car' size={25} color={tintColor} />)
+        }
+    },
+    Logout: {
+        screen: LogoutStackNavigator,
+        navigationOptions: {
+            drawerLabel: 'Sair do App',
+            drawerIcon: () => (<Ionicons name='ios-power' size={25} color='red' />)
+        }
     }
-    // cadastrar veiculo, cadastrar motorista...
 }, {
     drawerPosition: "right"
 })

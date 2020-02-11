@@ -1,9 +1,8 @@
 import React from 'react'
-import {View, Text, StyleSheet, Button} from 'react-native'
+import {View, Text, StyleSheet} from 'react-native'
 import functions from '../functions'
 
 import { connect } from 'react-redux'
-import { userLoggout } from '../store/actions/user'
 
 class Header extends React.Component {
 
@@ -17,17 +16,11 @@ class Header extends React.Component {
         })
     }
 
-    sair = () => {
-        this.props.onLogout()
-        this.props.navigation.navigate('Auth')
-    }
-
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.rowContainer}>
                     <Text style={styles.user}>Bem vindo, {this.props.nome}</Text>
-                    <Button title='SAIR' onPress={() => {this.sair()}} />
                     <Text>{ this.state.date }</Text>
                 </View>
             </View>
@@ -57,10 +50,4 @@ const mapStateToProps = ({user}) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onLogout: () => dispatch(userLoggout())
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default connect(mapStateToProps)(Header)

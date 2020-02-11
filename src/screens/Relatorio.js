@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, Button} from 'react-native'
+import {View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import Header from '../components/Header'
 import UltimasViagens from '../components/UltimasViagens'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -10,12 +10,24 @@ import functions from '../functions'
 
 import { connect } from 'react-redux'
 import { filtrarViagens } from '../store/actions/viagem'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+
+export const BotaoData = props => {
+    return (
+        <View onPress={() => props.onPress()}>
+            <Ionicons name='ios-time' size={15} />
+            <Text>
+                <Icon name='clock' size={15} /> 
+                
+                {functions.getTimeString(props.datetime)}
+            </Text>
+        </View>
+    )
+}
 
 class Relatorio extends React.Component {
-
-    // componentDidMount() {
-    //     this.props.navigation.openDrawer();
-    // }
     
     state = {
         date: new Date(moment().format('YYYY-MM-DD[T]HH:mm')),
@@ -67,7 +79,7 @@ class Relatorio extends React.Component {
         
         return (
             <View style={styles.container}>
-                <Header navigation={this.props.navigation} />
+                <Header />
 
                 <View>                    
                     <UltimasViagens />
@@ -76,26 +88,34 @@ class Relatorio extends React.Component {
 
                     <View>
                         <View>
-                            <Button onPress={this.showDatepicker} 
-                                title={functions.getDateString(this.state.datetime)} />
+                            <TouchableHighlight onPress={this.showDatepicker}>
+                                <Text style={styles.dateTimeSelect}>
+                                    <Ionicons name='ios-calendar' size={15} /> {functions.getDateString(this.state.datetime) + ' '}
+                                    <Ionicons name='ios-time' size={15} /> {functions.getTimeString(this.state.datetime)}
+                                </Text>
+                            </TouchableHighlight>
                         </View>
-                        { show && <DateTimePicker 
+                        { show ? <DateTimePicker 
                             value={date}
                             mode={mode}
                             is24Hour={true}
                             display="default"
                             onChange={this.setDate} />
+                            : null
                         }
                     </View>
 
                     <Botao onPress={() => this.pesquisar()}
-                        title='Pesquisar' />
+                        title='Pesquisar' name='search' />
 
-                    {this.props.viagens_filtradas.map(item => {return (
+                    { this.props.viagens_filtradas.lenght > 0 ?
+                    this.props.viagens_filtradas.map(item => {return (
                         <View key={item.id}>
                             <Text>{item.veiculo.nome} - {item.motorista.nome}</Text>
                         </View>
-                    )})}
+                    )}) :
+                        <Text style={styles.txtSemResultado}>Nenhum resultado encontrado</Text>
+                    }
                 </View>
             </View>
         )
@@ -123,6 +143,17 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 15
+        fontSize: 15,
+        marginBottom: 10
+    },
+    dateTimeSelect: {
+        fontSize: 16,
+        textAlign: 'center',
+        backgroundColor: 'tomato',
+        padding: 10
+    },
+    txtSemResultado: {
+        textAlign: 'center',
+        marginTop: 10
     }
 })
