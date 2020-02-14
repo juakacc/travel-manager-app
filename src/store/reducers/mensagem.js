@@ -1,7 +1,7 @@
 import { SET_MENSAGEM } from "../actions/actionTypes"
 
 const initialState = {
-    title: '',
+    // title: '',
     message: ''
 }
 
@@ -10,8 +10,8 @@ const reducer = (state = initialState, action) => {
         case SET_MENSAGEM:
             return {
                 ...state,
-                title: action.payload.title,
-                message: action.payload.message
+                // title: action.payload.title,
+                message: action.payload
             }
         default:
             return state

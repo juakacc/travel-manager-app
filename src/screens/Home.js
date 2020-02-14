@@ -11,7 +11,7 @@ import { login } from '../store/actions/user'
 import { iniciarViagem } from '../store/actions/viagem'
 import { Icon } from 'react-native-vector-icons/FontAwesome'
 
-class PegarCarro extends React.Component {
+class Home extends React.Component {
     
     state = {
         viagem: null
@@ -44,7 +44,7 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PegarCarro)
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
 
 const styles = StyleSheet.create({
     container: {

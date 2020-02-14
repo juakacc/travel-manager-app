@@ -1,9 +1,10 @@
 import React from 'react'
 
 import Login from './screens/Login'
-import PegarCarro from './screens/PegarCarro'
+import Home from './screens/Home'
 import Relatorio from './screens/Relatorio'
 import ConcluirViagem from './screens/ConcluirViagem'
+import IniciarViagem from './screens/IniciarViagem'
 import Splash from './screens/LoginOuApp'
 import CadastrarPessoa from './screens/CadastrarPessoa'
 import CadastrarVeiculo from './screens/CadastrarVeiculo'
@@ -30,14 +31,34 @@ const Header = () => {
 
 const ViagemStackNavigator = createStackNavigator({
     Viagem: {
-        screen: PegarCarro
+        screen: Home
+    },
+    IniciarViagem: {
+        screen: IniciarViagem
     },
     ConcluirViagem: {
         screen: ConcluirViagem
     }
 }, {
     initialRouteName: 'Viagem',
-    headerMode: "none"
+    // headerMode: "none"
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: ({ navigation }) => ({
+        headerTitle: () => <Header />,
+        headerRight: <BotaoDrawer navigationProps={navigation} />
+    })
+})
+
+const RelatorioStack = createStackNavigator({
+    Relatorio: {
+        screen: Relatorio
+    }    
+}, {
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: ({ navigation }) => ({
+        headerTitle: () => <Header />,
+        headerRight: <BotaoDrawer navigationProps={navigation} />
+    })
 })
 
 const HomeBottomTabNavigator = createBottomTabNavigator({
@@ -50,7 +71,7 @@ const HomeBottomTabNavigator = createBottomTabNavigator({
         }
     },
     Viagens: { 
-        screen: Relatorio,
+        screen: RelatorioStack,
         navigationOptions: {
             title: 'Relatorio',
             tabBarIcon: ({tintColor}) => 
@@ -59,9 +80,7 @@ const HomeBottomTabNavigator = createBottomTabNavigator({
     }
 })
 
-
-// Add button options in header
-class NavigationDrawerStruture extends React.Component {
+class BotaoDrawer extends React.Component {
 
     onPressE = () => {
         this.props.navigationProps.toggleDrawer()
@@ -85,10 +104,15 @@ class BotaoVoltar extends React.Component {
 
     render() {
         return (
-            <Ionicons 
-                name='ios-arrow-back' size={30}
+            <Icon 
+                name='arrow-left' size={20}
                 style={{ marginLeft:15 }}
-                onPress={this.onPressE} />
+                onPress={this.onPressE}
+            />
+            // <Ionicons 
+            //     name='ios-arrow-back' size={30}
+            //     style={{ marginLeft:15 }}
+            //     onPress={this.onPressE} />
         )
     }
 }
@@ -98,11 +122,12 @@ const HomeStackNavigator = createStackNavigator({
         screen: HomeBottomTabNavigator
     }
 }, {
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: ({ navigation }) => ({
-        headerTitle: () => <Header />,
-        headerRight: <NavigationDrawerStruture navigationProps={navigation} />
-    })
+    headerMode: 'none'
+    // headerLayoutPreset: 'center',
+    // defaultNavigationOptions: ({ navigation }) => ({
+    //     headerTitle: () => <Header />,
+    //     headerRight: <BotaoDrawer navigationProps={navigation} />
+    // })
 })
 
 const LogoutStackNavigator = createStackNavigator({
@@ -143,7 +168,7 @@ const CadastrarVeiculoStack = createStackNavigator({
 
 const DrawerNavigator = createDrawerNavigator({
     Home: {
-        screen: HomeStackNavigator,
+        screen: HomeBottomTabNavigator,
         navigationOptions: {
             drawerLabel: 'Tela Inicial',
             drawerIcon: ({ tintColor }) => (<Ionicons name='ios-home' size={25} color={tintColor} />)

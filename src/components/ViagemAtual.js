@@ -10,7 +10,7 @@ class ViagemAtual extends React.Component {
         if (this.props.viagem) {
             return <VeiculoAtual viagem={this.props.viagem} navigation={this.props.navigation} />
         } else {
-            return <FormSelectVeiculo />
+            return <FormSelectVeiculo navigation={this.props.navigation} />
         }
     }
 }

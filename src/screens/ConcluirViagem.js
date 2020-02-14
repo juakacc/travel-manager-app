@@ -16,47 +16,49 @@ class ConcluirViagem extends React.Component {
         errQuilometragem: ''
     }
 
-    isValid = viagem => {
-        return this.state.errQuilometragem == '' && viagem.quilometragem > 0
-    }
-
-    concluir = () => {
-        const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm')
-        const viagem = {
-            'id': this.props.viagem.id,
-            "viagem": {
-                "saida": this.props.viagem.saida,
-                "chegada": dataAtual,
-                "descricao": this.state.descricao,
-                "veiculo": {
-                    "id": this.props.viagem.veiculo.id
-                },
-                "motorista": {
-                    "id": this.props.motorista.id
-                }
-            },
-            "quilometragem": this.state.quilometragem
+    componentDidUpdate = prevProps => {
+        if (prevProps.isLoading && !this.props.isLoading) {
+            this.props.navigation.navigate('Viagem')
         }
-        if (this.isValid(viagem)) {
-            this.props.onConcluirViagem(viagem)
-            this.props.navigation.navigate('Home')
-        } else {
-            Alert.alert('Preencha os dados corretamente')
-        }        
     }
 
-    setQuilometragem = q => {
-        if(isNaN(q) || q <= 0) {
+    isValid = () => {
+        this.setState({
+            errQuilometragem: ''
+        })
+
+        if(isNaN(this.state.quilometragem) || this.state.quilometragem <= 0) {
             this.setState({ 
                 errQuilometragem: 'Insira uma quilometragem válida!',
                 quilometragem: 0
             })
-        } else {
-            this.setState({
-                errQuilometragem: '',
-                quilometragem: q
-            })
+            return false
         }
+        return true
+    }
+
+    concluir = () => {
+        if (this.isValid()) {
+            const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm')
+
+            const viagem = {
+                id: this.props.viagem.id,
+                viagem: {
+                    "saida": this.props.viagem.saida,
+                    "chegada": dataAtual,
+                    "descricao": this.state.descricao,
+                    "km_inicial": this.props.viagem.km_inicial,
+                    "km_final": this.state.quilometragem,
+                    "veiculo": {
+                        "id": this.props.viagem.veiculo.id
+                    },
+                    "motorista": {
+                        "id": this.props.motorista.id
+                    }
+                }
+            }
+            this.props.onConcluirViagem(viagem)
+        }   
     }
 
     render() {
@@ -69,13 +71,13 @@ class ConcluirViagem extends React.Component {
                     placeholder='KM atual'
                     errorMessage={this.state.errQuilometragem}
                     returnKeyType='next'
-                    onChangeText={a => this.setQuilometragem(a)} />
+                    onChangeText={quilometragem => this.setState({ quilometragem })} />
                 
                 <Input 
                     label='Comentário'
                     placeholder='Comentário sobre a viagem (opcional)' 
                     returnKeyType='done'
-                    onChangeText={a => this.setState({ descricao: a })}/>
+                    onChangeText={descricao => this.setState({ descricao })}/>
 
                 <Botao onPress={() => this.concluir()}
                     title='Concluir Viagem' />
@@ -85,10 +87,10 @@ class ConcluirViagem extends React.Component {
 }
 
 const mapStateToProps = ({user, viagem}) => {
-    console.log(viagem.viagem)
     return {
         motorista: user,
-        viagem: viagem.viagem
+        viagem: viagem.viagem,
+        isLoading: viagem.isLoading
     }
 }
 

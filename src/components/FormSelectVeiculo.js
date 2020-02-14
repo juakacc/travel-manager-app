@@ -1,12 +1,10 @@
 import React from 'react'
 import { View, Text, StyleSheet, Picker } from 'react-native'
 import Botao from './Botao'
-import functions from '../functions'
 
 import axios from 'axios'
+import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
-import { iniciarViagem } from '../store/actions/viagem'
-import moment from 'moment'
 
 class FormSelectVeiculo extends React.Component {
 
@@ -19,32 +17,27 @@ class FormSelectVeiculo extends React.Component {
         this.getVeiculos()
     }
 
-    enviarVeiculo = () => {
-        const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm')
-        
-        const viagem = {
-            "saida": dataAtual,
-            "veiculo": {
-                "id": this.state.veiculoSelec
-            },
-            "motorista": {
-                "id": this.props.motorista.id
+    getVeiculos = async () => {
+        await axios.get('veiculos/disponiveis', {
+            headers: {
+                'Authorization': `Bearer ${this.props.token}`
             }
-        }
-        this.props.onIniciarViagem(viagem)
+        })
+        .then(res => {
+            if (res.data.length > 0) {
+                this.setState({
+                    veiculos: res.data,
+                    veiculoSelec: res.data[0].id
+                })
+            }
+        })
+        .catch(er => console.log('GET_VEICULOS', er.message))        
     }
 
-    getVeiculos = async () => {
-        await axios.get('veiculos/disponiveis')
-                .then(res => {
-                    if (res.data.length > 0) {
-                        this.setState({
-                            veiculos: res.data,
-                            veiculoSelec: res.data[0].id
-                        })
-                    }
-                })
-                .catch(er => console.log('GET_VEICULOS', er.message))        
+    enviarVeiculo = () => {
+        this.props.navigation.navigate('IniciarViagem', {
+            idVeiculo: this.state.veiculoSelec
+        })        
     }
 
     render() {
@@ -74,19 +67,13 @@ class FormSelectVeiculo extends React.Component {
     }
 }
 
-const mapStateToProps = ({user}) => {
+const mapStateToProps = ({ user }) => {
     return {
-        motorista: user
+        token: user.token
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onIniciarViagem: viagem => dispatch(iniciarViagem(viagem))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FormSelectVeiculo)
+export default connect(mapStateToProps, null)(FormSelectVeiculo)
 
 const styles = StyleSheet.create({
     container: {

@@ -24,17 +24,13 @@ class App extends Component {
 
 const mapStateToProps = ({ mensagem }) => {
   return {
-    title: mensagem.title,
     message: mensagem.message
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    clearMessage: () => dispatch(setMensagem({
-      title: '',
-      message: ''
-    }))
+    clearMessage: () => dispatch(setMensagem(''))
   }
 }
 
