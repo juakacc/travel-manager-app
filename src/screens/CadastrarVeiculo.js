@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Picker, Alert } from 'react-native'
+import { View, Text, StyleSheet, Picker } from 'react-native'
 import { Input } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler'
 import Botao from '../components/Botao'
@@ -7,20 +7,33 @@ import Botao from '../components/Botao'
 import axios from 'axios'
 import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
+import Titulo from '../components/Titulo'
+import commonStyles from '../commonStyles'
 
 class CadastrarVeiculo extends React.Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            nome: '',
-            placa: '',
-            renavam: '',
-            marca: '',
-            modelo: '',
-            quilometragem: 0,
-            cnh_requerida: 'A',
+    state = {
+        nome: '',
+        placa: '',
+        renavam: '',
+        marca: '',
+        modelo: '',
+        quilometragem: 0,
+        cnh_requerida: 'A',
 
+        err_nome: '',
+        err_placa: '',
+        err_renavam: '',
+        err_marca: '',
+        err_modelo: '',
+        err_quilometragem: '',
+        err_cnh_requerida: ''
+    }
+
+    isValid = () => {
+        const fields = {...this.state}
+        let valid = true
+        this.setState({
             err_nome: '',
             err_placa: '',
             err_renavam: '',
@@ -28,13 +41,7 @@ class CadastrarVeiculo extends React.Component {
             err_modelo: '',
             err_quilometragem: '',
             err_cnh_requerida: ''
-        }
-    }
-
-    isValid = () => {
-        const fields = {...this.state}
-
-        let valid = true
+        })
         
         if (fields.nome == '') {
             this.setState({ err_nome: 'Digite um nome válido' })
@@ -75,11 +82,10 @@ class CadastrarVeiculo extends React.Component {
 
     
     salvarVeiculo = () => {
-
-        if (true) {
+        if (this.isValid()) {
             axios.post('veiculos', {
-                nome: this.state.nome,
-                placa: this.state.placa,
+                nome: this.state.nome.toUpperCase(),
+                placa: this.state.placa.toUpperCase(),
                 renavam: this.state.renavam,
                 marca: this.state.marca,
                 modelo: this.state.modelo,
@@ -89,23 +95,25 @@ class CadastrarVeiculo extends React.Component {
             }, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.props.token}`
                 }
             })
             .then(res => {
                 console.log(res.data)
+                this.props.onShowMensagem('Veículo cadastrado')
+                this.props.navigation.navigate('Home')
             })
             .catch(err => {
                 this.props.onShowMensagem(''+err.response.data[0].mensagemUsuario)
                 console.log('Erro: ', err.response.data[0].mensagemUsuario)
             })
-            // Alert.alert('Salvando veículo')
         }        
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Tela para cadastro de veículo</Text>
+                <Titulo titulo='Cadastro de Veículo' />
 
                 <ScrollView>
                     <Input
@@ -155,17 +163,12 @@ class CadastrarVeiculo extends React.Component {
 
                     <Picker selectedValue={this.state.cnh_requerida}
                         onValueChange={(cnh_requerida) => 
-                        this.setState({ cnh_requerida })}
-                    >
+                        this.setState({ cnh_requerida })} >
                         <Picker.Item label='A' value='A' />
                         <Picker.Item label='B' value='B' />
-                        <Picker.Item label='AB' value='AB' />
                         <Picker.Item label='C' value='C' />
-                        <Picker.Item label='AC' value='AC' />
                         <Picker.Item label='D' value='D' />
-                        <Picker.Item label='AD' value='AD' />
                         <Picker.Item label='E' value='E' />
-                        <Picker.Item label='AE' value='AE' />
                     </Picker>
 
                     <Botao onPress={() => this.salvarVeiculo()}
@@ -178,13 +181,7 @@ class CadastrarVeiculo extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 5
-    },
-    title: {
-        fontSize: 15,
-        textAlign: 'center',
-        marginBottom: 10
+        ...commonStyles.container
     }
 })
 
@@ -194,4 +191,10 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(CadastrarVeiculo)
+const mapStateToProps = ({ user }) => {
+    return {
+        token: user.token
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CadastrarVeiculo)

@@ -19,6 +19,7 @@ import { Text, View } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import DetalharViagem from './screens/DetalharViagem'
 
 // Header to StackNavigator
 const Header = () => {
@@ -52,8 +53,12 @@ const ViagemStackNavigator = createStackNavigator({
 const RelatorioStack = createStackNavigator({
     Relatorio: {
         screen: Relatorio
-    }    
+    },
+    ViagemDetalhes: {
+        screen: DetalharViagem
+    }
 }, {
+    initialRouteName: 'Relatorio',
     headerLayoutPreset: 'center',
     defaultNavigationOptions: ({ navigation }) => ({
         headerTitle: () => <Header />,

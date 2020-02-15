@@ -45,12 +45,14 @@ class Login extends Component {
 
                 <TextInput
                     style={styles.field}
+                    autoCapitalize={false}
                     placeholder='Apelido'
                     value={this.state.apelido} 
                     returnKeyType='next'
                     onChangeText={apelido => this.setState({ apelido })} />
                 <TextInput 
                     style={styles.field}
+                    autoCapitalize='none'
                     placeholder='Senha'
                     secureTextEntry={true} 
                     value={this.state.senha}

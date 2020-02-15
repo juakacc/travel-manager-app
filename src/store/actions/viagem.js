@@ -43,6 +43,7 @@ export const iniciarViagem = viagem => {
         .then(res => {
             dispatch(loadViagem(res.data.motorista))
             dispatch(loadViagensNaoConcluidas())
+            dispatch(setMensagem('Viagem iniciada. Siga as leis de trânsito'))
             dispatch(viagem_iniciada())
         })
         .catch(err => console.log('VIAGEM', err))        

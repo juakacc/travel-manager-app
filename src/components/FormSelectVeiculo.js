@@ -13,7 +13,11 @@ class FormSelectVeiculo extends React.Component {
         veiculoSelec: null
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
+        this.getVeiculos()
+    }
+
+    componentDidUpdate = () => {
         this.getVeiculos()
     }
 

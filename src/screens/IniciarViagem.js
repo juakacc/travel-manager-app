@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { iniciarViagem } from '../store/actions/viagem'
-import { View } from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import { Input } from 'react-native-elements'
 
 import moment from 'moment'
 import Botao from '../components/Botao'
+import commonStyles from '../commonStyles'
+import Titulo from '../components/Titulo'
 
 class IniciarViagem extends React.Component {
 
@@ -44,7 +46,7 @@ class IniciarViagem extends React.Component {
                 "saida": dataAtual,
                 "km_inicial": this.state.quilometragem,
                 "veiculo": {
-                    "id": this.props.navigation.getParam('idVeiculo')
+                    "id": this.props.navigation.getParam('idVeiculo')  // verificar antes de enviar
                 },
                 "motorista": {
                     "id": this.props.motorista.id
@@ -55,21 +57,35 @@ class IniciarViagem extends React.Component {
     }
 
     render() {
+        // Tentar adicionar o nome do veículo aqui
         return (
-            <View>
+            <View style={styles.container}>
+                <Titulo titulo='Iniciar Viagem' />
+                <Text style={styles.title}>Qual a quilometragem atual registrada no veículo?</Text>
                 <Input
                     keyboardType='numeric'
                     label='Quilometragem'
-                    placeholder='KM atual'
+                    placeholder='KM atual do veículo'
                     errorMessage={this.state.errQuilometragem}
                     returnKeyType='next'
                     onChangeText={quilometragem => this.setState({ quilometragem })} />
 
-                <Botao onPress={this.iniciarViagem} title='Iniciar viagem' name='key' />
+                <Botao onPress={this.iniciarViagem} title='Iniciar viagem' name='route' />
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        ...commonStyles.container
+    },
+    title: {
+        fontSize: 15,
+        textAlign: 'center',
+        marginBottom: 10
+    }
+})
 
 const mapStateToProps = ({ user, viagem }) => {
     return {

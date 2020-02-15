@@ -7,6 +7,7 @@ import moment from 'moment'
 
 import { connect } from 'react-redux'
 import { concluirViagem } from '../store/actions/viagem'
+import Titulo from '../components/Titulo'
 
 class ConcluirViagem extends React.Component {
 
@@ -64,6 +65,7 @@ class ConcluirViagem extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <Titulo titulo='Concluir Viagem' />
                 <Text style={styles.title}>Complete os dados a seguir sobre a viagem</Text>
                 <Input
                     keyboardType='numeric'
@@ -80,7 +82,7 @@ class ConcluirViagem extends React.Component {
                     onChangeText={descricao => this.setState({ descricao })}/>
 
                 <Botao onPress={() => this.concluir()}
-                    title='Concluir Viagem' />
+                    title='Concluir Viagem' name='route' />
             </View>
         )
     }

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 
 import { connect } from 'react-redux'
 import { loadViagensConcluidas } from '../store/actions/viagem'
+import ItemViagemConcluida from './ItemViagemConcluida'
 
 class UltimasViagens extends React.Component {
 
@@ -17,9 +18,7 @@ class UltimasViagens extends React.Component {
 
                 {this.props.viagens.length > 0 ?
                 this.props.viagens.map(item => {return (
-                    <View key={item.id}>
-                        <Text>{item.veiculo.nome} - {item.motorista.nome}</Text>
-                    </View>
+                    <ItemViagemConcluida viagem={item} navigation={this.props.navigation} key={item.id} />
                 )}) :
                     <Text style={styles.txtSemRegistro}>Nenhum registro encontrado</Text>
                 }

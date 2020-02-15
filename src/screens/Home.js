@@ -4,7 +4,6 @@ import { View, Text, StyleSheet } from 'react-native'
 import Header from '../components/Header'
 import DisposicaoVeiculos from '../components/DisposicaoVeiculos'
 import ViagemAtual from '../components/ViagemAtual'
-import Botao from '../components/Botao'
 
 import { connect } from 'react-redux'
 import { login } from '../store/actions/user'

@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableHighlight } from 'react-native'
+import {View, Text, StyleSheet, TouchableHighlight, ScrollView } from 'react-native'
 import Header from '../components/Header'
 import UltimasViagens from '../components/UltimasViagens'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -13,6 +13,8 @@ import { filtrarViagens } from '../store/actions/viagem'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import ItemViagemConcluida from '../components/ItemViagemConcluida'
+import Titulo from '../components/Titulo'
 
 export const BotaoData = props => {
     return (
@@ -40,8 +42,9 @@ class Relatorio extends React.Component {
     }
 
     pesquisar = () => {
-        console.log('DateTime', moment(this.state.datetime).format('YYYY-MM-DD[T]HH:mm'))
-        this.props.onFiltrarViagens(moment(this.state.datetime).format('YYYY-MM-DD[T]HH:mm'))
+        const dataPesquisar = moment(this.state.datetime).format('YYYY-MM-DD[T]HH:mm')
+        console.log('DateTime', dataPesquisar)
+        this.props.onFiltrarViagens(dataPesquisar)
     }
 
     setDate = (event, date) => {
@@ -80,9 +83,10 @@ class Relatorio extends React.Component {
         return (
             <View style={styles.container}>
                 <Header />
-
-                <View>                    
-                    <UltimasViagens />
+                <Titulo titulo='Relatórios' />
+                
+                <ScrollView>
+                    <UltimasViagens navigation={this.props.navigation} />
 
                     <Text style={styles.title}>Realize uma filtragem:</Text>
 
@@ -108,21 +112,21 @@ class Relatorio extends React.Component {
                     <Botao onPress={() => this.pesquisar()}
                         title='Pesquisar' name='search' />
 
-                    { this.props.viagens_filtradas.lenght > 0 ?
-                    this.props.viagens_filtradas.map(item => {return (
-                        <View key={item.id}>
-                            <Text>{item.veiculo.nome} - {item.motorista.nome}</Text>
-                        </View>
-                    )}) :
-                        <Text style={styles.txtSemResultado}>Nenhum resultado encontrado</Text>
-                    }
-                </View>
+                    <View style={styles.resultados}>
+                        { this.props.viagens_filtradas.length > 0 ?
+                            this.props.viagens_filtradas.map(item => (
+                                <ItemViagemConcluida viagem={item} navigation={this.props.navigation} key={item.id} />
+                            )) :
+                            <Text style={styles.txtSemResultado}>Nenhum resultado encontrado</Text>
+                        }
+                    </View>
+                </ScrollView>
             </View>
         )
     }
 }
 
-const mapStateToProps = ({viagem}) => {
+const mapStateToProps = ({ viagem }) => {
     return {
         viagens_filtradas: viagem.viagens_filtradas
     }
@@ -154,6 +158,9 @@ const styles = StyleSheet.create({
     },
     txtSemResultado: {
         textAlign: 'center',
+        marginTop: 10
+    },
+    resultados: {
         marginTop: 10
     }
 })

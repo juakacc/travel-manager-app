@@ -12,7 +12,7 @@ export default class VeiculoAtual extends React.Component {
                     <Text style={styles.saida}>Saída às {this.props.viagem.saida}</Text>
 
                     <Botao onPress={() => this.props.navigation.navigate('ConcluirViagem')}
-                        title='Entregar veículo'/>
+                        title='Entregar veículo' name='key' />
                     <Text style={styles.txtInfo}>Ao entregar o veículo você deverá informar a quilometragem atual</Text>
                 </View>
             )
