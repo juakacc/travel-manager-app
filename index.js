@@ -6,9 +6,22 @@ import {name as appName} from './app.json';
 import storeConfig from './src/store/storeConfig'
 import { Provider } from 'react-redux';
 import axios from 'axios'
+import AsyncStorage from '@react-native-community/async-storage';
 
 // axios.defaults.baseURL = 'http://107.21.5.22:8080/' // Remote
 axios.defaults.baseURL = 'http://192.168.31.20:8080/' // Local
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+
+const configureToken = async () => {
+    const json = await AsyncStorage.getItem('userData')
+    const userData = JSON.parse(json) || {}
+    
+    if (userData.token) {
+        axios.defaults.headers.common = {'Authorization': `Bearer ${userData.token}`}
+    }
+}
+
+configureToken()
 
 const storeFunction = storeConfig()
 

@@ -6,9 +6,6 @@ import DisposicaoVeiculos from '../components/DisposicaoVeiculos'
 import ViagemAtual from '../components/ViagemAtual'
 
 import { connect } from 'react-redux'
-import { login } from '../store/actions/user'
-import { iniciarViagem } from '../store/actions/viagem'
-import { Icon } from 'react-native-vector-icons/FontAwesome'
 
 class Home extends React.Component {
     
@@ -36,14 +33,7 @@ const mapStateToProps = ({user}) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onLogin: t => dispatch(login(t)),
-        onIniciarViagem: viagem => dispatch(iniciarViagem(viagem))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps)(Home)
 
 const styles = StyleSheet.create({
     container: {

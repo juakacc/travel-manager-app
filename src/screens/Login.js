@@ -45,11 +45,11 @@ class Login extends Component {
 
                 <TextInput
                     style={styles.field}
-                    autoCapitalize={false}
+                    autoCapitalize='none'
                     placeholder='Apelido'
                     value={this.state.apelido} 
                     returnKeyType='next'
-                    onChangeText={apelido => this.setState({ apelido })} />
+                    onChangeText={apelido => this.setState({ apelido: apelido.toLowerCase() })} />
                 <TextInput 
                     style={styles.field}
                     autoCapitalize='none'

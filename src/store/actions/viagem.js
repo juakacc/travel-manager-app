@@ -8,6 +8,8 @@ import {
     INICIANDO_VIAGEM,
     VIAGEM_INICIADA
 } from "./actionTypes"
+
+import { load_veiculos_disponiveis } from './veiculo'
 import { setMensagem } from './mensagem'
 
 import axios from 'axios'
@@ -32,12 +34,11 @@ export const viagem_iniciada = () => {
 }
 
 export const iniciarViagem = viagem => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(iniciando_viagem())
         axios.post('viagens', JSON.stringify(viagem), {
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getState().user.token
+                'Content-Type': 'application/json'
             }
         })
         .then(res => {
@@ -45,6 +46,7 @@ export const iniciarViagem = viagem => {
             dispatch(loadViagensNaoConcluidas())
             dispatch(setMensagem('Viagem iniciada. Siga as leis de trânsito'))
             dispatch(viagem_iniciada())
+            dispatch(load_veiculos_disponiveis())
         })
         .catch(err => console.log('VIAGEM', err))        
     }
@@ -57,18 +59,18 @@ export const viagemConcluida = () => {
 }
 
 export const concluirViagem = viagem => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(iniciando_viagem())
         axios.put(`viagens/concluir/${viagem.id}`, JSON.stringify(viagem.viagem), {
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getState().user.token
+                'Content-Type': 'application/json'
             }
         })
         .then(res => {
             dispatch(viagemConcluida())
             dispatch(setMensagem('Viagem concluída com sucesso'))
             dispatch(viagem_iniciada())
+            dispatch(load_veiculos_disponiveis())
         })
         .catch(err => console.log('VIAGEM', err))
     }
@@ -82,12 +84,8 @@ export const setViagem = viagem => {
 }
 
 export const loadViagem = motorista => {
-    return (dispatch, getState) => {
-        axios.get(`viagens/nao-concluidas/${motorista.id}`, {
-            headers: {
-                'Authorization': 'Bearer ' + getState().user.token
-            }
-        })
+    return (dispatch) => {
+        axios.get(`viagens/nao-concluidas/${motorista.id}`)
         .then(res => {
             dispatch(setViagem(res.data))
         })
@@ -111,11 +109,7 @@ export const setViagensConcluidas = viagens => {
 
 export const loadViagensConcluidas = () => {
     return (dispatch, getState) => {
-        axios.get('viagens/concluidas', {
-            headers: {
-                'Authorization': 'Bearer ' + getState().user.token
-            }
-        })
+        axios.get('viagens/concluidas')
         .then(res => {
             dispatch(setViagensConcluidas(res.data))
         })
@@ -125,11 +119,7 @@ export const loadViagensConcluidas = () => {
 
 export const loadViagensNaoConcluidas = () => {
     return (dispatch, getState) => {
-        axios.get('viagens/nao-concluidas', {
-            headers: {
-                'Authorization': 'Bearer ' + getState().user.token
-            }
-        })
+        axios.get('viagens/nao-concluidas')
         .then(res => {
             dispatch(setViagensNaoConcluidas(res.data))
         })
@@ -146,11 +136,7 @@ export const setViagensFiltradas = viagens => {
 
 export const filtrarViagens = date => {
     return (dispatch, getState) => {
-        axios.get(`viagens?date=${date}`, {
-            headers: {
-                'Authorization': 'Bearer ' + getState().user.token
-            }
-        })
+        axios.get(`viagens?date=${date}`)
         .then(res => {
             dispatch(setViagensFiltradas(res.data))
         })

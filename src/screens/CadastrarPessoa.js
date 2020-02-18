@@ -1,10 +1,9 @@
 import React from 'react'
-import { View, Text, StyleSheet, Picker, Alert } from 'react-native'
+import { View, Text, StyleSheet, Picker } from 'react-native'
 import Titulo from '../components/Titulo'
 
-import axios from 'axios'
+import { salvar_usuario } from '../store/actions/user'
 import { connect } from 'react-redux'
-import { setMensagem } from '../store/actions/mensagem'
 
 import commonStyles from '../commonStyles'
 import { Input } from 'react-native-elements'
@@ -38,6 +37,12 @@ class CadastrarPessoa extends React.Component {
 
     componentDidMount = () => {
         this.setState({ ...estadoInicial })
+    }
+
+    componentDidUpdate = prevProps => {
+        if (prevProps.isLoading && !this.props.isLoading) {
+            this.props.navigation.navigate('Home')
+        }
     }
 
     isValid = () => {
@@ -93,26 +98,15 @@ class CadastrarPessoa extends React.Component {
 
     salvar = () => {
         if (this.isValid()) {
-            axios.post('motoristas', {
+            const usuario = {
                 nome: this.state.nome,
                 apelido: this.state.apelido.toLowerCase().trim(),
                 cnh: this.state.cnh,
                 categoria: this.state.categoria,
                 telefone: this.state.telefone,
                 senha: this.state.senha,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.props.token}`
-                }
-            })
-            .then(res => {
-                this.props.setMensagem('Motorista cadastrado')
-                this.props.navigation.navigate('Home')
-            })
-            .catch(err => {
-                this.props.setMensagem('Erro ao salvar motorista')
-            })
+            }
+            this.props.onSalvar(usuario)
         }
     }
 
@@ -198,13 +192,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ user }) => {
     return {
-        token: user.token
+        isLoading: user.isLoading
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        setMensagem: msg => dispatch(setMensagem(msg))
+        onSalvar: user => dispatch(salvar_usuario(user))
     }
 }
 

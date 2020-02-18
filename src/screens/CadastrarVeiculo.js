@@ -4,8 +4,7 @@ import { Input } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler'
 import Botao from '../components/Botao'
 
-import axios from 'axios'
-import { setMensagem } from '../store/actions/mensagem'
+import { salvar_veiculo } from '../store/actions/veiculo'
 import { connect } from 'react-redux'
 import Titulo from '../components/Titulo'
 import commonStyles from '../commonStyles'
@@ -28,6 +27,12 @@ class CadastrarVeiculo extends React.Component {
         err_modelo: '',
         err_quilometragem: '',
         err_cnh_requerida: ''
+    }
+
+    componentDidUpdate = prevProps => {
+        if (prevProps.isLoading && !this.props.isLoading) {
+            this.props.navigation.navigate('Home')
+        }
     }
 
     isValid = () => {
@@ -82,8 +87,9 @@ class CadastrarVeiculo extends React.Component {
 
     
     salvarVeiculo = () => {
+        
         if (this.isValid()) {
-            axios.post('veiculos', {
+            const veiculo = {
                 nome: this.state.nome.toUpperCase(),
                 placa: this.state.placa.toUpperCase(),
                 renavam: this.state.renavam,
@@ -92,21 +98,8 @@ class CadastrarVeiculo extends React.Component {
                 quilometragem: this.state.quilometragem,
                 cnh_requerida: this.state.cnh_requerida,
                 disponivel: true
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.props.token}`
-                }
-            })
-            .then(res => {
-                console.log(res.data)
-                this.props.onShowMensagem('Veículo cadastrado')
-                this.props.navigation.navigate('Home')
-            })
-            .catch(err => {
-                this.props.onShowMensagem(''+err.response.data[0].mensagemUsuario)
-                console.log('Erro: ', err.response.data[0].mensagemUsuario)
-            })
+            }
+            this.props.onSalvarVeiculo(veiculo)
         }        
     }
 
@@ -187,13 +180,13 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onShowMensagem: msg => dispatch(setMensagem(msg))
+        onSalvarVeiculo: veiculo => dispatch(salvar_veiculo(veiculo))
     }
 }
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ veiculo }) => {
     return {
-        token: user.token
+        isLoading: veiculo.isLoading
     }
 }
 

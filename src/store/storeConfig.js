@@ -4,11 +4,13 @@ import thunk from "redux-thunk";
 import userReducer from './reducers/user'
 import messageReducer from './reducers/mensagem'
 import viagemReducer from './reducers/viagem'
+import veiculoReducer from './reducers/veiculo'
 
 const reducers = combineReducers({
     user: userReducer,
     viagem: viagemReducer,
-    mensagem: messageReducer
+    mensagem: messageReducer,
+    veiculo: veiculoReducer
 })
 
 const storeConfig = () => {
