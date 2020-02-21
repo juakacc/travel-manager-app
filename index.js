@@ -8,8 +8,8 @@ import { Provider } from 'react-redux';
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 
-// axios.defaults.baseURL = 'http://107.21.5.22:8080/' // Remote
-axios.defaults.baseURL = 'http://192.168.31.20:8888/' // Local
+axios.defaults.baseURL = 'https://viagens-api.herokuapp.com/' // Remote
+// axios.defaults.baseURL = 'http://192.168.31.20:8888/' // Local
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 const configureToken = async () => {
