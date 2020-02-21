@@ -129,7 +129,7 @@ class CadastrarPessoa extends React.Component {
                         errorMessage={this.state.err_apelido}
                         returnKeyType='next'
                         value={this.state.apelido}
-                        onChangeText={apelido => this.setState({ apelido: apelido.toLowerCase().trim() })} />
+                        onChangeText={apelido => this.setState({ apelido })} />
 
                     <Input
                         label='CNH'

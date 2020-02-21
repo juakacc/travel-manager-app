@@ -40,7 +40,7 @@ class DetalharViagem extends React.Component {
                 this.setState({ viagem: res.data })
             })
             .catch(err => {
-                this.props.setMensagem('Erro ao recuperar dados da viagem')
+                this.props.setMensagem(err.response.data.mensagem)
             })
         } else {
             this.props.navigation.goBack()

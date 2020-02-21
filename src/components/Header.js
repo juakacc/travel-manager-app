@@ -10,11 +10,15 @@ class Header extends React.Component {
         date: functions.getDateString()
     }
 
-    componentDidUpdate() {
-        this.setState({
-            date: functions.getDateString()
-        })
+    componentDidUpdate = () => {
+        console.log('Header didMount')
     }
+
+    // componentDidUpdate() {
+    //     this.setState({
+    //         date: functions.getDateString()
+    //     })
+    // }
 
     render() {
         return (

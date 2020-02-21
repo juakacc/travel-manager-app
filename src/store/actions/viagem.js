@@ -36,11 +36,7 @@ export const viagem_iniciada = () => {
 export const iniciarViagem = viagem => {
     return (dispatch) => {
         dispatch(iniciando_viagem())
-        axios.post('viagens', JSON.stringify(viagem), {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        axios.post('viagens', JSON.stringify(viagem))
         .then(res => {
             dispatch(loadViagem(res.data.motorista))
             dispatch(loadViagensNaoConcluidas())
@@ -48,7 +44,7 @@ export const iniciarViagem = viagem => {
             dispatch(viagem_iniciada())
             dispatch(load_veiculos_disponiveis())
         })
-        .catch(err => console.log('VIAGEM', err))        
+        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))        
     }
 }
 
@@ -61,7 +57,7 @@ export const viagemConcluida = () => {
 export const concluirViagem = viagem => {
     return (dispatch) => {
         dispatch(iniciando_viagem())
-        axios.put(`viagens/concluir/${viagem.id}`, JSON.stringify(viagem.viagem), {
+        axios.put(`viagens/${viagem.id}`, JSON.stringify(viagem.viagem), {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -72,7 +68,7 @@ export const concluirViagem = viagem => {
             dispatch(viagem_iniciada())
             dispatch(load_veiculos_disponiveis())
         })
-        .catch(err => console.log('VIAGEM', err))
+        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
     }
 }
 
@@ -85,11 +81,14 @@ export const setViagem = viagem => {
 
 export const loadViagem = motorista => {
     return (dispatch) => {
-        axios.get(`viagens/nao-concluidas/${motorista.id}`)
+        axios.get(`viagens/atual/${motorista.id}`)
         .then(res => {
             dispatch(setViagem(res.data))
         })
-        .catch(err => console.log('VIAGEM: ', err))
+        .catch(err => {
+            if (err.response.status != 404)
+                dispatch(setMensagem(err.response.data.mensagem))
+        })
     }
 }
 
@@ -109,21 +108,21 @@ export const setViagensConcluidas = viagens => {
 
 export const loadViagensConcluidas = () => {
     return (dispatch, getState) => {
-        axios.get('viagens/concluidas')
+        axios.get('viagens?status=concluida')
         .then(res => {
             dispatch(setViagensConcluidas(res.data))
         })
-        .catch(err => console.log('VIAGEM', err))        
+        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))        
     }
 }
 
 export const loadViagensNaoConcluidas = () => {
     return (dispatch, getState) => {
-        axios.get('viagens/nao-concluidas')
+        axios.get('viagens?status=nao-concluida')
         .then(res => {
             dispatch(setViagensNaoConcluidas(res.data))
         })
-        .catch(err => console.log('VIAGEM', err))
+        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
     }
 }
 
@@ -135,11 +134,11 @@ export const setViagensFiltradas = viagens => {
 }
 
 export const filtrarViagens = date => {
-    return (dispatch, getState) => {
+    return dispatch => {
         axios.get(`viagens?date=${date}`)
         .then(res => {
             dispatch(setViagensFiltradas(res.data))
         })
-        .catch(err => console.log('VIAGEM', err))
+        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
     }
 }

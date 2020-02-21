@@ -78,7 +78,7 @@ const HomeBottomTabNavigator = createBottomTabNavigator({
     Viagens: { 
         screen: RelatorioStack,
         navigationOptions: {
-            title: 'Relatorio',
+            title: 'Relatórios',
             tabBarIcon: ({tintColor}) => 
                 <Ionicons name='ios-albums' size={30} color={tintColor} />
         }

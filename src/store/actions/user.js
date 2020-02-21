@@ -1,6 +1,7 @@
 import { USER_LOGGED_IN, USER_LOADED, LOADING_USER, USER_LOGGED_OUT } from "./actionTypes"
 
 import { loadViagem } from './viagem'
+import { setMensagem } from './mensagem'
 import { load_veiculos_disponiveis } from './veiculo'
 import axios from "axios"
 import AsyncStorage from "@react-native-community/async-storage"
@@ -16,10 +17,11 @@ export const setUser = user => {
 export const userLogged = user => {
     
     return async dispatch => {
+        await AsyncStorage.setItem('userData', JSON.stringify(user))
+        axios.defaults.headers.common = {'Authorization': `Bearer ${user.token}`}
         dispatch(setUser(user))
         dispatch(loadViagem(user))
         dispatch(load_veiculos_disponiveis())
-        await AsyncStorage.setItem('userData', JSON.stringify(user))
         dispatch(usuario_carregado())
     }
 }
@@ -42,24 +44,28 @@ export const login = user => {
         dispatch(carregando_usuario())
 
         axios.post('login', {
-            username: user.apelido,
-            password: user.senha
+            apelido: user.apelido,
+            senha: user.senha
         })       
         .then(res => {
             const token = res.data.token
             
-            axios.get(`motoristas/dados/${user.apelido}`)            
-            .then(async res => {
+            axios.get(`motoristas/${res.data.id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })            
+            .then(motorista => {
                 delete user.senha
-                user.id = res.data.id
-                user.nome = res.data.nome
+                user.id = motorista.data.id
+                user.nome = motorista.data.nome
                 user.token = token
 
                 dispatch(userLogged(user))
             })
-            .catch(err => console.log('LOGIN', err))
+            .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
         })
-        .catch(err => console.log('LOGIN', err))
+        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
     }
 }
 
@@ -67,14 +73,12 @@ export const salvar_usuario = user => {
     return dispatch => {
         dispatch(carregando_usuario())
 
-        axios.post('motoristas', usuario)
+        axios.post('motoristas', user)
         .then(res => {
-            this.props.setMensagem('Motorista cadastrado')
+            dispatch(dispatch(setMensagem('Motorista cadastrado')))
             dispatch(usuario_carregado())
         })
-        .catch(err => {
-            this.props.setMensagem('Erro ao salvar motorista')
-        })
+        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
     }
 }
 
