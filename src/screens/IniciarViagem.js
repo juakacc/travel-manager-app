@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { iniciarViagem } from '../store/actions/viagem'
+import { setMensagem } from '../store/actions/mensagem'
 import { View, StyleSheet, Text } from 'react-native'
 import { Input } from 'react-native-elements'
 
@@ -37,6 +38,15 @@ class IniciarViagem extends React.Component {
         return true
     }
 
+    componentDidMount = () => {
+        const idVeiculo = this.props.navigation.getParam('idVeiculo')
+
+        if (!idVeiculo) {
+            this.props.setMensagem('Veículo inválido')
+            this.props.navigation.navigate('Viagem')
+        }
+    }
+
     iniciarViagem = () => {
 
         if (this.isValid()) {
@@ -45,12 +55,8 @@ class IniciarViagem extends React.Component {
             const viagem = {
                 "saida": dataAtual,
                 "km_inicial": this.state.quilometragem,
-                "veiculo": {
-                    "id": this.props.navigation.getParam('idVeiculo')  // verificar antes de enviar
-                },
-                "motorista": {
-                    "id": this.props.motorista.id
-                }
+                "veiculo": this.props.navigation.getParam('idVeiculo'),
+                "motorista": this.props.motorista.id
             }
             this.props.onIniciarViagem(viagem)
         }        
@@ -96,7 +102,8 @@ const mapStateToProps = ({ user, viagem }) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIniciarViagem: viagem => dispatch(iniciarViagem(viagem))
+        onIniciarViagem: viagem => dispatch(iniciarViagem(viagem)),
+        setMensagem: msg => dispatch(setMensagem(msg))
     }
 }
 

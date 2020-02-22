@@ -12,7 +12,6 @@ import { connect } from 'react-redux'
 import { filtrarViagens } from '../store/actions/viagem'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import ItemViagemConcluida from '../components/ItemViagemConcluida'
 import Titulo from '../components/Titulo'
 

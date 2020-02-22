@@ -63,9 +63,14 @@ class DetalharViagem extends React.Component {
                     </Text>
                 <Text style={styles.info}>KM registrado na saída: {this.state.viagem.km_inicial} KM
                     </Text>
-                <Text style={styles.info}>Momento da chegada: {functions.getDateTimeString(this.state.viagem.chegada)}
-                    </Text>
-                <Text style={styles.info}>KM registrado na chegada: {this.state.viagem.km_final} KM</Text>
+                { this.state.viagem.chegada ? 
+                    <View>
+                        <Text style={styles.info}>Momento da chegada: {functions.getDateTimeString(this.state.viagem.chegada)}</Text>
+                        <Text style={styles.info}>KM registrado na chegada: {this.state.viagem.km_final} KM</Text>
+                    </View>
+                : 
+                    <Text style={styles.emAndamento}>VIAGEM EM ANDAMENTO</Text>
+                }
             </View>
         )
     }
@@ -78,6 +83,11 @@ const styles = StyleSheet.create({
     info: {
         marginLeft: 10,
         marginVertical: 10
+    },
+    emAndamento: {
+        marginVertical: 20,
+        textAlign: 'center',
+        fontWeight: 'bold'
     }
 })
 

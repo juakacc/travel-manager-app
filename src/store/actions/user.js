@@ -20,8 +20,8 @@ export const userLogged = user => {
         await AsyncStorage.setItem('userData', JSON.stringify(user))
         axios.defaults.headers.common = {'Authorization': `Bearer ${user.token}`}
         dispatch(setUser(user))
-        dispatch(loadViagem(user))
-        dispatch(load_veiculos_disponiveis())
+        // dispatch(loadViagem(user))
+        // dispatch(load_veiculos_disponiveis())
         dispatch(usuario_carregado())
     }
 }

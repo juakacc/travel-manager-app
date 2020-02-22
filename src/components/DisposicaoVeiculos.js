@@ -1,13 +1,21 @@
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 
 import { connect } from 'react-redux'
 import { loadViagensNaoConcluidas } from '../store/actions/viagem'
+import { ScrollView } from 'react-native-gesture-handler'
 
 class DisposicaoVeiculos extends React.Component {
 
     componentDidMount() {
-        this.props.onLoadViagens()
+        const { navigation } = this.props
+        this.focusListener = navigation.addListener('didFocus', () => {
+            this.props.onLoadViagens()
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
     }
 
     render() {
@@ -15,6 +23,7 @@ class DisposicaoVeiculos extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.title}>Disposição atual dos veículos:</Text>
 
+                <ScrollView>
                 {this.props.viagens.length > 0 ? 
                     this.props.viagens.map(viagem => {
                         return (
@@ -28,6 +37,7 @@ class DisposicaoVeiculos extends React.Component {
                         <Text style={styles.txtSemViagem}>Todos os veículos estão disponíveis</Text>
                     </View>
                 }
+                </ScrollView>
             </View>
         )
     }
@@ -35,23 +45,27 @@ class DisposicaoVeiculos extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center'
+        paddingBottom: 260
     },
     title: {
         color: '#000',
         fontFamily: 'shelter',
         fontWeight: 'bold',
-        fontSize: 14
+        fontSize: 14,
+        textAlign: 'center'
     },
     motorista: {
-        fontSize: 14
+        fontSize: 14,
+        textAlign: 'center'
     },
     veiculo: {
         color: '#777',
-        fontSize: 11
+        fontSize: 11,
+        textAlign: 'center'
     },
     txtSemViagem: {
-        marginTop: 10
+        marginTop: 10,
+        textAlign: 'center'
     }
 })
 

@@ -4,7 +4,20 @@ import { connect } from 'react-redux'
 import VeiculoAtual from './VeiculoAtual'
 import FormSelectVeiculo from './FormSelectVeiculo'
 
+import { loadViagem } from '../store/actions/viagem'
+
 class ViagemAtual extends React.Component {
+
+    componentDidMount() {
+        const { navigation } = this.props
+        this.focusListener = navigation.addListener('didFocus', () => {
+            this.props.onLoadViagem()
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
 
     render() {
         if (this.props.viagem) {
@@ -22,4 +35,10 @@ const mapStateToProps = ({user, viagem}) => {
     }
 }
 
-export default connect(mapStateToProps, null)(ViagemAtual)
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadViagem: () => dispatch(loadViagem())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViagemAtual)

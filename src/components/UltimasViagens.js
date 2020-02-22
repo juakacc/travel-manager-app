@@ -8,7 +8,14 @@ import ItemViagemConcluida from './ItemViagemConcluida'
 class UltimasViagens extends React.Component {
 
     componentDidMount() {
-        this.props.onLoadViagens()
+        const { navigation } = this.props
+        this.focusListener = navigation.addListener('didFocus', () => {
+            this.props.onLoadViagens()
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
     }
 
     render() {

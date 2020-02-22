@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 axios.defaults.baseURL = 'https://viagens-api.herokuapp.com/' // Remote
 // axios.defaults.baseURL = 'http://192.168.31.20:8888/' // Local
+
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 const configureToken = async () => {

@@ -9,7 +9,6 @@ import {
     VIAGEM_INICIADA
 } from "./actionTypes"
 
-import { load_veiculos_disponiveis } from './veiculo'
 import { setMensagem } from './mensagem'
 
 import axios from 'axios'
@@ -21,13 +20,13 @@ export const viagemIniciada = viagem => {
     }
 }
 
-export const iniciando_viagem = () => {
+export const carregando_viagem = () => {
     return {
         type: INICIANDO_VIAGEM
     }
 }
 
-export const viagem_iniciada = () => {
+export const viagem_carregada = () => {
     return {
         type: VIAGEM_INICIADA
     }
@@ -35,14 +34,14 @@ export const viagem_iniciada = () => {
 
 export const iniciarViagem = viagem => {
     return (dispatch) => {
-        dispatch(iniciando_viagem())
-        axios.post('viagens', JSON.stringify(viagem))
+        dispatch(carregando_viagem())
+        axios.post('viagens', viagem)
         .then(res => {
-            dispatch(loadViagem(res.data.motorista))
-            dispatch(loadViagensNaoConcluidas())
+            // dispatch(loadViagem(res.data.motorista))
+            // dispatch(loadViagensNaoConcluidas())
             dispatch(setMensagem('Viagem iniciada. Siga as leis de trânsito'))
-            dispatch(viagem_iniciada())
-            dispatch(load_veiculos_disponiveis())
+            dispatch(viagem_carregada())
+            // dispatch(load_veiculos_disponiveis())
         })
         .catch(err => dispatch(setMensagem(err.response.data.mensagem)))        
     }
@@ -56,17 +55,13 @@ export const viagemConcluida = () => {
 
 export const concluirViagem = viagem => {
     return (dispatch) => {
-        dispatch(iniciando_viagem())
-        axios.put(`viagens/${viagem.id}`, JSON.stringify(viagem.viagem), {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        dispatch(carregando_viagem())
+        axios.put(`viagens/${viagem.id}`, viagem.viagem)
         .then(res => {
             dispatch(viagemConcluida())
             dispatch(setMensagem('Viagem concluída com sucesso'))
-            dispatch(viagem_iniciada())
-            dispatch(load_veiculos_disponiveis())
+            dispatch(viagem_carregada())
+            // dispatch(load_veiculos_disponiveis())
         })
         .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
     }
@@ -79,9 +74,9 @@ export const setViagem = viagem => {
     }
 }
 
-export const loadViagem = motorista => {
-    return (dispatch) => {
-        axios.get(`viagens/atual/${motorista.id}`)
+export const loadViagem = () => {
+    return (dispatch, getState) => {
+        axios.get(`viagens/atual/${getState().user.id}`)
         .then(res => {
             dispatch(setViagem(res.data))
         })

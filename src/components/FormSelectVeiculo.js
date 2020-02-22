@@ -2,21 +2,41 @@ import React from 'react'
 import { View, Text, StyleSheet, Picker } from 'react-native'
 import Botao from './Botao'
 
-import { load_veiculos_disponiveis } from '../store/actions/veiculo'
-import { connect } from 'react-redux'
+import axios from 'axios'
 
 class FormSelectVeiculo extends React.Component {
+    _isMounted = false
 
     state = {
+        veiculos: [],
         veiculoSelec: null
     }
 
-    componentDidMount = () => {
-        this.props.onAtualizarVeiculos()
+    componentDidMount() {
+        this._isMounted = true
 
-        if (this.props.veiculos.length > 0) {
-            this.setState({ veiculoSelec: this.props.veiculos[0].id })
-        }
+        const { navigation } = this.props
+        this.focusListener = navigation.addListener('didFocus', () => {
+            axios.get('veiculos/disponiveis')
+            .then(res => {
+                if(this._isMounted) {
+                    if (res.data.length > 0) {
+                        this.setState({ 
+                            veiculos: res.data,
+                            veiculoSelec: res.data[0].id
+                        })
+                    } else {
+                        this.setState({ veiculos: res.data })
+                    }
+                }
+            })
+            .catch(err => console.log(err))
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove()
+        this._isMounted = false
     }
 
     enviarVeiculo = () => {
@@ -30,14 +50,14 @@ class FormSelectVeiculo extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.title}>Veículos disponíveis:</Text>
 
-                { this.props.veiculos.length > 0 ?
+                { this.state.veiculos.length > 0 ?
                 <View>
                     <Picker
                         selectedValue={this.state.veiculoSelec}
                         onValueChange={(itemValue, itemIndex) => {
                             this.setState({ veiculoSelec: itemValue })
                         }}>
-                        {this.props.veiculos.map(item => {
+                        {this.state.veiculos.map(item => {
                             return (<Picker.Item label={item.nome} value={item.id} key={item.id}/>) 
                         })}
                     </Picker>
@@ -52,19 +72,7 @@ class FormSelectVeiculo extends React.Component {
     }
 }
 
-const mapStateToProps = ({ veiculo }) => {
-    return {
-        veiculos: veiculo.veiculos_disponiveis
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onAtualizarVeiculos: () => dispatch(load_veiculos_disponiveis())
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FormSelectVeiculo)
+export default FormSelectVeiculo
 
 const styles = StyleSheet.create({
     container: {

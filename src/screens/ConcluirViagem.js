@@ -50,12 +50,8 @@ class ConcluirViagem extends React.Component {
                     "descricao": this.state.descricao,
                     "km_inicial": this.props.viagem.km_inicial,
                     "km_final": this.state.quilometragem,
-                    "veiculo": {
-                        "id": this.props.viagem.veiculo.id
-                    },
-                    "motorista": {
-                        "id": this.props.motorista.id
-                    }
+                    "veiculo": this.props.viagem.veiculo.id,
+                    "motorista": this.props.motorista.id
                 }
             }
             this.props.onConcluirViagem(viagem)

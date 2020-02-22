@@ -41,7 +41,7 @@ export const salvar_veiculo = veiculo => {
         .then(res => {
             dispatch(setMensagem('Veículo cadastrado'))
             dispatch(veiculo_carregado())
-            dispatch(load_veiculos_disponiveis())
+            // dispatch(load_veiculos_disponiveis())
         })
         .catch(err => {
             dispatch(setMensagem(err.response.data.mensagem))
