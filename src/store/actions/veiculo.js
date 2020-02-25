@@ -29,7 +29,7 @@ export const load_veiculos_disponiveis = () => {
         .then(res => {
             dispatch(set_veiculos_disponiveis(res.data))
         })
-        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
+        .catch(err => dispatch(setMensagem(err)))
     }    
 }
 
@@ -44,7 +44,7 @@ export const salvar_veiculo = veiculo => {
             // dispatch(load_veiculos_disponiveis())
         })
         .catch(err => {
-            dispatch(setMensagem(err.response.data.mensagem))
+            dispatch(setMensagem(err))
         })
     }
 }

@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { setMensagem } from './store/actions/mensagem'
 import { ToastAndroid } from 'react-native';
 
+import NavigatorService from './NavigatorService'
+
 class App extends Component {
 
   componentDidUpdate = () => {
@@ -17,7 +19,11 @@ class App extends Component {
 
   render () {
     return (
-      <Navigator />
+      <Navigator 
+        ref={navigatorRef => {
+            NavigatorService.setTopLevelNavigator(navigatorRef)
+        }}
+      />
     )
   }  
 }

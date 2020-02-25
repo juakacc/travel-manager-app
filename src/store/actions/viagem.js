@@ -43,7 +43,7 @@ export const iniciarViagem = viagem => {
             dispatch(viagem_carregada())
             // dispatch(load_veiculos_disponiveis())
         })
-        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))        
+        .catch(err => dispatch(setMensagem(err)))        
     }
 }
 
@@ -63,7 +63,7 @@ export const concluirViagem = viagem => {
             dispatch(viagem_carregada())
             // dispatch(load_veiculos_disponiveis())
         })
-        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
+        .catch(err => dispatch(setMensagem(err)))
     }
 }
 
@@ -81,8 +81,8 @@ export const loadViagem = () => {
             dispatch(setViagem(res.data))
         })
         .catch(err => {
-            if (err.response.status != 404)
-                dispatch(setMensagem(err.response.data.mensagem))
+            if (err.response && err.response.status != 404)
+                dispatch(setMensagem(err))
         })
     }
 }
@@ -102,12 +102,12 @@ export const setViagensConcluidas = viagens => {
 }
 
 export const loadViagensConcluidas = () => {
-    return (dispatch, getState) => {
+    return dispatch => {
         axios.get('viagens?status=concluida')
         .then(res => {
             dispatch(setViagensConcluidas(res.data))
         })
-        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))        
+        .catch(err => dispatch(setMensagem(err)))        
     }
 }
 
@@ -117,7 +117,7 @@ export const loadViagensNaoConcluidas = () => {
         .then(res => {
             dispatch(setViagensNaoConcluidas(res.data))
         })
-        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
+        .catch(err => dispatch(setMensagem(err)))
     }
 }
 
@@ -134,6 +134,6 @@ export const filtrarViagens = date => {
         .then(res => {
             dispatch(setViagensFiltradas(res.data))
         })
-        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
+        .catch(err => dispatch(setMensagem(err)))
     }
 }

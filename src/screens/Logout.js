@@ -8,7 +8,6 @@ import { userLoggout } from '../store/actions/user'
 class Logout extends React.Component {
 
     logout = () => {
-        
         this.props.onLogout()
         this.props.navigation.navigate('Auth')
     }

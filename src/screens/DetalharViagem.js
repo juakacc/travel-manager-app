@@ -40,7 +40,7 @@ class DetalharViagem extends React.Component {
                 this.setState({ viagem: res.data })
             })
             .catch(err => {
-                this.props.setMensagem(err.response.data.mensagem)
+                this.props.setMensagem(err)
             })
         } else {
             this.props.navigation.goBack()

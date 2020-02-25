@@ -29,14 +29,14 @@ export const userLogged = user => {
 export const userLog = () => {
     return {
         type: USER_LOGGED_OUT
-    }
+    }   
 }
 
 export const userLoggout = () => {
     return async dispatch => {
         await AsyncStorage.setItem('userData', JSON.stringify({}))
         dispatch(userLog())
-    }    
+    }
 }
 
 export const login = user => {
@@ -63,9 +63,9 @@ export const login = user => {
 
                 dispatch(userLogged(user))
             })
-            .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
+            .catch(err => dispatch(setMensagem(err)))
         })
-        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
+        .catch(err => dispatch(setMensagem(err)))
     }
 }
 
@@ -78,7 +78,7 @@ export const salvar_usuario = user => {
             dispatch(dispatch(setMensagem('Motorista cadastrado')))
             dispatch(usuario_carregado())
         })
-        .catch(err => dispatch(setMensagem(err.response.data.mensagem)))
+        .catch(err => dispatch(setMensagem(err)))
     }
 }
 

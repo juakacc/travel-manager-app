@@ -6,7 +6,9 @@ import {
     TextInput,
     StyleSheet,
     TouchableOpacity,
-    Alert
+    Alert,
+    KeyboardAvoidingView,
+    Platform
 } from 'react-native'
 import Botao from '../components/Botao'
 
@@ -14,6 +16,9 @@ import { login } from '../store/actions/user'
 import { connect } from 'react-redux'
 
 import Icon from 'react-native-vector-icons/FontAwesome'
+
+import PasswordInputText from 'react-native-hide-show-password-input'
+import { Input } from 'react-native-elements'
 
 class Login extends Component {
 
@@ -34,39 +39,50 @@ class Login extends Component {
 
     render () {
         return (
-            <View style={styles.container}>
+            // <View style={styles.container}>
+
+                <KeyboardAvoidingView
+                    style={styles.container}
+                    behavior={Platform.select({
+                        ios: 'padding',
+                        android: null,
+                    })} >
+
+                    {/* <View style={styles.containerTitles}> */}
+                        <Text style={styles.subtitle}>Bem vindo ao sistema de gerenciamento de viagens da prefeitura municipal de Olivêdos</Text>
+                        <Text style={styles.subtitle}>Realize login para acessar as funcionalidades do aplicativo:</Text>
+                    {/* </View> */}
+
+                    {/* <View style={styles.containerForm}> */}
                 
-                <Text style={styles.title}>
-                    <Icon name="road" size={30} color="#a50" /> Viagens PMO
-                </Text>
-                <Text style={styles.subtitle}>Bem vindo ao sistema de gerenciamento de viagens da prefeitura municipal de Olivêdos</Text>
+                        <View style={styles.field}>
+                            <Input
+                                style={styles.field}
+                                autoCapitalize='none'
+                                label='Apelido'
+                                value={this.state.apelido} 
+                                returnKeyType='next'
+                                onChangeText={apelido => this.setState({ apelido: apelido.toLowerCase() })} />
+                        </View>
 
-                <Text style={styles.subtitle}>Realize login para acessar as funcionalidades do aplicativo</Text>
+                        <View style={styles.field}>
+                            <PasswordInputText
+                                style={{fontSize: 19, marginHorizontal: 10}}
+                                autoCapitalize='none'
+                                label='Senha'
+                                value={this.state.senha}
+                                returnKeyType='done'
+                                onChangeText={senha => this.setState({ senha })} />
+                        </View>
 
-                <TextInput
-                    style={styles.field}
-                    autoCapitalize='none'
-                    placeholder='Apelido'
-                    value={this.state.apelido} 
-                    returnKeyType='next'
-                    onChangeText={apelido => this.setState({ apelido: apelido.toLowerCase() })} />
-                <TextInput 
-                    style={styles.field}
-                    autoCapitalize='none'
-                    placeholder='Senha'
-                    secureTextEntry={true} 
-                    value={this.state.senha}
-                    returnKeyType='done'
-                    onChangeText={senha => this.setState({ senha })} />
+                        <TouchableOpacity onPress={() => {Alert.alert('(83) 9 9184-7766 - Entre em contato e solicite uma nova senha')}}>
+                            <Text style={styles.esqueci}>Esqueci a senha</Text>
+                        </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => {Alert.alert('Esqueci a senha')}}>
-                    <Text style={styles.esqueci}>Esqueci a senha</Text>
-                </TouchableOpacity>
-
-                <Botao title='Entrar'
-                    name='plug'
-                    onPress={() => this.login()} />
-            </View>    
+                        <Botao title='Entrar' name='plug' onPress={() => this.login()} />
+                    {/* </View> */}
+                </KeyboardAvoidingView>                
+            // {/* </View>     */}
         )
     }
 }
@@ -77,18 +93,24 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center'
     },
+    containerTitles: {
+        flex: 1
+    },
+    containerForm: {
+        flex: 2,
+        justifyContent: 'center',
+        // paddingTop: 100
+    },
     title: {
         fontSize: 30,
         marginBottom: 10
     },
     subtitle: {
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 10
     },
     field: {
-        width: 200,
-        borderRadius: 20,
-        backgroundColor: '#DCDCDC',
-        paddingHorizontal: 10,
+        width: 300,
         marginTop: 10
     },
     esqueci: {

@@ -204,16 +204,29 @@ const DrawerNavigator = createDrawerNavigator({
     drawerPosition: "right"
 })
 
+const LoginStack = createStackNavigator({
+    Screen: {
+        screen: Login
+    }
+}, {
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: {
+        headerTitle: () => <Header />
+    }
+})
+
 const SwitchNavigator = createSwitchNavigator({
     Splash: {
         screen: Splash
     },
     Auth: {
-        screen: Login
+        screen: LoginStack
     },
     App: {
         screen: DrawerNavigator
     }
+}, {
+    initialRouteName: 'Splash'
 })
 
 export default createAppContainer(SwitchNavigator)
