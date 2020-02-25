@@ -21,7 +21,7 @@ class Header extends React.Component {
             <View style={styles.container}>
                 <View style={styles.rowContainer}>
                     <Text style={styles.user}>Bem vindo, {this.props.nome}</Text>
-                    <Text>{ this.state.date }</Text>
+                    <Text>{ functions.getDateString() }</Text>
                 </View>
             </View>
         )

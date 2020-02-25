@@ -15,8 +15,6 @@ import Botao from '../components/Botao'
 import { login } from '../store/actions/user'
 import { connect } from 'react-redux'
 
-import Icon from 'react-native-vector-icons/FontAwesome'
-
 import PasswordInputText from 'react-native-hide-show-password-input'
 import { Input } from 'react-native-elements'
 

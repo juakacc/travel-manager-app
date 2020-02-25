@@ -40,6 +40,9 @@ const ViagemStackNavigator = createStackNavigator({
     },
     ConcluirViagem: {
         screen: ConcluirViagem
+    },
+    ViagemDetalhes: {
+        screen: DetalharViagem
     }
 }, {
     initialRouteName: 'Viagem',

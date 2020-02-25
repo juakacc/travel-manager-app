@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { loadViagensNaoConcluidas } from '../store/actions/viagem'
 import { ScrollView } from 'react-native-gesture-handler'
+import ItemViagemConcluida from './ItemViagemConcluida'
 
 class DisposicaoVeiculos extends React.Component {
 
@@ -25,16 +26,12 @@ class DisposicaoVeiculos extends React.Component {
 
                 <ScrollView>
                 {this.props.viagens.length > 0 ? 
-                    this.props.viagens.map(viagem => {
-                        return (
-                            <View key={viagem.id}>
-                                <Text style={styles.motorista}>{viagem.motorista.apelido}</Text>
-                                <Text style={styles.veiculo}>- {viagem.veiculo.nome} -</Text>
-                            </View>
-                        )
-                    }) : 
+                    this.props.viagens.map(viagem => {return (
+                        <ItemViagemConcluida viagem={viagem} navigation={this.props.navigation} key={viagem.id} /> 
+                    )}) 
+                : 
                     <View>
-                        <Text style={styles.txtSemViagem}>Todos os veículos estão disponíveis</Text>
+                        <Text style={styles.txtSemViagem}>Nenhuma viagem em andamento</Text>
                     </View>
                 }
                 </ScrollView>
@@ -52,7 +49,8 @@ const styles = StyleSheet.create({
         fontFamily: 'shelter',
         fontWeight: 'bold',
         fontSize: 14,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginBottom: 10
     },
     motorista: {
         fontSize: 14,
