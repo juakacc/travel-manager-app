@@ -20,6 +20,7 @@ import { Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import DetalharViagem from './screens/DetalharViagem'
+import Sobre from './screens/Sobre'
 
 // Header to StackNavigator
 const Header = () => {
@@ -198,6 +199,13 @@ const DrawerNavigator = createDrawerNavigator({
         navigationOptions: {
             drawerLabel: 'Sair do App',
             drawerIcon: () => (<Ionicons name='ios-power' size={25} color='red' />)
+        }
+    },
+    Sobre: {
+        screen: Sobre,
+        navigationOptions: {
+            drawerLabel: 'Sobre o App',
+            drawerIcon: () => (<Ionicons name='ios-help-circle-outline' size={25} color='blue' />)
         }
     }
 }, {

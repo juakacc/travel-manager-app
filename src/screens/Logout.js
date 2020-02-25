@@ -17,7 +17,7 @@ class Logout extends React.Component {
             <View style={styles.container}>
                 <Text>Você deseja realmente sair da aplicação? </Text>
 
-                <Botao title='Sim' name='power-off' onPress={() => this.logout()} />
+                <Botao title='Sair' name='sign-out-alt' onPress={() => this.logout()} />
             </View>
         )
     }

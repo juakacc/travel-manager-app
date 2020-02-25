@@ -49,8 +49,8 @@ class Login extends Component {
                     })} >
 
                     {/* <View style={styles.containerTitles}> */}
-                        <Text style={styles.subtitle}>Bem vindo ao sistema de gerenciamento de viagens da prefeitura municipal de Olivêdos</Text>
-                        <Text style={styles.subtitle}>Realize login para acessar as funcionalidades do aplicativo:</Text>
+                        {/* <Text style={styles.subtitle}>Bem vindo ao sistema de gerenciamento de viagens da prefeitura municipal de Olivêdos</Text>
+                        <Text style={styles.subtitle}>Realize login para acessar as funcionalidades do aplicativo:</Text> */}
                     {/* </View> */}
 
                     {/* <View style={styles.containerForm}> */}
@@ -79,7 +79,7 @@ class Login extends Component {
                             <Text style={styles.esqueci}>Esqueci a senha</Text>
                         </TouchableOpacity>
 
-                        <Botao title='Entrar' name='plug' onPress={() => this.login()} />
+                        <Botao title='Entrar' name='sign-in-alt' onPress={() => this.login()} />
                     {/* </View> */}
                 </KeyboardAvoidingView>                
             // {/* </View>     */}
@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     containerTitles: {
         flex: 1
