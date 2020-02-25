@@ -1,8 +1,6 @@
 import { USER_LOGGED_IN, USER_LOADED, LOADING_USER, USER_LOGGED_OUT } from "./actionTypes"
 
-import { loadViagem } from './viagem'
 import { setMensagem } from './mensagem'
-import { load_veiculos_disponiveis } from './veiculo'
 import axios from "axios"
 import AsyncStorage from "@react-native-community/async-storage"
 
@@ -20,8 +18,6 @@ export const userLogged = user => {
         await AsyncStorage.setItem('userData', JSON.stringify(user))
         axios.defaults.headers.common = {'Authorization': `Bearer ${user.token}`}
         dispatch(setUser(user))
-        // dispatch(loadViagem(user))
-        // dispatch(load_veiculos_disponiveis())
         dispatch(usuario_carregado())
     }
 }

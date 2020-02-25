@@ -1,11 +1,12 @@
 import { SET_MENSAGEM } from "./actionTypes"
 
 import { userLoggout } from '../actions/user'
-
 import NavigatorService from '../../NavigatorService'
 
 export const setMensagem = msg => {
     return dispatch => {
+        const msg_padrao = 'Erro de comunicação, verifique sua conexão com a internet'
+
         if (typeof msg === 'string') { // Caso seja uma mensagem direta
             dispatch(set_mensagem_string(msg))
         } else if (msg.response) {
@@ -15,13 +16,13 @@ export const setMensagem = msg => {
                     dispatch(userLoggout())
                     NavigatorService.navigate('Splash')
                 } else {
-                    dispatch(set_mensagem_string(msg.response.data.mensagem || 'Erro de comunicação'))
+                    dispatch(set_mensagem_string(msg.response.data.mensagem || msg_padrao))
                 }
             } else {
-                dispatch(set_mensagem_string('Erro de comunicação'))
+                dispatch(set_mensagem_string(msg_padrao))
             }
         } else {
-            dispatch(set_mensagem_string('Erro de comunicação'))
+            dispatch(set_mensagem_string(msg_padrao))
         }
     }
 }

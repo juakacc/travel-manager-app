@@ -37,11 +37,8 @@ export const iniciarViagem = viagem => {
         dispatch(carregando_viagem())
         axios.post('viagens', viagem)
         .then(res => {
-            // dispatch(loadViagem(res.data.motorista))
-            // dispatch(loadViagensNaoConcluidas())
             dispatch(setMensagem('Viagem iniciada. Siga as leis de trânsito'))
             dispatch(viagem_carregada())
-            // dispatch(load_veiculos_disponiveis())
         })
         .catch(err => dispatch(setMensagem(err)))        
     }
@@ -61,7 +58,6 @@ export const concluirViagem = viagem => {
             dispatch(viagemConcluida())
             dispatch(setMensagem('Viagem concluída com sucesso'))
             dispatch(viagem_carregada())
-            // dispatch(load_veiculos_disponiveis())
         })
         .catch(err => dispatch(setMensagem(err)))
     }
