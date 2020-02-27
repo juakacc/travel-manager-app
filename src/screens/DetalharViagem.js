@@ -8,6 +8,8 @@ import commonStyles from '../commonStyles'
 import functions from '../functions'
 import Titulo from '../components/Titulo'
 
+import NumberFormat from 'react-number-format'
+
 class DetalharViagem extends React.Component {
 
     state = {
@@ -31,11 +33,13 @@ class DetalharViagem extends React.Component {
         const idViagem = this.props.navigation.getParam('idViagem')
         
         if (idViagem) {
-            await axios.get(`viagens/${idViagem}`, {
-                headers: {
-                    Authorization: `Bearer ${this.props.token}`
-                }
-            })
+            await axios.get(`viagens/${idViagem}`
+            // , {
+            //     headers: {
+            //         Authorization: `Bearer ${this.props.token}`
+            //     }
+            // }
+            )
             .then(res => {
                 this.setState({ viagem: res.data })
             })
@@ -61,12 +65,19 @@ class DetalharViagem extends React.Component {
                     : null }
                 <Text style={styles.info}>Momento da saída: {functions.getDateTimeString(this.state.viagem.saida)}
                     </Text>
-                <Text style={styles.info}>KM registrado na saída: {this.state.viagem.km_inicial} KM
-                    </Text>
+                <NumberFormat value={this.state.viagem.km_inicial} displayType={'text'} thousandSeparator={true}
+                    renderText={value => 
+                        <Text style={styles.info}>KM registrado na saída: {value} KM</Text>} 
+                />
+                
                 { this.state.viagem.chegada ? 
                     <View>
                         <Text style={styles.info}>Momento da chegada: {functions.getDateTimeString(this.state.viagem.chegada)}</Text>
-                        <Text style={styles.info}>KM registrado na chegada: {this.state.viagem.km_final} KM</Text>
+                        <NumberFormat value={this.state.viagem.km_final} displayType={'text'} thousandSeparator={true}
+                            renderText={value =>
+                                <Text style={styles.info}>KM registrado na chegada: {value} KM</Text>}
+                        />
+                        
                     </View>
                 : 
                     <Text style={styles.emAndamento}>VIAGEM EM ANDAMENTO</Text>

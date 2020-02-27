@@ -4,6 +4,7 @@ import Titulo from '../components/Titulo'
 
 import { salvar_usuario } from '../store/actions/user'
 import { connect } from 'react-redux'
+import axios from 'axios'
 
 import commonStyles from '../commonStyles'
 import { Input } from 'react-native-elements'
@@ -18,6 +19,8 @@ const estadoInicial = {
     telefone: '',
     senha: '',
     confirm_senha: '',
+
+    isEdit: false,
 
     err_nome: '',
     err_apelido: '',
@@ -36,7 +39,27 @@ class CadastrarPessoa extends React.Component {
     }
 
     componentDidMount = () => {
-        this.setState({ ...estadoInicial })
+        const motoristaId = this.props.navigation.getParam('motoristaId')
+        if (motoristaId) {
+            axios.get(`motoristas/${motoristaId}`)
+            .then(res => {
+                const {nome, apelido, cnh, categoria, telefone} = res.data
+
+                this.setState({
+                    nome,
+                    apelido,
+                    cnh,
+                    categoria,
+                    telefone,
+                    isEdit: true
+                })
+            })
+            .catch(err => {
+
+            })
+        } else {
+            this.setState({ ...estadoInicial })
+        }
     }
 
     componentDidUpdate = prevProps => {
@@ -106,14 +129,17 @@ class CadastrarPessoa extends React.Component {
                 telefone: this.state.telefone,
                 senha: this.state.senha,
             }
+            // if isEdit
             this.props.onSalvar(usuario)
         }
     }
 
     render() {
+        const titulo = this.state.isEdit ? 'Edição de Pessoa' : 'Cadastro de Pessoa'
+
         return (
             <View style={styles.container}>
-                <Titulo titulo='Cadastro de Pessoa' />
+                <Titulo titulo={titulo} />
         
                 <ScrollView>
                     <Input
@@ -143,12 +169,12 @@ class CadastrarPessoa extends React.Component {
                         onValueChange={categoria => this.setState({ categoria })} >
                         <Picker.Item label='A' value='A' />
                         <Picker.Item label='B' value='B' />
-                        <Picker.Item label='AB' value='AB' />
                         <Picker.Item label='C' value='C' />
-                        <Picker.Item label='AC' value='AC' />
                         <Picker.Item label='D' value='D' />
-                        <Picker.Item label='AD' value='AD' />
                         <Picker.Item label='E' value='E' />
+                        <Picker.Item label='AB' value='AB' />
+                        <Picker.Item label='AC' value='AC' />
+                        <Picker.Item label='AD' value='AD' />
                         <Picker.Item label='AE' value='AE' />
                     </Picker>
 
