@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, Picker } from 'react-native'
 import Titulo from '../components/Titulo'
 
-import { salvar_usuario } from '../store/actions/user'
+import { salvar_usuario, editar_usuario } from '../store/actions/user'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
@@ -21,6 +21,7 @@ const estadoInicial = {
     confirm_senha: '',
 
     isEdit: false,
+    motoristaId: 0,
 
     err_nome: '',
     err_apelido: '',
@@ -51,7 +52,8 @@ class CadastrarPessoa extends React.Component {
                     cnh,
                     categoria,
                     telefone,
-                    isEdit: true
+                    isEdit: true,
+                    motoristaId
                 })
             })
             .catch(err => {
@@ -64,7 +66,7 @@ class CadastrarPessoa extends React.Component {
 
     componentDidUpdate = prevProps => {
         if (prevProps.isLoading && !this.props.isLoading) {
-            this.props.navigation.navigate('Home')
+            this.props.navigation.navigate('ListPessoas')
         }
     }
 
@@ -129,8 +131,12 @@ class CadastrarPessoa extends React.Component {
                 telefone: this.state.telefone,
                 senha: this.state.senha,
             }
-            // if isEdit
-            this.props.onSalvar(usuario)
+            if (this.state.isEdit) {
+                usuario.id = this.state.motoristaId
+                this.props.onEditar(usuario)
+            } else {
+                this.props.onSalvar(usuario)
+            }
         }
     }
 
@@ -203,7 +209,9 @@ class CadastrarPessoa extends React.Component {
                         onChangeText={confirm_senha => this.setState({ confirm_senha })} />
 
                     <Botao onPress={() => this.salvar()}
-                        title='Salvar' name='save' />
+                        title='Salvar' 
+                        name='save'
+                        isSubmetendo={this.props.isSubmetendo} />
                 </ScrollView>
             </View>
         )
@@ -218,13 +226,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ user }) => {
     return {
-        isLoading: user.isLoading
+        isLoading: user.isLoading,
+        isSubmetendo: user.isSubmetendo
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSalvar: user => dispatch(salvar_usuario(user))
+        onSalvar: user => dispatch(salvar_usuario(user)),
+        onEditar: user => dispatch(editar_usuario(user))
     }
 }
 

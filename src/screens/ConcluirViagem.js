@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, StyleSheet, Alert} from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 import { Input } from 'react-native-elements'
 
 import Botao from '../components/Botao'
@@ -42,7 +42,7 @@ class ConcluirViagem extends React.Component {
         if (this.isValid()) {
             const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm')
 
-            const viagem = {
+            const dados = {
                 id: this.props.viagem.id,
                 viagem: {
                     "saida": this.props.viagem.saida,
@@ -54,7 +54,7 @@ class ConcluirViagem extends React.Component {
                     "motorista": this.props.motorista.id
                 }
             }
-            this.props.onConcluirViagem(viagem)
+            this.props.onConcluirViagem(dados)
         }   
     }
 
@@ -77,8 +77,11 @@ class ConcluirViagem extends React.Component {
                     returnKeyType='done'
                     onChangeText={descricao => this.setState({ descricao })}/>
 
-                <Botao onPress={() => this.concluir()}
-                    title='Concluir Viagem' name='route' />
+                <Botao 
+                    onPress={() => this.concluir()}
+                    title='Concluir Viagem' 
+                    isSubmetendo={this.props.isSubmetendo}
+                    name='route' />
             </View>
         )
     }
@@ -88,7 +91,8 @@ const mapStateToProps = ({user, viagem}) => {
     return {
         motorista: user,
         viagem: viagem.viagem,
-        isLoading: viagem.isLoading
+        isLoading: viagem.isLoading,
+        isSubmetendo: viagem.isSubmetendo
     }
 }
 

@@ -17,7 +17,9 @@ class Logout extends React.Component {
             <View style={styles.container}>
                 <Text>Você deseja realmente sair da aplicação? </Text>
 
-                <Botao title='Sair' name='sign-out-alt' onPress={() => this.logout()} />
+                <Botao title='Sair' 
+                    name='sign-out-alt' 
+                    onPress={() => this.logout()} />
             </View>
         )
     }
@@ -26,7 +28,8 @@ class Logout extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        // alignItems: 'center',
+        justifyContent: 'center',
         padding: 10,
         paddingTop:50
     }

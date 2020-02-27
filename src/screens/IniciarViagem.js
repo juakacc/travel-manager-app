@@ -10,11 +10,15 @@ import Botao from '../components/Botao'
 import commonStyles from '../commonStyles'
 import Titulo from '../components/Titulo'
 
+import axios from 'axios'
+
 class IniciarViagem extends React.Component {
 
     state = {
         quilometragem: 0,
-        errQuilometragem: ''
+        errQuilometragem: '',
+        veiculoId: 0,
+        veiculoNome: ''
     }
 
     componentDidUpdate = prevProps => {
@@ -39,12 +43,25 @@ class IniciarViagem extends React.Component {
     }
 
     componentDidMount = () => {
-        const idVeiculo = this.props.navigation.getParam('idVeiculo')
+        const veiculoId = this.props.navigation.getParam('idVeiculo')
 
-        if (!idVeiculo) {
+        if (!veiculoId) {
             this.props.setMensagem('Veículo inválido')
             this.props.navigation.navigate('Viagem')
+        } else {
+            this.setState({ veiculoId }, this.carregarVeiculo)
         }
+    }
+
+    carregarVeiculo = () => {
+        axios.get(`veiculos/${this.state.veiculoId}`)
+        .then(res => {
+            this.setState({ veiculoNome: res.data.nome })
+        })
+        .catch(err => {
+            this.props.setMensagem('Veículo inválido')
+            this.props.navigation.navigate('Viagem')
+        })
     }
 
     iniciarViagem = () => {
@@ -55,7 +72,7 @@ class IniciarViagem extends React.Component {
             const viagem = {
                 "saida": dataAtual,
                 "km_inicial": this.state.quilometragem,
-                "veiculo": this.props.navigation.getParam('idVeiculo'),
+                "veiculo": this.state.veiculoId,
                 "motorista": this.props.motorista.id
             }
             this.props.onIniciarViagem(viagem)
@@ -63,10 +80,12 @@ class IniciarViagem extends React.Component {
     }
 
     render() {
-        // Tentar adicionar o nome do veículo aqui
         return (
             <View style={styles.container}>
                 <Titulo titulo='Iniciar Viagem' />
+
+                <Text style={styles.veiculo}>{ this.state.veiculoNome }</Text>
+
                 <Text style={styles.title}>Qual a quilometragem atual registrada no veículo?</Text>
                 <Input
                     keyboardType='numeric'
@@ -76,7 +95,10 @@ class IniciarViagem extends React.Component {
                     returnKeyType='next'
                     onChangeText={quilometragem => this.setState({ quilometragem })} />
 
-                <Botao onPress={this.iniciarViagem} title='Iniciar viagem' name='route' />
+                <Botao onPress={this.iniciarViagem}
+                    isSubmetendo={this.props.isSubmetendo} 
+                    title='Iniciar viagem' 
+                    name='route' />
             </View>
         )
     }
@@ -90,13 +112,20 @@ const styles = StyleSheet.create({
         fontSize: 15,
         textAlign: 'center',
         marginBottom: 10
+    },
+    veiculo: {
+        color: 'red',
+        textAlign: 'center',
+        fontSize: 20,
+        marginVertical: 10
     }
 })
 
 const mapStateToProps = ({ user, viagem }) => {
     return {
         motorista: user,
-        isLoading: viagem.isLoading
+        isLoading: viagem.isLoading,
+        isSubmetendo: viagem.isSubmetendo
     }
 }
 

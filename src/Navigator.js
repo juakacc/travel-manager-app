@@ -233,7 +233,7 @@ const SwitchNavigator = createSwitchNavigator({
         screen: Splash
     },
     Auth: {
-        screen: LoginStack
+        screen: Login
     },
     App: {
         screen: DrawerNavigator

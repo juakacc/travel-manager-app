@@ -1,4 +1,4 @@
-import { USER_LOGGED_IN, USER_LOADED, LOADING_USER, USER_LOGGED_OUT } from "./actionTypes"
+import { USER_LOGGED_IN, USER_LOADED, LOADING_USER, USER_LOGGED_OUT, SUBMETENDO, SUBMETIDO } from "./actionTypes"
 
 import { setMensagem } from './mensagem'
 import axios from "axios"
@@ -38,6 +38,7 @@ export const userLoggout = () => {
 export const login = user => {
     return dispatch => {
         dispatch(carregando_usuario())
+        dispatch(submetendo())
 
         axios.post('login', {
             apelido: user.apelido,
@@ -58,23 +59,53 @@ export const login = user => {
                 user.token = token
 
                 dispatch(userLogged(user))
+                dispatch(submetido())
             })
-            .catch(err => dispatch(setMensagem(err)))
+            .catch(err => {
+                dispatch(setMensagem(err))
+                dispatch(submetido())
+            })
         })
-        .catch(err => dispatch(setMensagem(err)))
-    }
+        .catch(err => {
+            dispatch(setMensagem(err))
+            dispatch(submetido())
+        })
+    }    
 }
 
 export const salvar_usuario = user => {
     return dispatch => {
         dispatch(carregando_usuario())
+        dispatch(submetendo())
 
         axios.post('motoristas', user)
         .then(res => {
             dispatch(dispatch(setMensagem('Motorista cadastrado')))
             dispatch(usuario_carregado())
+            dispatch(submetido())
         })
-        .catch(err => dispatch(setMensagem(err)))
+        .catch(err => {
+            dispatch(setMensagem(err))
+            dispatch(submetido())
+        })
+    }
+}
+
+export const editar_usuario = user => {
+    return dispatch => {
+        dispatch(carregando_usuario())
+        dispatch(submetendo())
+
+        axios.put(`motoristas/${user.id}`, user)
+        .then(res => {
+            dispatch(dispatch(setMensagem('Motorista cadastrado')))
+            dispatch(usuario_carregado())
+            dispatch(submetido())
+        })
+        .catch(err => {
+            dispatch(setMensagem(err))
+            dispatch(submetido())
+        })
     }
 }
 
@@ -87,5 +118,17 @@ export const carregando_usuario = () => {
 export const usuario_carregado = () => {
     return {
         type: USER_LOADED
+    }
+}
+
+export const submetendo = () => {
+    return {
+        type: SUBMETENDO
+    }
+}
+
+export const submetido = () => {
+    return {
+        type: SUBMETIDO
     }
 }

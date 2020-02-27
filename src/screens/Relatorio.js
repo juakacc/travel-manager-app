@@ -11,7 +11,7 @@ import functions from '../functions'
 import { connect } from 'react-redux'
 import { filtrarViagens } from '../store/actions/viagem'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import ItemViagemConcluida from '../components/ItemViagemConcluida'
 import Titulo from '../components/Titulo'
 
@@ -108,8 +108,12 @@ class Relatorio extends React.Component {
                         }
                     </View>
 
-                    <Botao onPress={() => this.pesquisar()}
-                        title='Pesquisar' name='search' />
+                    <Botao 
+                        onPress={() => this.pesquisar()}
+                        isSubmetendo={this.props.isSubmetendo}
+                        title='Pesquisar'
+                        name='search'
+                    />
 
                     <View style={styles.resultados}>
                         { this.props.viagens_filtradas.length > 0 ?
@@ -127,7 +131,8 @@ class Relatorio extends React.Component {
 
 const mapStateToProps = ({ viagem }) => {
     return {
-        viagens_filtradas: viagem.viagens_filtradas
+        viagens_filtradas: viagem.viagens_filtradas,
+        isSubmetendo: viagem.isSubmetendo
     }
 }
 

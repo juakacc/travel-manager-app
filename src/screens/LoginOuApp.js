@@ -7,18 +7,16 @@ import { connect } from 'react-redux'
 
 class Splash extends React.Component {
 
-    componentDidMount = () => {        
-        setTimeout(async () => {
-            const json = await AsyncStorage.getItem('userData')
-            const userData = JSON.parse(json) || {}
+    componentDidMount = async () => {        
+        const json = await AsyncStorage.getItem('userData')
+        const userData = JSON.parse(json) || {}
 
-            if (userData.token) {
-                this.props.onUserLogged(userData)
-                this.props.navigation.navigate('App')
-            } else {
-                this.props.navigation.navigate('Auth')
-            }
-        }, 1000)
+        if (userData.token) {
+            this.props.onUserLogged(userData)
+            this.props.navigation.navigate('App')
+        } else {
+            this.props.navigation.navigate('Auth')
+        }
     }
 
     render() {

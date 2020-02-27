@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, SafeAreaView, FlatList, StyleSheet, ScrollView } from 'react-native'
+import { SafeAreaView, StyleSheet, ScrollView } from 'react-native'
 import ActionButton from 'react-native-action-button'
 import axios from 'axios'
 import MotoristaItem from '../components/MotoristaItem'
@@ -29,12 +29,9 @@ class ListPessoas extends React.Component {
                 <Titulo titulo='Motoristas cadastrados' />
 
                 <ScrollView>
-                    <FlatList
-                        data={this.state.motoristas}
-                        renderItem={({item}) => (
-                            <MotoristaItem motorista={item} navigation={this.props.navigation} />)
-                        }
-                        keyExtractor={item => item.id} />
+                    {this.state.motoristas.map(item => (
+                        <MotoristaItem motorista={item} navigation={this.props.navigation} key={item.id} />
+                    ))}
                 </ScrollView>
 
                 <ActionButton
@@ -45,7 +42,6 @@ class ListPessoas extends React.Component {
                     onPress={() => { this.props.navigation.navigate('CadastrarPessoa') }}
                 />    
             </SafeAreaView>
-            
         )
     }
 }

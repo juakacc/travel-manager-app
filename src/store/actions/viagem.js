@@ -6,7 +6,9 @@ import {
     LOAD_VIAGENS_CONCLUIDAS, 
     SET_VIAGENS_FILTRADAS, 
     INICIANDO_VIAGEM,
-    VIAGEM_INICIADA
+    VIAGEM_INICIADA,
+    SUBMETENDO,
+    SUBMETIDO
 } from "./actionTypes"
 
 import { setMensagem } from './mensagem'
@@ -32,15 +34,33 @@ export const viagem_carregada = () => {
     }
 }
 
+export const submetendo = () => {
+    return {
+        type: SUBMETENDO
+    }
+}
+
+export const submetido = () => {
+    return {
+        type: SUBMETIDO
+    }
+}
+
 export const iniciarViagem = viagem => {
     return (dispatch) => {
         dispatch(carregando_viagem())
+        dispatch(submetendo())
+
         axios.post('viagens', viagem)
         .then(res => {
             dispatch(setMensagem('Viagem iniciada. Siga as leis de trânsito'))
             dispatch(viagem_carregada())
+            dispatch(submetido())
         })
-        .catch(err => dispatch(setMensagem(err)))        
+        .catch(err => {
+            dispatch(setMensagem(err))
+            dispatch(submetido())
+        })        
     }
 }
 
@@ -53,13 +73,19 @@ export const viagemConcluida = () => {
 export const concluirViagem = viagem => {
     return (dispatch) => {
         dispatch(carregando_viagem())
+        dispatch(submetendo())
+
         axios.put(`viagens/${viagem.id}`, viagem.viagem)
         .then(res => {
             dispatch(viagemConcluida())
             dispatch(setMensagem('Viagem concluída com sucesso'))
             dispatch(viagem_carregada())
+            dispatch(submetido())
         })
-        .catch(err => dispatch(setMensagem(err)))
+        .catch(err => {
+            dispatch(setMensagem(err))
+            dispatch(submetido())
+        })
     }
 }
 
@@ -108,7 +134,7 @@ export const loadViagensConcluidas = () => {
 }
 
 export const loadViagensNaoConcluidas = () => {
-    return (dispatch, getState) => {
+    return dispatch => {
         axios.get('viagens?status=nao-concluida')
         .then(res => {
             dispatch(setViagensNaoConcluidas(res.data))
@@ -126,10 +152,16 @@ export const setViagensFiltradas = viagens => {
 
 export const filtrarViagens = date => {
     return dispatch => {
+        dispatch(submetendo())
+
         axios.get(`viagens?date=${date}`)
         .then(res => {
             dispatch(setViagensFiltradas(res.data))
+            dispatch(submetido())
         })
-        .catch(err => dispatch(setMensagem(err)))
+        .catch(err => {
+            dispatch(setMensagem(err))
+            dispatch(submetido())
+        })
     }
 }

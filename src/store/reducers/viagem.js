@@ -6,7 +6,9 @@ import {
     LOAD_VIAGENS_CONCLUIDAS, 
     SET_VIAGENS_FILTRADAS, 
     INICIANDO_VIAGEM, 
-    VIAGEM_INICIADA 
+    VIAGEM_INICIADA, 
+    SUBMETENDO,
+    SUBMETIDO
 } from "../actions/actionTypes"
 
 const initialState = {
@@ -14,7 +16,8 @@ const initialState = {
     viagens_concluidas: [],
     viagens_nao_concluidas: [],
     viagens_filtradas: [],
-    isLoading: false
+    isLoading: false,
+    isSubmetendo: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -58,6 +61,16 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false
+            }
+        case SUBMETENDO:
+            return {
+                ...state,
+                isSubmetendo: true
+            }
+        case SUBMETIDO:
+            return {
+                ...state,
+                isSubmetendo: false
             }
         default:
             return state

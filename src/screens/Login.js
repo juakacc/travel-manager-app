@@ -3,30 +3,55 @@ import React, {Component} from 'react'
 import {
     View, 
     Text,
-    TextInput,
     StyleSheet,
     TouchableOpacity,
     Alert,
     KeyboardAvoidingView,
-    Platform
+    Platform,
+    TextInput,
+    ActivityIndicator
 } from 'react-native'
+
 import Botao from '../components/Botao'
 
+import commonStyles from '../commonStyles'
+
 import { login } from '../store/actions/user'
+import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
 
-import PasswordInputText from 'react-native-hide-show-password-input'
-import { Input } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 class Login extends Component {
 
     state = {
         apelido: '',
-        senha: ''
+        senha: '',
+        mostrar: true
+    }
+
+    isValid = () => {
+        if (this.state.apelido.trim() == '') {
+            this.props.set_mensagem('Preencha o apelido')
+            return false
+        }
+        if (this.state.senha.trim() == '') {
+            this.props.set_mensagem('Preencha a senha')
+            return false
+        }
+        return true
     }
 
     login = () => {
-        this.props.onLogin({...this.state})
+        if (this.isValid()) {
+            this.props.onLogin({...this.state})
+        }
+    }
+
+    mostrar = () => {
+        this.setState({
+            mostrar: !this.state.mostrar
+        })
     }
 
     componentDidUpdate = prevProps => {
@@ -37,50 +62,56 @@ class Login extends Component {
 
     render () {
         return (
-            // <View style={styles.container}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.select({
+                    ios: 'padding',
+                    android: null,
+                })} >
 
-                <KeyboardAvoidingView
-                    style={styles.container}
-                    behavior={Platform.select({
-                        ios: 'padding',
-                        android: null,
-                    })} >
+                <Text style={styles.titulo}>
+                    <Icon name="road" size={35} color={commonStyles.colors.secundaria} /> Viagens PMO
+                </Text>
 
-                    {/* <View style={styles.containerTitles}> */}
-                        {/* <Text style={styles.subtitle}>Bem vindo ao sistema de gerenciamento de viagens da prefeitura municipal de Olivêdos</Text>
-                        <Text style={styles.subtitle}>Realize login para acessar as funcionalidades do aplicativo:</Text> */}
-                    {/* </View> */}
+                <View style={styles.inputContainer}>
+                    <Icon style={styles.inputIcon} name='user-alt' size={20} />
+                    <TextInput style={styles.inputs}
+                        placeholder='Apelido'
+                        autoCapitalize='none'
+                        value={this.state.apelido}
+                        returnKeyType='next'
+                        underlineColorAndroid='transparent'
+                        onChangeText={apelido => this.setState({ apelido: apelido })}/>
+                </View>
 
-                    {/* <View style={styles.containerForm}> */}
-                
-                        <View style={styles.field}>
-                            <Input
-                                style={styles.field}
-                                autoCapitalize='none'
-                                label='Apelido'
-                                value={this.state.apelido} 
-                                returnKeyType='next'
-                                onChangeText={apelido => this.setState({ apelido: apelido.toLowerCase() })} />
-                        </View>
+                <View style={styles.inputContainer}>
+                    <Icon style={styles.inputIcon} name='user-lock' size={20} />
+                    <TextInput style={styles.inputs}
+                        placeholder='Senha'
+                        autoCapitalize='none'
+                        secureTextEntry={this.state.mostrar}
+                        value={this.state.senha}
+                        returnKeyType='done'
+                        underlineColorAndroid='transparent'
+                        onChangeText={senha => this.setState({ senha })} />
 
-                        <View style={styles.field}>
-                            <PasswordInputText
-                                style={{fontSize: 19, marginHorizontal: 10}}
-                                autoCapitalize='none'
-                                label='Senha'
-                                value={this.state.senha}
-                                returnKeyType='done'
-                                onChangeText={senha => this.setState({ senha })} />
-                        </View>
+                    <TouchableOpacity onPress={this.mostrar} style={styles.eye}>
+                        <Icon name={this.state.mostrar ? 'eye' : 'eye-slash'} size={20} />
+                    </TouchableOpacity>
+                </View>
 
-                        <TouchableOpacity onPress={() => {Alert.alert('(83) 9 9184-7766 - Entre em contato e solicite uma nova senha')}}>
-                            <Text style={styles.esqueci}>Esqueci a senha</Text>
-                        </TouchableOpacity>
+                <TouchableOpacity onPress={() => {Alert.alert('(83) 9 9184-7766 - Entre em contato e solicite uma nova senha')}}>
+                    <Text style={styles.esqueci}>Esqueci a senha</Text>
+                </TouchableOpacity>
 
-                        <Botao title='Entrar' name='sign-in-alt' onPress={() => this.login()} />
-                    {/* </View> */}
-                </KeyboardAvoidingView>                
-            // {/* </View>     */}
+                <Botao 
+                    style={styles.buttonContainer}
+                    title='Entrar'
+                    isSubmetendo={this.props.isSubmetendo}
+                    onPress={() => this.login()}
+                    name='sign-in-alt' />
+
+            </KeyboardAvoidingView>                
         )
     }
 }
@@ -90,43 +121,65 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         alignItems: 'center',
-        justifyContent: 'center'
-    },
-    containerTitles: {
-        flex: 1
-    },
-    containerForm: {
-        flex: 2,
         justifyContent: 'center',
-        // paddingTop: 100
-    },
-    title: {
-        fontSize: 30,
-        marginBottom: 10
-    },
-    subtitle: {
-        textAlign: 'center',
-        marginTop: 10
-    },
-    field: {
-        width: 300,
-        marginTop: 10
+        backgroundColor: 'white'
     },
     esqueci: {
         color: 'blue',
         marginVertical: 10
+    },
+    inputContainer: {
+        backgroundColor: '#aa5500cc',
+        borderRadius:15,
+        width:250,
+        height:45,
+        marginBottom:20,
+        flexDirection: 'row',
+        alignItems:'center'
+    },
+    inputs:{
+        height:45,
+        marginLeft:16,
+        borderBottomColor: '#FFFFFF',
+        flex:1,
+    },
+    inputIcon:{
+      width:30,
+      height:30,
+      marginLeft:15,
+      justifyContent: 'center'
+    },
+    eye: {
+        marginHorizontal: 10
+    },
+    buttonContainer: {
+        height: 40,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom:20,
+        width:250,
+        borderRadius: 15,
+        backgroundColor: commonStyles.colors.principal,
+    },
+    titulo: {
+        fontSize: 30, 
+        fontWeight: 'bold',
+        marginBottom: 30
     }
 })
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLogin: user => dispatch(login(user))
+        onLogin: user => dispatch(login(user)),
+        set_mensagem: msg => dispatch(setMensagem(msg))
     }
 }
 
 const mapStateToProps = ({ user }) => {
     return {
-        isLoading: user.isLoading
+        isLoading: user.isLoading,
+        isSubmetendo: user.isSubmetendo
     }
 }
 
