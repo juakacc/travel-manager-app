@@ -1,18 +1,34 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
+import axios from 'axios'
 import { connect } from 'react-redux'
-import { loadViagensNaoConcluidas } from '../store/actions/viagem'
+import { setMensagem } from '../store/actions/mensagem'
+
 import { ScrollView } from 'react-native-gesture-handler'
 import ItemViagemConcluida from './ItemViagemConcluida'
 
 class DisposicaoVeiculos extends React.Component {
 
+    state = {
+        viagens: []
+    }
+
     componentDidMount() {
         const { navigation } = this.props
+
         this.focusListener = navigation.addListener('didFocus', () => {
-            this.props.onLoadViagens()
-        });
+            this.props.onComplete(false)
+            axios.get('viagens?status=nao-concluida')
+            .then(res => {
+                this.setState({ viagens: res.data })
+                this.props.onComplete(true)
+            })
+            .catch(err => {
+                this.props.set_mensagem(err)
+                this.props.onComplete(true)
+            })  
+        })
     }
 
     componentWillUnmount() {
@@ -25,8 +41,8 @@ class DisposicaoVeiculos extends React.Component {
                 <Text style={styles.title}>Disposição atual dos veículos:</Text>
 
                 <ScrollView>
-                {this.props.viagens.length > 0 ? 
-                    this.props.viagens.map(viagem => {return (
+                {this.state.viagens.length > 0 ? 
+                    this.state.viagens.map(viagem => {return (
                         <ItemViagemConcluida viagem={viagem} navigation={this.props.navigation} key={viagem.id} /> 
                     )}) 
                 : 
@@ -67,16 +83,10 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = ({viagem}) => {
-    return {
-        viagens: viagem.viagens_nao_concluidas
-    }
-}
-
 const mapDispatchToProps = dispatch => {
     return {
-        onLoadViagens: () => dispatch(loadViagensNaoConcluidas())
+        set_mensagem: msg => dispatch(setMensagem(msg))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DisposicaoVeiculos)
+export default connect(null, mapDispatchToProps)(DisposicaoVeiculos)

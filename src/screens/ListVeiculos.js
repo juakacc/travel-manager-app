@@ -10,18 +10,18 @@ import Titulo from '../components/Titulo'
 import { connect } from 'react-redux'
 import { setMensagem } from '../store/actions/mensagem'
 
-class ListPessoas extends React.Component {
+class ListVeiculos extends React.Component {
 
     state = {
-        motoristas: []
+        veiculos: []
     }
 
     componentDidMount() {
         const { navigation } = this.props
         this.focusListener = navigation.addListener('didFocus', () => {
-            axios.get('motoristas')
+            axios.get('veiculos')
             .then(res => {
-                this.setState({ motoristas: res.data })
+                this.setState({ veiculos: res.data })
             })
             .catch(err => {
                 this.props.set_mensagem(err)
@@ -36,15 +36,15 @@ class ListPessoas extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Titulo titulo='Motoristas cadastrados' />
+                <Titulo titulo='Veículos cadastrados' />
 
                 <ScrollView>
-                    {this.state.motoristas.map(item => (
+                    {this.state.veiculos.map(item => (
                         <ListItem 
                             navigation={this.props.navigation}
-                            editScreen='CadastrarPessoa'
+                            editScreen='CadastrarVeiculo'
                             id={item.id}
-                            titulo={item.apelido}
+                            titulo={item.nome}
                             key={item.id} />
                     ))}
                 </ScrollView>
@@ -54,7 +54,7 @@ class ListPessoas extends React.Component {
                     renderIcon={() => (
                         <Icon name='plus' color='black' size={20} />
                     )}
-                    onPress={() => { this.props.navigation.navigate('CadastrarPessoa') }}
+                    onPress={() => { this.props.navigation.navigate('CadastrarVeiculo') }}
                 />    
             </SafeAreaView>
         )
@@ -78,4 +78,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ListPessoas)
+export default connect(null, mapDispatchToProps)(ListVeiculos)

@@ -14,23 +14,26 @@ class FormSelectVeiculo extends React.Component {
 
     componentDidMount() {
         this._isMounted = true
-
         const { navigation } = this.props
+
         this.focusListener = navigation.addListener('didFocus', () => {
+
+            this.props.componenteOk(false)
             axios.get('veiculos/disponiveis')
             .then(res => {
                 if(this._isMounted) {
+                    this.setState({ veiculos: res.data })
+                
                     if (res.data.length > 0) {
-                        this.setState({ 
-                            veiculos: res.data,
-                            veiculoSelec: res.data[0].id
-                        })
-                    } else {
-                        this.setState({ veiculos: res.data })
+                        this.setState({ veiculoSelec: res.data[0].id })
                     }
                 }
+                this.props.componenteOk(true)
             })
-            .catch(err => console.log(err || ''))
+            .catch(err => {
+                console.log(err || '')
+                this.props.componenteOk(true)
+            })
         });
     }
 

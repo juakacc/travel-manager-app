@@ -80,9 +80,9 @@ export const salvar_usuario = user => {
 
         axios.post('motoristas', user)
         .then(res => {
-            dispatch(dispatch(setMensagem('Motorista cadastrado')))
             dispatch(usuario_carregado())
             dispatch(submetido())
+            dispatch(setMensagem('Motorista cadastrado'))
         })
         .catch(err => {
             dispatch(setMensagem(err))
@@ -98,9 +98,9 @@ export const editar_usuario = user => {
 
         axios.put(`motoristas/${user.id}`, user)
         .then(res => {
-            dispatch(dispatch(setMensagem('Motorista cadastrado')))
             dispatch(usuario_carregado())
             dispatch(submetido())
+            dispatch(setMensagem('Motorista atualizado'))
         })
         .catch(err => {
             dispatch(setMensagem(err))

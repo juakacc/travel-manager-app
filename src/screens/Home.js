@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 import Header from '../components/Header'
 import DisposicaoVeiculos from '../components/DisposicaoVeiculos'
@@ -9,51 +10,17 @@ class Home extends React.Component {
     
     state = {
         viagem: null,
-        // appState: AppState.currentState
+        viagemAtual: false,
+        disposicaoVeiculos: false
     }
 
-    // componentDidUpdate = prevState => {
-    //     console.log(prevState.appState)
-    //     console.log(this.state.appState)
-    // }
+    viagemAtual = v => {
+        this.setState({ viagemAtual: v })
+    }
 
-    // componentDidMount() {
-    //     console.log(this.state.appState)
-    //     AppState.addEventListener('change', (nextAppState) => {
-    //         if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-    //             console.log('App has come to the foreground!')
-    //         }
-    //     })
-    // }
-
-    // componentDidMount() {
-    //     const { navigation } = this.props
-    //     this.focusListener = navigation.addListener('didFocus', () => {
-    //         console.log('Ganhou foco, executa...')
-    //     });
-    // }
-
-    // componentWillUnmount() {
-    //     this.focusListener.remove();
-    // }
-
-    // componentWillUnmount() {
-    //     AppState.removeEventListener('focus', this._handleAppStateChange);
-    // }
-
-    // _handleAppStateChange = (nextAppState) => {
-    //     if (
-    //         this.state.appState.match(/inactive|background/) &&
-    //         nextAppState === 'active'
-    //     ) {
-    //         console.log('App has come to the foreground!');
-    //     }
-    //     this.setState({appState: nextAppState});
-    // };
-
-    // componentDidUpdate = () => {
-    //     console.log('HOME_UPDATE')
-    // }
+    disposicaoVeiculos = v => {
+        this.setState({ disposicaoVeiculos: v })
+    }
 
     render () {
         return (
@@ -61,9 +28,13 @@ class Home extends React.Component {
                 <Header navigation={this.props.navigation} />
                 <Text style={styles.textAlert}>NÃO ULTRAPASSE EM LUGAR INDEVIDO</Text>
 
-                <ViagemAtual navigation={this.props.navigation} />
+                <Spinner
+                    visible={! (this.state.viagemAtual && this.state.disposicaoVeiculos)}
+                    textStyle={styles.spinnerTextStyle} />             
 
-                <DisposicaoVeiculos navigation={this.props.navigation} />
+                <ViagemAtual navigation={this.props.navigation} onComplete={v => this.viagemAtual(v)} />
+
+                <DisposicaoVeiculos navigation={this.props.navigation} onComplete={v => this.disposicaoVeiculos(v)} />
             </View>
         )
     }

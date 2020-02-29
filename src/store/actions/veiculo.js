@@ -1,4 +1,4 @@
-import { SET_VEICULOS_DISPONIVEIS, CARREGANDO_VEICULO, VEICULO_CARREGADO } from './actionTypes'
+import { SET_VEICULOS_DISPONIVEIS, CARREGANDO_VEICULO, VEICULO_CARREGADO, SUBMETENDO, SUBMETIDO } from './actionTypes'
 
 import { setMensagem } from './mensagem'
 
@@ -13,6 +13,18 @@ export const carregando_veiculo = () => {
 export const veiculo_carregado = () => {
     return {
         type: VEICULO_CARREGADO
+    }
+}
+
+export const submetendo = () => {
+    return {
+        type: SUBMETENDO
+    }
+}
+
+export const submetido = () => {
+    return {
+        type: SUBMETIDO
     }
 }
 
@@ -36,14 +48,34 @@ export const load_veiculos_disponiveis = () => {
 export const salvar_veiculo = veiculo => {
     return (dispatch) => {
         dispatch(carregando_veiculo())
+        dispatch(submetendo())
 
         axios.post('veiculos', veiculo)
         .then(res => {
-            dispatch(setMensagem('Veículo cadastrado'))
             dispatch(veiculo_carregado())
-            // dispatch(load_veiculos_disponiveis())
+            dispatch(submetido())
+            dispatch(setMensagem('Veículo cadastrado'))
         })
         .catch(err => {
+            dispatch(submetido())
+            dispatch(setMensagem(err))
+        })
+    }
+}
+
+export const editar_veiculo = veiculo => {
+    return (dispatch) => {
+        dispatch(carregando_veiculo())
+        dispatch(submetendo())
+
+        axios.put(`veiculos/${veiculo.id}`, veiculo)
+        .then(res => {
+            dispatch(veiculo_carregado())
+            dispatch(submetido())
+            dispatch(setMensagem('Veículo atualizado'))
+        })
+        .catch(err => {
+            dispatch(submetido())
             dispatch(setMensagem(err))
         })
     }

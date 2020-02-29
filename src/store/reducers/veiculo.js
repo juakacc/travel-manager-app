@@ -1,9 +1,10 @@
-import { CARREGANDO_VEICULO, VEICULO_CARREGADO, SET_VEICULOS_DISPONIVEIS } from "../actions/actionTypes"
+import { CARREGANDO_VEICULO, VEICULO_CARREGADO, SET_VEICULOS_DISPONIVEIS, SUBMETENDO, SUBMETIDO } from "../actions/actionTypes"
 
 const estadoInicial = {
     veiculos_disponiveis: [],
     veiculos: [],
-    isLoading: false
+    isLoading: false,
+    isSubmetendo: false
 }
 
 const reducer = (prevState = estadoInicial, action) => {
@@ -22,6 +23,16 @@ const reducer = (prevState = estadoInicial, action) => {
             return {
                 ...prevState,
                 veiculos_disponiveis: action.payload
+            }
+        case SUBMETENDO:
+            return {
+                ...prevState,
+                isSubmetendo: true
+            }
+        case SUBMETIDO:
+            return {
+                ...prevState,
+                isSubmetendo: false
             }
         default:
             return prevState

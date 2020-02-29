@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, Picker } from 'react-native'
 import { Input } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler'
 import Botao from '../components/Botao'
-
-import { salvar_veiculo } from '../store/actions/veiculo'
-import { connect } from 'react-redux'
 import Titulo from '../components/Titulo'
 import commonStyles from '../commonStyles'
+
+import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo'
+import { connect } from 'react-redux'
+import axios from 'axios'
+import { setMensagem } from '../store/actions/mensagem'
 
 class CadastrarVeiculo extends React.Component {
 
@@ -20,6 +22,9 @@ class CadastrarVeiculo extends React.Component {
         quilometragem: 0,
         cnh_requerida: 'A',
 
+        isEdit: false,
+        veiculoId: 0,
+
         err_nome: '',
         err_placa: '',
         err_renavam: '',
@@ -31,12 +36,37 @@ class CadastrarVeiculo extends React.Component {
 
     componentDidUpdate = prevProps => {
         if (prevProps.isLoading && !this.props.isLoading) {
-            this.props.navigation.navigate('Home')
+            this.props.navigation.navigate('VeiculosScreen')
+        }
+    }
+
+    componentDidMount = () => {
+        const veiculoId = this.props.navigation.getParam('itemId')
+
+        if (veiculoId) {
+            axios.get(`veiculos/${veiculoId}`)
+            .then(res => {
+                const { nome, placa, renavam, marca, modelo, quilometragem, cnh_requerida } = res.data
+
+                this.setState({
+                    nome,
+                    placa,
+                    renavam,
+                    marca,
+                    modelo,
+                    quilometragem,
+                    cnh_requerida,
+                    isEdit: true,
+                    veiculoId
+                })
+            })
+            .catch(err => {
+                this.props.set_mensagem(err)
+            })
         }
     }
 
     isValid = () => {
-        const fields = {...this.state}
         let valid = true
         this.setState({
             err_nome: '',
@@ -48,44 +78,43 @@ class CadastrarVeiculo extends React.Component {
             err_cnh_requerida: ''
         })
         
-        if (fields.nome == '') {
+        if (this.state.nome.trim() == '') {
             this.setState({ err_nome: 'Digite um nome válido' })
             valid = false
         }
 
-        if (fields.placa == '') {
+        if (this.state.placa.trim() == '') {
             this.setState({ err_placa: 'Digite um nome válido' })
             valid = false
         }
 
-        if (fields.renavam == '') {
+        if (this.state.renavam.trim() == '') {
             this.setState({ err_renavam: 'Digite um renavam válido' })
             valid = false
         }
 
-        if (fields.marca == '') {
+        if (this.state.marca.trim() == '') {
             this.setState({ err_marca: 'Digite uma marca válida' })
             valid = false
         }
 
-        if (fields.modelo == '') {
+        if (this.state.modelo.trim() == '') {
             this.setState({ err_modelo: 'Digite um modelo válido' })
             valid = false
         }
 
-        if (isNaN(fields.quilometragem) || fields.quilometragem < 0) {
+        if (isNaN(this.state.quilometragem) || this.state.quilometragem < 0) {
             this.setState({ err_quilometragem: 'Digite uma quilometragem válida' })
             valid = false
         }
 
-        if (fields.cnh_requerida == '') {
+        if (this.state.cnh_requerida.trim() == '') {
             this.setState({ err_cnh_requerida: 'Escolha uma CNH válida' })
             valid = false
         }
         return valid
     }
 
-    
     salvarVeiculo = () => {
         
         if (this.isValid()) {
@@ -96,10 +125,14 @@ class CadastrarVeiculo extends React.Component {
                 marca: this.state.marca,
                 modelo: this.state.modelo,
                 quilometragem: this.state.quilometragem,
-                cnh_requerida: this.state.cnh_requerida,
-                disponivel: true
+                cnh_requerida: this.state.cnh_requerida
             }
-            this.props.onSalvarVeiculo(veiculo)
+            if (this.state.isEdit){
+                veiculo.id = this.state.veiculoId
+                this.props.onEditarVeiculo(veiculo)
+            } else {
+                this.props.onSalvarVeiculo(veiculo)
+            }
         }        
     }
 
@@ -164,8 +197,11 @@ class CadastrarVeiculo extends React.Component {
                         <Picker.Item label='E' value='E' />
                     </Picker>
 
-                    <Botao onPress={() => this.salvarVeiculo()}
-                        title='Salvar' name='save' />
+                    <Botao 
+                        onPress={() => this.salvarVeiculo()}
+                        title='Salvar' 
+                        name='save' 
+                        isSubmetendo={this.props.isSubmetendo} />
                 </ScrollView>
             </View>
         )
@@ -180,13 +216,16 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSalvarVeiculo: veiculo => dispatch(salvar_veiculo(veiculo))
+        onSalvarVeiculo: veiculo => dispatch(salvar_veiculo(veiculo)),
+        onEditarVeiculo: veiculo => dispatch(editar_veiculo(veiculo)),
+        set_mensagem: msg => dispatch(setMensagem(msg))
     }
 }
 
 const mapStateToProps = ({ veiculo }) => {
     return {
-        isLoading: veiculo.isLoading
+        isLoading: veiculo.isLoading,
+        isSubmetendo: veiculo.isSubmetendo
     }
 }
 

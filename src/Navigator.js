@@ -22,6 +22,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import DetalharViagem from './screens/DetalharViagem'
 import Sobre from './screens/Sobre'
 import ListPessoas from './screens/ListPessoas'
+import ListVeiculos from './screens/ListVeiculos'
 
 // Header to StackNavigator
 const Header = () => {
@@ -148,7 +149,7 @@ const LogoutStackNavigator = createStackNavigator({
 })
 
 const PessoasStack = createStackNavigator({
-    ListPessoas: {
+    PessoasScreen: {
         screen: ListPessoas,
         navigationOptions: ({ navigation }) => ({
             headerLeft: <BotaoVoltar navigationProps={navigation} />
@@ -158,23 +159,29 @@ const PessoasStack = createStackNavigator({
         screen: CadastrarPessoa
     }
 }, {
-    initialRouteName: 'ListPessoas',
+    initialRouteName: 'PessoasScreen',
     headerLayoutPreset: 'center',
     defaultNavigationOptions: {
         headerTitle: () => <Header />
     }
 })
 
-const CadastrarVeiculoStack = createStackNavigator({
-    Screen: {
+const VeiculoStack = createStackNavigator({
+    VeiculosScreen: {
+        screen: ListVeiculos,
+        navigationOptions: ({ navigation }) => ({
+            headerLeft: <BotaoVoltar navigationProps={navigation} />
+        })
+    },
+    CadastrarVeiculo: {
         screen: CadastrarVeiculo
     }
 }, {
+    initialRouteName: 'VeiculosScreen',
     headerLayoutPreset: 'center',
-    defaultNavigationOptions: ({ navigation }) => ({
-        headerTitle: () => <Header />,
-        headerLeft: <BotaoVoltar navigationProps={navigation} />
-    })
+    defaultNavigationOptions: {
+        headerTitle: () => <Header />
+    }
 })
 
 const DrawerNavigator = createDrawerNavigator({
@@ -185,15 +192,15 @@ const DrawerNavigator = createDrawerNavigator({
             drawerIcon: ({ tintColor }) => (<Ionicons name='ios-home' size={25} color={tintColor} />)
         }
     },
-    CadastrarPessoa: {
+    Pessoas: {
         screen: PessoasStack,
         navigationOptions: {
             drawerLabel: 'Pessoas',
             drawerIcon: ({ tintColor }) => (<Ionicons name='ios-person-add' size={25} color={tintColor} />)
         }
     },
-    CadastrarVeiculo: {
-        screen: CadastrarVeiculoStack,
+    Veiculos: {
+        screen: VeiculoStack,
         navigationOptions: {
             drawerLabel: 'Veículos',
             drawerIcon: ({ tintColor }) => (<Ionicons name='ios-car' size={25} color={tintColor} />)

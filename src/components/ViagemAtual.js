@@ -1,43 +1,62 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import VeiculoAtual from './VeiculoAtual'
 import FormSelectVeiculo from './FormSelectVeiculo'
 
-import { loadViagem } from '../store/actions/viagem'
+import { connect } from 'react-redux'
+import { setMensagem } from '../store/actions/mensagem'
+import axios from 'axios'
 
 class ViagemAtual extends React.Component {
+
+    state = {
+        viagem: null
+    }
 
     componentDidMount() {
         const { navigation } = this.props
         this.focusListener = navigation.addListener('didFocus', () => {
-            this.props.onLoadViagem()
-        });
+
+            this.componenteOk(false)
+            axios.get(`viagens/atual/${this.props.motorista.id}`)
+            .then(res => {
+                this.setState({ viagem: res.data })
+                this.componenteOk(true)
+            })
+            .catch(err => {
+                if (err.response && err.response.status != 404) {
+                    this.props.set_mensagem(err)
+                }
+            })          
+        })
     }
 
     componentWillUnmount() {
         this.focusListener.remove();
     }
 
+    componenteOk = v => {
+        this.props.onComplete(v)
+    }
+
     render() {
-        if (this.props.viagem) {
-            return <VeiculoAtual viagem={this.props.viagem} navigation={this.props.navigation} />
+        if (this.state.viagem) {
+            return <VeiculoAtual viagem={this.state.viagem} navigation={this.props.navigation} />
         } else {
-            return <FormSelectVeiculo navigation={this.props.navigation} />
+            return <FormSelectVeiculo navigation={this.props.navigation} componenteOk={v => this.componenteOk(v)}/>
         }
     }
 }
 
-const mapStateToProps = ({user, viagem}) => {
+const mapStateToProps = ({ user }) => {
     return {
-        motorista: user,
-        viagem: viagem.viagem
+        motorista: user
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLoadViagem: () => dispatch(loadViagem())
+        set_mensagem: msg => dispatch(setMensagem(msg))
     }
 }
 

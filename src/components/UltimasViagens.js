@@ -1,17 +1,33 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
+import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
-import { loadViagensConcluidas } from '../store/actions/viagem'
+import axios from 'axios'
+
 import ItemViagemConcluida from './ItemViagemConcluida'
 
 class UltimasViagens extends React.Component {
 
+    state = {
+        viagens: []
+    }
+
     componentDidMount() {
         const { navigation } = this.props
         this.focusListener = navigation.addListener('didFocus', () => {
-            this.props.onLoadViagens()
-        });
+            
+            this.props.componentOk(false)
+            axios.get('viagens?status=concluida')
+            .then(res => {
+                this.setState({ viagens: res.data })
+                this.props.componentOk(true)
+            })
+            .catch(err => {
+                this.props.set_mensagem(err)
+                this.props.componentOk(true)
+            })            
+        })
     }
 
     componentWillUnmount() {
@@ -23,12 +39,11 @@ class UltimasViagens extends React.Component {
             <View>
                 <Text style={styles.title}>Últimas viagens finalizadas:</Text>
 
-                {this.props.viagens.length > 0 ?
-                this.props.viagens.map(item => {return (
-                    <ItemViagemConcluida viagem={item} navigation={this.props.navigation} key={item.id} />
-                )}) :
-                    <Text style={styles.txtSemRegistro}>Nenhum registro encontrado</Text>
-                }
+                {this.state.viagens.length > 0 ?
+                    this.state.viagens.map(item => {return (
+                        <ItemViagemConcluida viagem={item} navigation={this.props.navigation} key={item.id} />
+                    )}) 
+                : <Text style={styles.txtSemRegistro}>Nenhum registro encontrado</Text> }
             </View>
         )
     }
@@ -36,17 +51,11 @@ class UltimasViagens extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLoadViagens: () => dispatch(loadViagensConcluidas())
+        set_mensagem: msg => dispatch(setMensagem(msg))
     }
 }
 
-const mapStateToProps = ({viagem}) => {
-    return {
-        viagens: viagem.viagens_concluidas
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(UltimasViagens)
+export default connect(null, mapDispatchToProps)(UltimasViagens)
 
 const styles = StyleSheet.create({
     title: {

@@ -56,7 +56,10 @@ class IniciarViagem extends React.Component {
     carregarVeiculo = () => {
         axios.get(`veiculos/${this.state.veiculoId}`)
         .then(res => {
-            this.setState({ veiculoNome: res.data.nome })
+            this.setState({ 
+                veiculoNome: res.data.nome,
+                quilometragem: res.data.quilometragem
+            })
         })
         .catch(err => {
             this.props.setMensagem('Veículo inválido')
@@ -91,6 +94,7 @@ class IniciarViagem extends React.Component {
                     keyboardType='numeric'
                     label='Quilometragem'
                     placeholder='KM atual do veículo'
+                    value={`${this.state.quilometragem}`}
                     errorMessage={this.state.errQuilometragem}
                     returnKeyType='next'
                     onChangeText={quilometragem => this.setState({ quilometragem })} />

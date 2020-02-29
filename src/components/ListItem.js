@@ -3,11 +3,11 @@ import { Text, TouchableOpacity, StyleSheet, View } from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import commonStyles from '../commonStyles'
 
-export default class MotoristaItem extends React.Component {
+export default class ListItem extends React.Component {
 
     editar = () => {
-        this.props.navigation.navigate('CadastrarPessoa', { 
-            motoristaId: this.props.motorista.id
+        this.props.navigation.navigate(this.props.editScreen, { 
+            itemId: this.props.id
         })
     }
 
@@ -15,7 +15,7 @@ export default class MotoristaItem extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.nomeMotorista}>
-                    <Text style={styles.txtNome}>{ this.props.motorista.apelido }</Text>
+                    <Text style={styles.txtNome}>{ this.props.titulo }</Text>
                 </View>
 
                 <View style={styles.viewEdit}>

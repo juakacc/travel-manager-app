@@ -21,6 +21,7 @@ import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import config from '../config'
 
 class Login extends Component {
 
@@ -110,6 +111,8 @@ class Login extends Component {
                     isSubmetendo={this.props.isSubmetendo}
                     onPress={() => this.login()}
                     name='sign-in-alt' />
+
+                <Text>Versão: { config.version }</Text>
 
             </KeyboardAvoidingView>                
         )
