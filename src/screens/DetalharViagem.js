@@ -9,6 +9,7 @@ import functions from '../functions'
 import Titulo from '../components/Titulo'
 
 import NumberFormat from 'react-number-format'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 class DetalharViagem extends React.Component {
 
@@ -26,25 +27,25 @@ class DetalharViagem extends React.Component {
             veiculo: {
                 nome: ''
             }
-        }
+        },
+        isLoading: false
     }
 
     componentDidMount = async () => {
         const idViagem = this.props.navigation.getParam('idViagem')
         
         if (idViagem) {
-            await axios.get(`viagens/${idViagem}`
-            // , {
-            //     headers: {
-            //         Authorization: `Bearer ${this.props.token}`
-            //     }
-            // }
-            )
+            this.setState({ isLoading: true })
+            await axios.get(`viagens/${idViagem}`)
             .then(res => {
-                this.setState({ viagem: res.data })
+                this.setState({ 
+                    viagem: res.data,
+                    isLoading: false
+                })
             })
             .catch(err => {
                 this.props.setMensagem(err)
+                this.setState({ isLoading: false })
             })
         } else {
             this.props.navigation.goBack()
@@ -54,6 +55,8 @@ class DetalharViagem extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.isLoading} />
+
                 <Titulo titulo='Viagem Detalhada' />
 
                 <Text style={styles.info}>Motorista: {this.state.viagem.motorista.nome}

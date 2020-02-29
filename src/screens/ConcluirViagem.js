@@ -5,16 +5,49 @@ import { Input } from 'react-native-elements'
 import Botao from '../components/Botao'
 import moment from 'moment'
 
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { concluirViagem } from '../store/actions/viagem'
 import Titulo from '../components/Titulo'
+import Spinner from 'react-native-loading-spinner-overlay'
+import { setMensagem } from '../store/actions/mensagem'
 
 class ConcluirViagem extends React.Component {
 
     state = {
+        id: 0,
+        saida: '',
+        km_inicial: 0,
+        veiculo: 0,
+        motorista: 0,
+        
         descricao: '',
-        quilometragem: 0,
+        km_final: 0,
+
         errQuilometragem: ''
+    }
+
+    componentDidMount = () => {
+        const id = this.props.navigation.getParam('viagemId')
+
+        if (id) {
+            axios.get(`viagens/${id}`)
+            .then(res => {
+                const { saida, km_inicial, descricao, veiculo, motorista } = res.data
+
+                this.setState({
+                    id,
+                    saida,
+                    km_inicial,
+                    descricao,
+                    veiculo: veiculo.id,
+                    motorista: motorista.id
+                })
+            })
+            .catch(err => {
+                this.props.set_mensagem(err)
+            })
+        }
     }
 
     componentDidUpdate = prevProps => {
@@ -28,10 +61,10 @@ class ConcluirViagem extends React.Component {
             errQuilometragem: ''
         })
 
-        if(isNaN(this.state.quilometragem) || this.state.quilometragem <= 0) {
+        if(isNaN(this.state.km_final) || this.state.km_final <= 0) {
             this.setState({ 
                 errQuilometragem: 'Insira uma quilometragem válida!',
-                quilometragem: 0
+                km_final: 0
             })
             return false
         }
@@ -43,15 +76,15 @@ class ConcluirViagem extends React.Component {
             const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm')
 
             const dados = {
-                id: this.props.viagem.id,
+                id: this.state.id,
                 viagem: {
-                    "saida": this.props.viagem.saida,
-                    "chegada": dataAtual,
-                    "descricao": this.state.descricao,
-                    "km_inicial": this.props.viagem.km_inicial,
-                    "km_final": this.state.quilometragem,
-                    "veiculo": this.props.viagem.veiculo.id,
-                    "motorista": this.props.motorista.id
+                    saida: this.state.saida,
+                    chegada: dataAtual,
+                    descricao: this.state.descricao,
+                    km_inicial: this.state.km_inicial,
+                    km_final: this.state.km_final,
+                    veiculo: this.state.veiculo,
+                    motorista: this.state.motorista
                 }
             }
             this.props.onConcluirViagem(dados)
@@ -61,15 +94,18 @@ class ConcluirViagem extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.props.isSubmetendo} />
+
                 <Titulo titulo='Concluir Viagem' />
                 <Text style={styles.title}>Complete os dados a seguir sobre a viagem</Text>
+                
                 <Input
                     keyboardType='numeric'
                     label='Quilometragem'
                     placeholder='KM atual'
                     errorMessage={this.state.errQuilometragem}
                     returnKeyType='next'
-                    onChangeText={quilometragem => this.setState({ quilometragem })} />
+                    onChangeText={km_final => this.setState({ km_final })} />
                 
                 <Input 
                     label='Comentário'
@@ -87,10 +123,8 @@ class ConcluirViagem extends React.Component {
     }
 }
 
-const mapStateToProps = ({user, viagem}) => {
+const mapStateToProps = ({ viagem }) => {
     return {
-        motorista: user,
-        viagem: viagem.viagem,
         isLoading: viagem.isLoading,
         isSubmetendo: viagem.isSubmetendo
     }
@@ -98,7 +132,8 @@ const mapStateToProps = ({user, viagem}) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onConcluirViagem: viagem => dispatch(concluirViagem(viagem))
+        onConcluirViagem: viagem => dispatch(concluirViagem(viagem)),
+        set_mensagem: msg => dispatch(setMensagem(msg))
     }
 }
 

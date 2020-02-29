@@ -16,9 +16,7 @@ export default class Relatorio extends React.Component {
     render () {
         return (
             <View style={styles.container}>
-                <Spinner
-                    visible={!this.state.componentOk}
-                    textStyle={styles.spinnerTextStyle} />
+                <Spinner visible={!this.state.componentOk} />
 
                 <Header />
                 <Titulo titulo='Relatórios' />

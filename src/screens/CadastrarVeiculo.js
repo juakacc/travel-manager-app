@@ -7,9 +7,12 @@ import Titulo from '../components/Titulo'
 import commonStyles from '../commonStyles'
 
 import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo'
+import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { setMensagem } from '../store/actions/mensagem'
+
+import Spinner from 'react-native-loading-spinner-overlay'
+import NumberFormat from 'react-number-format'
 
 class CadastrarVeiculo extends React.Component {
 
@@ -19,11 +22,12 @@ class CadastrarVeiculo extends React.Component {
         renavam: '',
         marca: '',
         modelo: '',
-        quilometragem: 0,
+        quilometragem: '',
         cnh_requerida: 'A',
 
         isEdit: false,
         veiculoId: 0,
+        isLoading: false,
 
         err_nome: '',
         err_placa: '',
@@ -44,6 +48,7 @@ class CadastrarVeiculo extends React.Component {
         const veiculoId = this.props.navigation.getParam('itemId')
 
         if (veiculoId) {
+            this.setState({ isLoading: true })
             axios.get(`veiculos/${veiculoId}`)
             .then(res => {
                 const { nome, placa, renavam, marca, modelo, quilometragem, cnh_requerida } = res.data
@@ -57,11 +62,13 @@ class CadastrarVeiculo extends React.Component {
                     quilometragem,
                     cnh_requerida,
                     isEdit: true,
-                    veiculoId
+                    veiculoId,
+                    isLoading: false
                 })
             })
             .catch(err => {
                 this.props.set_mensagem(err)
+                this.setState({ isLoading: false })
             })
         }
     }
@@ -103,9 +110,11 @@ class CadastrarVeiculo extends React.Component {
             valid = false
         }
 
-        if (isNaN(this.state.quilometragem) || this.state.quilometragem < 0) {
-            this.setState({ err_quilometragem: 'Digite uma quilometragem válida' })
-            valid = false
+        if (this.state.quilometragem != '') {
+            if (isNaN(this.state.quilometragem) || this.state.quilometragem < 0) {
+                this.setState({ err_quilometragem: 'Digite uma quilometragem válida' })
+                valid = false
+            }
         }
 
         if (this.state.cnh_requerida.trim() == '') {
@@ -136,9 +145,17 @@ class CadastrarVeiculo extends React.Component {
         }        
     }
 
+    setKM = quilometragem => {
+        if (quilometragem == '' || /^\d+$/.test(quilometragem)) {
+            this.setState({ quilometragem })
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.props.isSubmetendo || this.state.isLoading } />
+                
                 <Titulo titulo='Cadastro de Veículo' />
 
                 <ScrollView>
@@ -183,7 +200,7 @@ class CadastrarVeiculo extends React.Component {
                         errorMessage={this.state.err_quilometragem}
                         returnKeyType='next'
                         value={`${this.state.quilometragem}`}
-                        onChangeText={quilometragem => this.setState({ quilometragem })} />
+                        onChangeText={q => this.setKM(q)} />
 
                     <Text style={{ marginLeft: 10, fontWeight: 'bold', color: 'gray', fontSize: 15 }}>CNH Requerida</Text>
 

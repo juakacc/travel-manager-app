@@ -7,7 +7,7 @@ export default class ListItem extends React.Component {
 
     editar = () => {
         this.props.navigation.navigate(this.props.editScreen, { 
-            itemId: this.props.id
+            itemId: this.props.item.id
         })
     }
 
@@ -15,7 +15,7 @@ export default class ListItem extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.nomeMotorista}>
-                    <Text style={styles.txtNome}>{ this.props.titulo }</Text>
+                    <Text style={styles.txtNome}>{ this.props.item.title }</Text>
                 </View>
 
                 <View style={styles.viewEdit}>

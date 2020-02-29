@@ -9,17 +9,16 @@ import ViagemAtual from '../components/ViagemAtual'
 class Home extends React.Component {
     
     state = {
-        viagem: null,
         viagemAtual: false,
         disposicaoVeiculos: false
     }
 
-    viagemAtual = v => {
-        this.setState({ viagemAtual: v })
+    viagemAtual = viagemAtual => {
+        this.setState({ viagemAtual })
     }
 
-    disposicaoVeiculos = v => {
-        this.setState({ disposicaoVeiculos: v })
+    disposicaoVeiculos = disposicaoVeiculos => {
+        this.setState({ disposicaoVeiculos })
     }
 
     render () {
@@ -28,9 +27,7 @@ class Home extends React.Component {
                 <Header navigation={this.props.navigation} />
                 <Text style={styles.textAlert}>NÃO ULTRAPASSE EM LUGAR INDEVIDO</Text>
 
-                <Spinner
-                    visible={! (this.state.viagemAtual && this.state.disposicaoVeiculos)}
-                    textStyle={styles.spinnerTextStyle} />             
+                <Spinner visible={! (this.state.viagemAtual && this.state.disposicaoVeiculos)} />             
 
                 <ViagemAtual navigation={this.props.navigation} onComplete={v => this.viagemAtual(v)} />
 

@@ -1,32 +1,42 @@
 import React from 'react'
-import { SafeAreaView, StyleSheet, ScrollView } from 'react-native'
-import ActionButton from 'react-native-action-button'
+import { SafeAreaView, StyleSheet, FlatList, Text } from 'react-native'
+import ActionButton from '../components/ActionButton'
 import axios from 'axios'
 import ListItem from '../components/ListItem'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import commonStyles from '../commonStyles'
 import Titulo from '../components/Titulo'
 
 import { connect } from 'react-redux'
 import { setMensagem } from '../store/actions/mensagem'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 class ListPessoas extends React.Component {
 
     state = {
-        motoristas: []
+        motoristas: [],
+        isLoading: false,
+        buttonIsVisible: true
+    }
+    _listViewOffset = 0
+
+    loadMotoristas = () => {
+        this.setState({ isLoading: true })
+        axios.get('motoristas')
+        .then(res => {
+            this.setState({ 
+                motoristas: res.data,
+                isLoading: false 
+            })
+        })
+        .catch(err => {
+            this.props.set_mensagem(err)
+            this.setState({ isLoading: false })
+        })
     }
 
     componentDidMount() {
-        const { navigation } = this.props
-        this.focusListener = navigation.addListener('didFocus', () => {
-            axios.get('motoristas')
-            .then(res => {
-                this.setState({ motoristas: res.data })
-            })
-            .catch(err => {
-                this.props.set_mensagem(err)
-            })
-        });
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            this.loadMotoristas()
+        })
     }
 
     componentWillUnmount() {
@@ -36,26 +46,39 @@ class ListPessoas extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                <Spinner visible={this.state.isLoading} />
+
                 <Titulo titulo='Motoristas cadastrados' />
 
-                <ScrollView>
-                    {this.state.motoristas.map(item => (
+                <FlatList
+                    data={this.state.motoristas}
+                    renderItem={({ item }) =>
                         <ListItem 
                             navigation={this.props.navigation}
                             editScreen='CadastrarPessoa'
-                            id={item.id}
-                            titulo={item.apelido}
-                            key={item.id} />
-                    ))}
-                </ScrollView>
+                            item={{ id: item.id, title: item.apelido }} />
+                    }
+                    keyExtractor={item => `${item.id}`}
+                    ListEmptyComponent={<Text>Nenhum informação</Text>}
+                    onRefresh={() => this.loadMotoristas()}
+                    refreshing={this.state.isLoading}
 
-                <ActionButton
-                    buttonColor={commonStyles.colors.principal}
-                    renderIcon={() => (
-                        <Icon name='plus' color='black' size={20} />
-                    )}
-                    onPress={() => { this.props.navigation.navigate('CadastrarPessoa') }}
-                />    
+                    onScroll={(event) => {
+                        const currentOffset = event.nativeEvent.contentOffset.y
+                        const direction = (currentOffset > 0 && currentOffset > this._listViewOffset) ? 'down' : 'up'
+                        const buttonIsVisible = direction == 'up'
+
+                        if (buttonIsVisible != this.state.buttonIsVisible) {
+                          this.setState({ buttonIsVisible })
+                        }
+                        this._listViewOffset = currentOffset  
+                    }}
+                />
+
+                <ActionButton 
+                    visible={this.state.buttonIsVisible}
+                    navigation={this.props.navigation}
+                    toScreen='CadastrarPessoa' />
             </SafeAreaView>
         )
     }

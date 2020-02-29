@@ -10,6 +10,7 @@ import { setMensagem } from '../store/actions/mensagem'
 import commonStyles from '../commonStyles'
 import { Input } from 'react-native-elements'
 import Botao from '../components/Botao'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 const estadoInicial = {
     nome: '',
@@ -22,6 +23,7 @@ const estadoInicial = {
 
     isEdit: false,
     motoristaId: 0,
+    isLoading: false,
 
     err_nome: '',
     err_apelido: '',
@@ -41,7 +43,9 @@ class CadastrarPessoa extends React.Component {
 
     componentDidMount = () => {
         const motoristaId = this.props.navigation.getParam('itemId')
+        
         if (motoristaId) {
+            this.setState({ isLoading: true })
             axios.get(`motoristas/${motoristaId}`)
             .then(res => {
                 const {nome, apelido, cnh, categoria, telefone} = res.data
@@ -53,11 +57,13 @@ class CadastrarPessoa extends React.Component {
                     categoria,
                     telefone,
                     isEdit: true,
-                    motoristaId
+                    motoristaId,
+                    isLoading: false
                 })
             })
             .catch(err => {
                 this.props.set_mensagem(err)
+                this.setState({ isLoading: false })
             })
         }
     }
@@ -145,6 +151,8 @@ class CadastrarPessoa extends React.Component {
 
         return (
             <View style={styles.container}>
+                <Spinner visible={this.props.isSubmetendo || this.state.isLoading } />
+
                 <Titulo titulo={titulo} />
         
                 <ScrollView>

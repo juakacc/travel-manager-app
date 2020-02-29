@@ -22,6 +22,7 @@ import { connect } from 'react-redux'
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import config from '../config'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 class Login extends Component {
 
@@ -69,6 +70,8 @@ class Login extends Component {
                     ios: 'padding',
                     android: null,
                 })} >
+
+                <Spinner visible={this.props.isSubmetendo} />
 
                 <Text style={styles.titulo}>
                     <Icon name="road" size={35} color={commonStyles.colors.secundaria} /> Viagens PMO

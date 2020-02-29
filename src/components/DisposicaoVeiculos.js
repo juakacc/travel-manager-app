@@ -1,12 +1,10 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, FlatList } from 'react-native'
+import ItemViagemConcluida from './ItemViagemConcluida'
 
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { setMensagem } from '../store/actions/mensagem'
-
-import { ScrollView } from 'react-native-gesture-handler'
-import ItemViagemConcluida from './ItemViagemConcluida'
 
 class DisposicaoVeiculos extends React.Component {
 
@@ -15,9 +13,8 @@ class DisposicaoVeiculos extends React.Component {
     }
 
     componentDidMount() {
-        const { navigation } = this.props
-
-        this.focusListener = navigation.addListener('didFocus', () => {
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
+            
             this.props.onComplete(false)
             axios.get('viagens?status=nao-concluida')
             .then(res => {
@@ -40,17 +37,16 @@ class DisposicaoVeiculos extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.title}>Disposição atual dos veículos:</Text>
 
-                <ScrollView>
-                {this.state.viagens.length > 0 ? 
-                    this.state.viagens.map(viagem => {return (
-                        <ItemViagemConcluida viagem={viagem} navigation={this.props.navigation} key={viagem.id} /> 
-                    )}) 
-                : 
-                    <View>
-                        <Text style={styles.txtSemViagem}>Nenhuma viagem em andamento</Text>
-                    </View>
-                }
-                </ScrollView>
+                <FlatList 
+                    data={this.state.viagens}
+                    renderItem={({item}) =>
+                        <ItemViagemConcluida 
+                            viagem={item} 
+                            navigation={this.props.navigation} /> 
+                    }
+                    keyExtractor={item => `${item.id}`}
+                    ListEmptyComponent={<Text style={styles.txtSemViagem}>Nenhuma viagem em andamento</Text>}
+                />
             </View>
         )
     }

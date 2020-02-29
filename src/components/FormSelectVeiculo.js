@@ -5,7 +5,7 @@ import Botao from './Botao'
 import axios from 'axios'
 
 class FormSelectVeiculo extends React.Component {
-    _isMounted = false
+    // _isMounted = false
 
     state = {
         veiculos: [],
@@ -13,21 +13,20 @@ class FormSelectVeiculo extends React.Component {
     }
 
     componentDidMount() {
-        this._isMounted = true
-        const { navigation } = this.props
+        // this._isMounted = true
 
-        this.focusListener = navigation.addListener('didFocus', () => {
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
 
             this.props.componenteOk(false)
             axios.get('veiculos/disponiveis')
             .then(res => {
-                if(this._isMounted) {
+                // if(this._isMounted) {
                     this.setState({ veiculos: res.data })
                 
                     if (res.data.length > 0) {
                         this.setState({ veiculoSelec: res.data[0].id })
                     }
-                }
+                // }
                 this.props.componenteOk(true)
             })
             .catch(err => {
@@ -39,7 +38,7 @@ class FormSelectVeiculo extends React.Component {
 
     componentWillUnmount() {
         this.focusListener.remove()
-        this._isMounted = false
+        // this._isMounted = false
     }
 
     enviarVeiculo = () => {

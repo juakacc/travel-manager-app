@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, FlatList } from 'react-native'
 
 import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
@@ -39,11 +39,16 @@ class UltimasViagens extends React.Component {
             <View>
                 <Text style={styles.title}>Últimas viagens finalizadas:</Text>
 
-                {this.state.viagens.length > 0 ?
-                    this.state.viagens.map(item => {return (
-                        <ItemViagemConcluida viagem={item} navigation={this.props.navigation} key={item.id} />
-                    )}) 
-                : <Text style={styles.txtSemRegistro}>Nenhum registro encontrado</Text> }
+                <FlatList
+                    data={this.state.viagens}
+                    renderItem={({item}) => 
+                        <ItemViagemConcluida 
+                            viagem={item} 
+                            navigation={this.props.navigation} />
+                    }
+                    keyExtractor={item => `${item.id}`}
+                    ListEmptyComponent={<Text style={styles.txtSemRegistro}>Nenhum registro encontrado</Text>}
+                />
             </View>
         )
     }

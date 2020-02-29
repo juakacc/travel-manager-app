@@ -14,8 +14,7 @@ class ViagemAtual extends React.Component {
     }
 
     componentDidMount() {
-        const { navigation } = this.props
-        this.focusListener = navigation.addListener('didFocus', () => {
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
 
             this.componenteOk(false)
             axios.get(`viagens/atual/${this.props.motorista.id}`)
@@ -24,8 +23,11 @@ class ViagemAtual extends React.Component {
                 this.componenteOk(true)
             })
             .catch(err => {
+                this.setState({ viagem: null })
                 if (err.response && err.response.status != 404) {
                     this.props.set_mensagem(err)
+                } else {
+                    this.componenteOk(true)
                 }
             })          
         })
