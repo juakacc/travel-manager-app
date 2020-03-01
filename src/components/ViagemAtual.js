@@ -10,7 +10,9 @@ import axios from 'axios'
 class ViagemAtual extends React.Component {
 
     state = {
-        viagem: null
+        viagem: null,
+
+        veiculos: []
     }
 
     componentDidMount() {
@@ -24,14 +26,40 @@ class ViagemAtual extends React.Component {
             })
             .catch(err => {
                 this.setState({ viagem: null })
+
                 if (err.response && err.response.status != 404) {
                     this.props.set_mensagem(err)
-                } else {
                     this.componenteOk(true)
+                } else {
+                    this.loadVeiculos()
                 }
             })          
         })
     }
+
+    loadVeiculos = () => {
+        axios.get('veiculos/disponiveis')
+        .then(res => {
+            // if(this._isMounted) {
+                this.setState({ veiculos: res.data })
+            
+                // if (res.data.length > 0) {
+                //     this.setState({ veiculoSelec: res.data[0].id })
+                // }
+            // }
+            this.componenteOk(true)
+        })
+        .catch(err => {
+            console.log(err || '')
+            this.componenteOk(true)
+        })
+    }
+
+    // enviarVeiculo = () => {
+    //     this.props.navigation.navigate('IniciarViagem', {
+    //         idVeiculo: this.state.veiculoSelec
+    //     })        
+    // }
 
     componentWillUnmount() {
         this.focusListener.remove();
@@ -45,7 +73,8 @@ class ViagemAtual extends React.Component {
         if (this.state.viagem) {
             return <VeiculoAtual viagem={this.state.viagem} navigation={this.props.navigation} />
         } else {
-            return <FormSelectVeiculo navigation={this.props.navigation} componenteOk={v => this.componenteOk(v)}/>
+            // return <FormSelectVeiculo navigation={this.props.navigation} componenteOk={v => this.componenteOk(v)}/>
+            return <FormSelectVeiculo navigation={this.props.navigation} veiculos={this.state.veiculos} />
         }
     }
 }

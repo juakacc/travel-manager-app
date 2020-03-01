@@ -1,40 +1,47 @@
 import React from 'react'
-import { View, Text, StyleSheet, Picker } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import Botao from './Botao'
-
-import axios from 'axios'
+import RNPickerSelect from 'react-native-picker-select'
 
 class FormSelectVeiculo extends React.Component {
     // _isMounted = false
 
     state = {
-        veiculos: [],
         veiculoSelec: null
     }
 
-    componentDidMount() {
-        // this._isMounted = true
-
+    componentDidMount = () => {
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
-
-            this.props.componenteOk(false)
-            axios.get('veiculos/disponiveis')
-            .then(res => {
-                // if(this._isMounted) {
-                    this.setState({ veiculos: res.data })
-                
-                    if (res.data.length > 0) {
-                        this.setState({ veiculoSelec: res.data[0].id })
-                    }
-                // }
-                this.props.componenteOk(true)
-            })
-            .catch(err => {
-                console.log(err || '')
-                this.props.componenteOk(true)
-            })
-        });
+            this.setState({ veiculoSelec: null })
+            // if (this.props.veiculos.length > 0) {
+            //     this.setState({ veiculoSelec: this.props.veiculos[0].id })
+            // }
+        })        
     }
+
+    // componentDidMount() {
+    //     // this._isMounted = true
+
+    //     this.focusListener = this.props.navigation.addListener('didFocus', () => {
+
+    //         this.props.componenteOk(false)
+    //         axios.get('veiculos/disponiveis')
+    //         .then(res => {
+    //             // if(this._isMounted) {
+    //                 this.setState({ veiculos: res.data })
+                
+    //                 if (res.data.length > 0) {
+    //                     this.setState({ veiculoSelec: res.data[0].id })
+    //                 }
+    //             // }
+    //             this.props.componenteOk(true)
+    //         })
+    //         .catch(err => {
+    //             console.log(err || '')
+    //             this.props.componenteOk(true)
+    //         })
+    //     });
+    // }
 
     componentWillUnmount() {
         this.focusListener.remove()
@@ -42,27 +49,48 @@ class FormSelectVeiculo extends React.Component {
     }
 
     enviarVeiculo = () => {
-        this.props.navigation.navigate('IniciarViagem', {
-            idVeiculo: this.state.veiculoSelec
-        })        
+        if (this.state.veiculoSelec) {
+            this.props.navigation.navigate('IniciarViagem', {
+                idVeiculo: this.state.veiculoSelec
+            })        
+        }
     }
 
     render() {
+        const placeholder = {
+            label: 'Selecione um veículo...',
+            value: null,
+            color: '#9EA0A4',
+        }
+
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Veículos disponíveis:</Text>
 
-                { this.state.veiculos.length > 0 ?
+                { this.props.veiculos.length > 0 ?
                 <View>
-                    <Picker
+                    <RNPickerSelect
+                        onValueChange={(value) => this.setState({ veiculoSelec: value })}
+                        value={this.state.veiculoSelec}
+                        // useNativeAndroidPickerStyle={false}
+                        placeholder={placeholder}
+
+                        items={this.props.veiculos.map(veiculo => {
+                            return { 
+                                label: veiculo.nome, 
+                                value: veiculo.id 
+                            }
+                        })}
+                    />
+                    {/* <Picker
                         selectedValue={this.state.veiculoSelec}
                         onValueChange={(itemValue, itemIndex) => {
                             this.setState({ veiculoSelec: itemValue })
                         }}>
-                        {this.state.veiculos.map(item => {
+                        {this.props.veiculos.map(item => {
                             return (<Picker.Item label={item.nome} value={item.id} key={item.id}/>) 
                         })}
-                    </Picker>
+                    </Picker> */}
 
                     <Botao onPress={this.enviarVeiculo} title='Pegar Veículo' name='key' />
                     <Text style={styles.txtInfo}>Ao escolher um veículo será registrado o momento da saída</Text>

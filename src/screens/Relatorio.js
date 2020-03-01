@@ -1,6 +1,5 @@
 import React from 'react'
-import {View, StyleSheet, ScrollView } from 'react-native'
-import Header from '../components/Header'
+import {View, StyleSheet } from 'react-native'
 import UltimasViagens from '../components/UltimasViagens'
 import Spinner from 'react-native-loading-spinner-overlay'
 
@@ -18,14 +17,11 @@ export default class Relatorio extends React.Component {
             <View style={styles.container}>
                 <Spinner visible={!this.state.componentOk} />
 
-                <Header />
                 <Titulo titulo='Relatórios' />
                 
-                <ScrollView>
-                    <UltimasViagens navigation={this.props.navigation} componentOk={v => this.setState({ componentOk: v })} />
-
-                    <FiltroData navigation={this.props.navigation} />
-                </ScrollView>
+                <UltimasViagens navigation={this.props.navigation} componentOk={v => this.setState({ componentOk: v })} />
+                
+                <FiltroData navigation={this.props.navigation} />
             </View>
         )
     }

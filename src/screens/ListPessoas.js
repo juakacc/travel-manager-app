@@ -59,7 +59,7 @@ class ListPessoas extends React.Component {
                             item={{ id: item.id, title: item.apelido }} />
                     }
                     keyExtractor={item => `${item.id}`}
-                    ListEmptyComponent={<Text>Nenhum informação</Text>}
+                    ListEmptyComponent={<Text style={styles.semItens}>Nenhum item a ser exibido</Text>}
                     onRefresh={() => this.loadMotoristas()}
                     refreshing={this.state.isLoading}
 
@@ -92,6 +92,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         height: 22,
         color: 'white',
+    },
+    semItens: {
+        margin: 20,
+        textAlign: 'center'
     }
 });
 

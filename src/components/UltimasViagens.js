@@ -36,7 +36,7 @@ class UltimasViagens extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.container}>
                 <Text style={styles.title}>Últimas viagens finalizadas:</Text>
 
                 <FlatList
@@ -63,6 +63,9 @@ const mapDispatchToProps = dispatch => {
 export default connect(null, mapDispatchToProps)(UltimasViagens)
 
 const styles = StyleSheet.create({
+    container: {
+        height: 150
+    },
     title: {
         fontWeight: 'bold',
         fontSize: 15

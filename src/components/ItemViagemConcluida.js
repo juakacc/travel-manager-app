@@ -12,8 +12,12 @@ class ItemViagemConcluida extends React.Component {
     render() {
         return (
             <TouchableOpacity style={styles.container} onPress={this.detalharViagem}>
-                <Text style={styles.veiculo}>[{this.props.viagem.veiculo.nome}]</Text>
-                <Text style={styles.motorista}>{this.props.viagem.motorista.nome}</Text>
+                <View style={styles.viewVeiculo}>
+                    <Text style={styles.veiculo}>[{this.props.viagem.veiculo.nome}]</Text>
+                </View>
+                <View style={styles.viewMotorista}>
+                    <Text style={styles.motorista}>{this.props.viagem.motorista.apelido}</Text>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -26,11 +30,17 @@ const styles = StyleSheet.create({
         marginVertical: 3,
         backgroundColor: '#ccc',
         borderRadius: 5,
+        flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'center'
     },
-    veiculo: {
-
+    viewVeiculo: {
+        flex: 1,
+        alignItems: 'center'
+    },
+    viewMotorista: {
+        flex: 1,
+        alignItems: 'center'
     },
     motorista: {
         fontWeight: 'bold'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableHighlight, Text, StyleSheet } from 'react-native'
+import { View, TouchableHighlight, Text, StyleSheet, FlatList } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import ItemViagemConcluida from './ItemViagemConcluida'
@@ -11,6 +11,7 @@ import moment from 'moment'
 import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import commonStyles from '../commonStyles'
 
 class FiltroData extends React.Component {
 
@@ -91,14 +92,12 @@ class FiltroData extends React.Component {
                             </Text>
                         </TouchableHighlight>
                     </View>
-                    { show ? <DateTimePicker 
-                        value={date}
+                    { show && <DateTimePicker 
+                        value={date}                        
                         mode={mode}
                         is24Hour={true}
                         display="default"
-                        onChange={this.setDate} />
-                        : null
-                    }
+                        onChange={this.setDate} /> }
                 </View>
 
                 <Botao 
@@ -108,12 +107,16 @@ class FiltroData extends React.Component {
                     name='search' />
 
                 <View style={styles.resultados}>
-                    { this.state.viagens.length > 0 ?
-                        this.state.viagens.map(item => (
-                            <ItemViagemConcluida viagem={item} navigation={this.props.navigation} key={item.id} />
-                        )) :
-                        <Text style={styles.txtSemResultado}>Nenhum resultado encontrado</Text>
-                    }
+                    <FlatList
+                        data={this.state.viagens}
+                        renderItem={({item}) => 
+                        <ItemViagemConcluida 
+                            viagem={item} 
+                            navigation={this.props.navigation} />
+                        }
+                        keyExtractor={item => `${item.id}`}
+                        ListEmptyComponent={<Text style={styles.txtSemResultado}>Nenhum resultado encontrado</Text>}
+                    />
                 </View>
             </View>
         )
@@ -133,7 +136,8 @@ const styles = StyleSheet.create({
     dateTimeSelect: {
         fontSize: 16,
         textAlign: 'center',
-        backgroundColor: 'tomato',
+        backgroundColor: commonStyles.colors.secundaria,
+        borderRadius: 10,
         padding: 10
     },
     txtSemResultado: {
