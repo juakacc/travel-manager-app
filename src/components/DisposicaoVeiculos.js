@@ -54,7 +54,7 @@ class DisposicaoVeiculos extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        paddingBottom: 260
+        height: 195
     },
     title: {
         color: '#000',
