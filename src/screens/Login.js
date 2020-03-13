@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Fragment } from 'react'
 
 import {
     View, 
@@ -9,7 +9,8 @@ import {
     KeyboardAvoidingView,
     Platform,
     TextInput,
-    ActivityIndicator
+
+    SafeAreaView
 } from 'react-native'
 
 import Botao from '../components/Botao'
@@ -24,7 +25,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import config from '../config'
 import Spinner from 'react-native-loading-spinner-overlay'
 
-class Login extends Component {
+class Login extends React.Component {
 
     state = {
         apelido: '',
@@ -117,7 +118,7 @@ class Login extends Component {
 
                 <Text>Versão: { config.version }</Text>
 
-            </KeyboardAvoidingView>                
+            </KeyboardAvoidingView>      
         )
     }
 }

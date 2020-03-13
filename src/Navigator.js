@@ -89,6 +89,7 @@ const HomeBottomTabNavigator = createBottomTabNavigator({
                 <Ionicons name='ios-albums' size={30} color={tintColor} />
         }
     }
+}, {
 })
 
 class BotaoDrawer extends React.Component {

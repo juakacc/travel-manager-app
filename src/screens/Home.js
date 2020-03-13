@@ -6,11 +6,18 @@ import Header from '../components/Header'
 import DisposicaoVeiculos from '../components/DisposicaoVeiculos'
 import ViagemAtual from '../components/ViagemAtual'
 
+const textArray = [
+    'NÃO ULTRAPASSE EM LUGAR INDEVIDO',
+    'UTILIZE O CINTO DE SEGURANÇA',
+    'LIGUE OS FARÓIS DO VEÍCULO'
+]
+
 class Home extends React.Component {
     
     state = {
         viagemAtual: false,
-        disposicaoVeiculos: false
+        disposicaoVeiculos: false,
+        indice: 0
     }
 
     viagemAtual = viagemAtual => {
@@ -21,11 +28,25 @@ class Home extends React.Component {
         this.setState({ disposicaoVeiculos })
     }
 
+    componentDidMount() {
+        this.timeout = setInterval(() => {
+            let indice = this.state.indice + 1;
+            this.setState({ indice });
+        }, 5000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timeout);
+    }
+
     render () {
+
+        const textThatChanges = textArray[this.state.indice % textArray.length]
+
         return (
             <View style={styles.container}>
                 <Header navigation={this.props.navigation} />
-                <Text style={styles.textAlert}>NÃO ULTRAPASSE EM LUGAR INDEVIDO</Text>
+                <Text style={styles.textAlert}>{textThatChanges}</Text>
 
                 <Spinner visible={! (this.state.viagemAtual && this.state.disposicaoVeiculos)} />             
 

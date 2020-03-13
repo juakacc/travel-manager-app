@@ -80,10 +80,10 @@ class FiltroData extends React.Component {
         const { show, date, mode } = this.state
         
         return (
-            <View>
+            <View style={styles.container}>
                 <Text style={styles.title}>Realize uma filtragem:</Text>
 
-                <View>
+                <View style={styles.form}>
                     <View>
                         <TouchableHighlight onPress={this.showDatepicker}>
                             <Text style={styles.dateTimeSelect}>
@@ -92,19 +92,22 @@ class FiltroData extends React.Component {
                             </Text>
                         </TouchableHighlight>
                     </View>
-                    { show && <DateTimePicker 
+
+                    <Botao 
+                        style={styles.botao}
+                        onPress={() => this.pesquisar()}
+                        isSubmetendo={this.state.isSubmetendo}
+                        title='Pesquisar'
+                        name='search' />
+                    
+                </View>
+
+                { show && <DateTimePicker 
                         value={date}                        
                         mode={mode}
                         is24Hour={true}
                         display="default"
                         onChange={this.setDate} /> }
-                </View>
-
-                <Botao 
-                    onPress={() => this.pesquisar()}
-                    isSubmetendo={this.state.isSubmetendo}
-                    title='Pesquisar'
-                    name='search' />
 
                 <View style={styles.resultados}>
                     <FlatList
@@ -124,14 +127,16 @@ class FiltroData extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    botao: {
+        width: 150,
+        height: 45
+    },
     container: {
-        flex: 1,
-        padding: 5
+        
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 15,
-        marginBottom: 10
+        fontSize: 15
     },
     dateTimeSelect: {
         fontSize: 16,
@@ -145,7 +150,13 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     resultados: {
-        marginTop: 10
+        marginTop: 10,
+        height: 175
+    },
+    form: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
     }
 })
 

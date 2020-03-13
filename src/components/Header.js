@@ -10,12 +10,6 @@ class Header extends React.Component {
         date: functions.getDateString()
     }
 
-    // componentDidUpdate() {
-    //     this.setState({
-    //         date: functions.getDateString()
-    //     })
-    // }
-
     render() {
         return (
             <View style={styles.container}>
@@ -44,9 +38,9 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = ({user}) => {
+const mapStateToProps = ({ user }) => {
     return {
-        nome: user.nome
+        nome: user.apelido
     }
 }
 

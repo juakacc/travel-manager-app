@@ -1,10 +1,12 @@
 import React from 'react'
-import {View, StyleSheet } from 'react-native'
+import {View, StyleSheet, SafeAreaView } from 'react-native'
 import UltimasViagens from '../components/UltimasViagens'
 import Spinner from 'react-native-loading-spinner-overlay'
 
 import Titulo from '../components/Titulo'
 import FiltroData from '../components/FiltroData'
+// import { SafeAreaView } from 'react-navigation'
+// import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default class Relatorio extends React.Component {
 
@@ -14,15 +16,17 @@ export default class Relatorio extends React.Component {
     
     render () {
         return (
-            <View style={styles.container}>
-                <Spinner visible={!this.state.componentOk} />
+            <SafeAreaView style={styles.container}>
+                <View>
+                    <Spinner visible={!this.state.componentOk} />
 
-                <Titulo titulo='Relatórios' />
-                
-                <UltimasViagens navigation={this.props.navigation} componentOk={v => this.setState({ componentOk: v })} />
-                
-                <FiltroData navigation={this.props.navigation} />
-            </View>
+                    <Titulo titulo='Relatórios' />
+                    
+                    <UltimasViagens navigation={this.props.navigation} componentOk={v => this.setState({ componentOk: v })} />
+                    
+                    <FiltroData navigation={this.props.navigation} />
+                </View>
+            </SafeAreaView>
         )
     }
 }

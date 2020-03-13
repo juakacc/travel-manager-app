@@ -7,6 +7,7 @@ import { setMensagem } from './store/actions/mensagem'
 import { ToastAndroid } from 'react-native';
 
 import NavigatorService from './NavigatorService'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 class App extends Component {
 
@@ -19,11 +20,13 @@ class App extends Component {
 
   render () {
     return (
-      <Navigator 
-        ref={navigatorRef => {
-            NavigatorService.setTopLevelNavigator(navigatorRef)
-        }}
-      />
+        <SafeAreaProvider>
+            <Navigator 
+                ref={navigatorRef => {
+                    NavigatorService.setTopLevelNavigator(navigatorRef)
+                }}
+            />
+      </SafeAreaProvider>
     )
   }  
 }

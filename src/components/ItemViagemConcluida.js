@@ -10,8 +10,10 @@ class ItemViagemConcluida extends React.Component {
     }
 
     render() {
+        const color = this.props.viagem.chegada ? '#A9F5A9' : '#A9BCF5'
+
         return (
-            <TouchableOpacity style={styles.container} onPress={this.detalharViagem}>
+            <TouchableOpacity style={[styles.container, { backgroundColor: color }]} onPress={this.detalharViagem}>
                 <View style={styles.viewVeiculo}>
                     <Text style={styles.veiculo}>[{this.props.viagem.veiculo.nome}]</Text>
                 </View>
@@ -28,7 +30,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         marginVertical: 3,
-        backgroundColor: '#ccc',
         borderRadius: 5,
         flex: 1,
         flexDirection: 'row',
