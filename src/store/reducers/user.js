@@ -6,7 +6,8 @@ const initialState = {
     apelido: null,
     token: null,
     isLoading: false,
-    isSubmetendo: false // para desabilitar os botões durante a requisição
+    isSubmetendo: false, // para desabilitar os botões durante a requisição
+    permissoes: [] // para gerenciar as screens
 }
 
 const reducer = (prevState = initialState, action) => {

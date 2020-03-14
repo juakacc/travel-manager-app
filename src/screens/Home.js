@@ -5,6 +5,7 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import Header from '../components/Header'
 import DisposicaoVeiculos from '../components/DisposicaoVeiculos'
 import ViagemAtual from '../components/ViagemAtual'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
 
 const textArray = [
     'NÃO ULTRAPASSE EM LUGAR INDEVIDO',
@@ -45,6 +46,8 @@ class Home extends React.Component {
 
         return (
             <View style={styles.container}>
+                {/* <GeneralStatusBarColor backgroundColor="white" barStyle="dark-content"/>     */}
+                
                 <Header navigation={this.props.navigation} />
                 <Text style={styles.textAlert}>{textThatChanges}</Text>
 

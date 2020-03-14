@@ -75,10 +75,10 @@ class ListPessoas extends React.Component {
                     }}
                 />
 
-                <ActionButton 
+                {this.props.isAdmin && <ActionButton 
                     visible={this.state.buttonIsVisible}
                     navigation={this.props.navigation}
-                    toScreen='CadastrarPessoa' />
+                    toScreen='CadastrarPessoa' />}
             </SafeAreaView>
         )
     }
@@ -97,7 +97,13 @@ const styles = StyleSheet.create({
         margin: 20,
         textAlign: 'center'
     }
-});
+})
+
+const mapStateToProps = ({ user }) => {
+    return {
+        isAdmin: user.permissoes.includes('admin') 
+    }
+}
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -105,4 +111,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ListPessoas)
+export default connect(mapStateToProps, mapDispatchToProps)(ListPessoas)

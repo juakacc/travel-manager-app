@@ -8,6 +8,7 @@ import { ToastAndroid } from 'react-native';
 
 import NavigatorService from './NavigatorService'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import NavigatorMotorista from './NavigatorMotorista';
 
 class App extends Component {
 
@@ -19,9 +20,11 @@ class App extends Component {
   }
 
   render () {
+      // crio um boolean classificando se o user é admin ou não, 
+      // renderizo o navigator correspondente
     return (
         <SafeAreaProvider>
-            <Navigator 
+            <NavigatorMotorista 
                 ref={navigatorRef => {
                     NavigatorService.setTopLevelNavigator(navigatorRef)
                 }}
