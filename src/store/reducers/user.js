@@ -7,7 +7,7 @@ const initialState = {
     token: null,
     isLoading: false,
     isSubmetendo: false, // para desabilitar os botões durante a requisição
-    permissoes: [] // para gerenciar as screens
+    permissoes: ['motorista'] // para gerenciar as screens
 }
 
 const reducer = (prevState = initialState, action) => {
@@ -18,7 +18,8 @@ const reducer = (prevState = initialState, action) => {
                 id: action.payload.id,
                 nome: action.payload.nome,
                 apelido: action.payload.apelido,
-                token: action.payload.token
+                token: action.payload.token,
+                permissoes: action.payload.permissoes
             }
         case USER_LOGGED_OUT:
             return {

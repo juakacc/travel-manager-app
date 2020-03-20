@@ -55,6 +55,7 @@ class ListPessoas extends React.Component {
                     renderItem={({ item }) =>
                         <ListItem 
                             navigation={this.props.navigation}
+                            isEdit={this.props.isAdmin}
                             editScreen='CadastrarPessoa'
                             item={{ id: item.id, title: item.apelido }} />
                     }

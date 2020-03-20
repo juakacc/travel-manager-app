@@ -18,11 +18,17 @@ export default class ListItem extends React.Component {
                     <Text style={styles.txtNome}>{ this.props.item.title }</Text>
                 </View>
 
+                {this.props.isEdit ? 
                 <View style={styles.viewEdit}>
                     <TouchableOpacity onPress={this.editar} style={styles.btnEdit} >
                         <Icon name='edit' size={20} color='yellow' />
                     </TouchableOpacity>
-                </View>
+                </View> : 
+                <View style={styles.viewEdit}>
+                    <TouchableOpacity onPress={this.editar} style={styles.btnEdit} >
+                        <Icon name='info-circle' size={20} color='yellow' />
+                    </TouchableOpacity>
+                </View> }
             </View>
         )
     }

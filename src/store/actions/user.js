@@ -57,6 +57,7 @@ export const login = user => {
                 user.id = motorista.data.id
                 user.nome = motorista.data.nome
                 user.token = token
+                user.permissoes = motorista.data.permissoes
 
                 dispatch(userLogged(user))
                 dispatch(submetido())
