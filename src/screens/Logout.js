@@ -4,6 +4,8 @@ import Botao from '../components/Botao'
 
 import { connect } from 'react-redux'
 import { userLoggout } from '../store/actions/user'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
+import commonStyles from '../commonStyles'
 
 class Logout extends React.Component {
 
@@ -15,6 +17,7 @@ class Logout extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
                 <Text>Você deseja realmente sair da aplicação? </Text>
 
                 <Botao title='Sair' 
@@ -28,7 +31,6 @@ class Logout extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
         paddingTop:50

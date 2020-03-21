@@ -5,8 +5,8 @@ import Spinner from 'react-native-loading-spinner-overlay'
 
 import Titulo from '../components/Titulo'
 import FiltroData from '../components/FiltroData'
-// import { SafeAreaView } from 'react-navigation'
-// import { SafeAreaView } from 'react-native-safe-area-context'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
+import commonStyles from '../commonStyles'
 
 export default class Relatorio extends React.Component {
 
@@ -17,6 +17,7 @@ export default class Relatorio extends React.Component {
     render () {
         return (
             <SafeAreaView style={styles.container}>
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
                 <View>
                     <Spinner visible={!this.state.componentOk} />
 

@@ -11,6 +11,7 @@ import commonStyles from '../commonStyles'
 import { Input } from 'react-native-elements'
 import Botao from '../components/Botao'
 import Spinner from 'react-native-loading-spinner-overlay'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
 
 const estadoInicial = {
     nome: '',
@@ -151,6 +152,7 @@ class CadastrarPessoa extends React.Component {
 
         return (
             <View style={styles.container}>
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
                 <Spinner visible={this.props.isSubmetendo || this.state.isLoading } />
 
                 <Titulo titulo={titulo} />

@@ -8,6 +8,7 @@ import { setMensagem } from '../store/actions/mensagem'
 import axios from 'axios'
 
 class ViagemAtual extends React.Component {
+    _isMounted = false
 
     state = {
         viagem: null,
@@ -16,16 +17,19 @@ class ViagemAtual extends React.Component {
     }
 
     componentDidMount() {
+        this._isMounted = true
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
 
             this.componenteOk(false)
             axios.get(`viagens/atual/${this.props.motorista.id}`)
             .then(res => {
-                this.setState({ viagem: res.data })
+                if (this._isMounted)
+                    this.setState({ viagem: res.data })
                 this.componenteOk(true)
             })
             .catch(err => {
-                this.setState({ viagem: null })
+                if (this._isMounted)
+                    this.setState({ viagem: null })
 
                 if (err.response && err.response.status != 404) {
                     this.props.set_mensagem(err)
@@ -40,13 +44,9 @@ class ViagemAtual extends React.Component {
     loadVeiculos = () => {
         axios.get('veiculos/disponiveis')
         .then(res => {
-            // if(this._isMounted) {
+            if(this._isMounted) {
                 this.setState({ veiculos: res.data })
-            
-                // if (res.data.length > 0) {
-                //     this.setState({ veiculoSelec: res.data[0].id })
-                // }
-            // }
+            }
             this.componenteOk(true)
         })
         .catch(err => {
@@ -55,14 +55,9 @@ class ViagemAtual extends React.Component {
         })
     }
 
-    // enviarVeiculo = () => {
-    //     this.props.navigation.navigate('IniciarViagem', {
-    //         idVeiculo: this.state.veiculoSelec
-    //     })        
-    // }
-
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener.remove()
+        this._isMounted = false
     }
 
     componenteOk = v => {
@@ -73,7 +68,6 @@ class ViagemAtual extends React.Component {
         if (this.state.viagem) {
             return <VeiculoAtual viagem={this.state.viagem} navigation={this.props.navigation} />
         } else {
-            // return <FormSelectVeiculo navigation={this.props.navigation} componenteOk={v => this.componenteOk(v)}/>
             return <FormSelectVeiculo navigation={this.props.navigation} veiculos={this.state.veiculos} />
         }
     }

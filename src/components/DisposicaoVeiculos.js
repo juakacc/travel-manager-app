@@ -7,18 +7,21 @@ import { connect } from 'react-redux'
 import { setMensagem } from '../store/actions/mensagem'
 
 class DisposicaoVeiculos extends React.Component {
+    _isMounted = false
 
     state = {
         viagens: []
     }
 
     componentDidMount() {
+        this._isMounted = true
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
             
             this.props.onComplete(false)
             axios.get('viagens?status=nao-concluida')
             .then(res => {
-                this.setState({ viagens: res.data })
+                if (this._isMounted)
+                    this.setState({ viagens: res.data })
                 this.props.onComplete(true)
             })
             .catch(err => {
@@ -29,7 +32,8 @@ class DisposicaoVeiculos extends React.Component {
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener.remove()
+        this._isMounted = false
     }
 
     render() {

@@ -12,6 +12,7 @@ import Titulo from '../components/Titulo'
 
 import axios from 'axios'
 import Spinner from 'react-native-loading-spinner-overlay'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
 
 class IniciarViagem extends React.Component {
 
@@ -86,8 +87,9 @@ class IniciarViagem extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
                 <Spinner visible={this.props.isSubmetendo} />
-                
+                                
                 <Titulo titulo='Iniciar Viagem' />
 
                 <Text style={styles.veiculo}>{ this.state.veiculoNome }</Text>

@@ -12,7 +12,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 
 import Spinner from 'react-native-loading-spinner-overlay'
-import NumberFormat from 'react-number-format'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
 
 class CadastrarVeiculo extends React.Component {
 
@@ -154,6 +154,7 @@ class CadastrarVeiculo extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
                 <Spinner visible={this.props.isSubmetendo || this.state.isLoading } />
                 
                 <Titulo titulo='Cadastro de Veículo' />

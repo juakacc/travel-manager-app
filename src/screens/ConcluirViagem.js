@@ -11,6 +11,8 @@ import { concluirViagem } from '../store/actions/viagem'
 import Titulo from '../components/Titulo'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { setMensagem } from '../store/actions/mensagem'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
+import commonStyles from '../commonStyles'
 
 class ConcluirViagem extends React.Component {
 
@@ -94,6 +96,7 @@ class ConcluirViagem extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
                 <Spinner visible={this.props.isSubmetendo} />
 
                 <Titulo titulo='Concluir Viagem' />

@@ -6,6 +6,7 @@ import Header from '../components/Header'
 import DisposicaoVeiculos from '../components/DisposicaoVeiculos'
 import ViagemAtual from '../components/ViagemAtual'
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
+import commonStyles from '../commonStyles'
 
 const textArray = [
     'NÃO ULTRAPASSE EM LUGAR INDEVIDO',
@@ -13,7 +14,8 @@ const textArray = [
     'LIGUE OS FARÓIS DO VEÍCULO'
 ]
 
-class Home extends React.Component {
+export default class Home extends React.Component {
+    _isMounted = false
     
     state = {
         viagemAtual: false,
@@ -22,36 +24,42 @@ class Home extends React.Component {
     }
 
     viagemAtual = viagemAtual => {
-        this.setState({ viagemAtual })
+        if (this._isMounted)
+            this.setState({ viagemAtual })
     }
 
     disposicaoVeiculos = disposicaoVeiculos => {
-        this.setState({ disposicaoVeiculos })
+        if (this._isMounted)
+            this.setState({ disposicaoVeiculos })
     }
 
     componentDidMount() {
+        this._isMounted = true
         this.timeout = setInterval(() => {
-            let indice = this.state.indice + 1;
-            this.setState({ indice });
-        }, 5000);
+            if (this._isMounted) {
+                let indice = this.state.indice + 1
+                this.setState({ indice })
+            }            
+        }, 5000)
     }
 
     componentWillUnmount() {
-        clearInterval(this.timeout);
+        clearInterval(this.timeout)
+        this._isMounted = false
     }
 
     render () {
-
         const textThatChanges = textArray[this.state.indice % textArray.length]
+        const mostrarSpinner = !(this.state.viagemAtual && this.state.disposicaoVeiculos)
 
         return (
             <View style={styles.container}>
-                {/* <GeneralStatusBarColor backgroundColor="white" barStyle="dark-content"/>     */}
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
                 
                 <Header navigation={this.props.navigation} />
                 <Text style={styles.textAlert}>{textThatChanges}</Text>
 
-                <Spinner visible={! (this.state.viagemAtual && this.state.disposicaoVeiculos)} />             
+                <Spinner visible={mostrarSpinner} />             
 
                 <ViagemAtual navigation={this.props.navigation} onComplete={v => this.viagemAtual(v)} />
 
@@ -60,8 +68,6 @@ class Home extends React.Component {
         )
     }
 }
-
-export default Home
 
 const styles = StyleSheet.create({
     container: {

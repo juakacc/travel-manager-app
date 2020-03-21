@@ -23,14 +23,21 @@ import { Text, View } from 'react-native'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import commonStyles from './commonStyles'
 
-// Header to StackNavigator
 const Header = () => {
     return (
-        <View style={{ backgroundColor: 'yellow' }}>
+        <View>
             <Text style={{ fontSize: 24 }}><Icon name="road" size={30} color="#a50" /> Viagens PMO</Text>
         </View>
     )
+}
+
+export const header = {
+    headerTitle: () => <Header />,
+    headerStyle: {
+        backgroundColor: commonStyles.colors.principal,
+    }
 }
 
 const ViagemStackNavigator = createStackNavigator({
@@ -48,13 +55,9 @@ const ViagemStackNavigator = createStackNavigator({
     }
 }, {
     initialRouteName: 'Viagem',
-    // headerMode: "none"
     headerLayoutPreset: 'center',
     defaultNavigationOptions: ({ navigation }) => ({
-        headerTitle: () => <Header />,
-        headerStyle: {
-            backgroundColor: 'yellow',
-        },
+        ...header,
         headerRight: <BotaoDrawer navigationProps={navigation} />
     })
 })
@@ -70,7 +73,7 @@ const RelatorioStack = createStackNavigator({
     initialRouteName: 'Relatorio',
     headerLayoutPreset: 'center',
     defaultNavigationOptions: ({ navigation }) => ({
-        headerTitle: () => <Header />,
+        ...header,
         headerRight: <BotaoDrawer navigationProps={navigation} />
     })
 })
@@ -92,53 +95,21 @@ const HomeBottomTabNavigator = createBottomTabNavigator({
                 <Ionicons name='ios-albums' size={30} color={tintColor} />
         }
     }
-}, {
-})
+}, { })
 
-class BotaoDrawer extends React.Component {
+export const BotaoDrawer = props => (
+    <Ionicons 
+        name='ios-options' size={30}
+        style={{ marginRight:10 }}
+        onPress={() => props.navigationProps.toggleDrawer()} />
+)
 
-    onPressE = () => {
-        this.props.navigationProps.toggleDrawer()
-    }
-
-    render() {
-        return (
-            <Ionicons 
-                name='ios-options' size={30}
-                style={{ marginRight:10 }}
-                onPress={this.onPressE} />
-        )
-    }
-}
-
-class BotaoVoltar extends React.Component {
-
-    onPressE = () => {
-        this.props.navigationProps.navigate('Home')
-    }
-
-    render() {
-        return (
-            <Icon 
-                name='home' size={25}
-                style={{ marginLeft: 20 }}
-                onPress={this.onPressE} />
-        )
-    }
-}
-
-const HomeStackNavigator = createStackNavigator({
-    App: {
-        screen: HomeBottomTabNavigator
-    }
-}, {
-    headerMode: 'none'
-    // headerLayoutPreset: 'center',
-    // defaultNavigationOptions: ({ navigation }) => ({
-    //     headerTitle: () => <Header />,
-    //     headerRight: <BotaoDrawer navigationProps={navigation} />
-    // })
-})
+export const BotaoVoltar = props => (
+    <Icon 
+        name='home' size={25}
+        style={{ marginLeft: 20 }}
+        onPress={() => props.navigationProps.navigate('Home')} />
+)
 
 const LogoutStackNavigator = createStackNavigator({
     Logout: {
@@ -147,7 +118,7 @@ const LogoutStackNavigator = createStackNavigator({
 }, {
     headerLayoutPreset: 'center',
     defaultNavigationOptions: ({ navigation }) => ({
-        headerTitle: () => <Header />,
+        ...header,
         headerLeft: <BotaoVoltar navigationProps={navigation} />
     })
 })
@@ -166,7 +137,7 @@ const PessoasStack = createStackNavigator({
     initialRouteName: 'PessoasScreen',
     headerLayoutPreset: 'center',
     defaultNavigationOptions: {
-        headerTitle: () => <Header />
+        ...header
     }
 })
 
@@ -184,7 +155,7 @@ const VeiculoStack = createStackNavigator({
     initialRouteName: 'VeiculosScreen',
     headerLayoutPreset: 'center',
     defaultNavigationOptions: {
-        headerTitle: () => <Header />
+        ...header
     }
 })
 
@@ -226,17 +197,6 @@ const DrawerNavigator = createDrawerNavigator({
     }
 }, {
     drawerPosition: "right"
-})
-
-const LoginStack = createStackNavigator({
-    Screen: {
-        screen: Login
-    }
-}, {
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: {
-        headerTitle: () => <Header />
-    }
 })
 
 const SwitchNavigator = createSwitchNavigator({

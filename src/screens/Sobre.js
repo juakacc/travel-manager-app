@@ -10,7 +10,6 @@ export default class Sobre extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <GeneralStatusBarColor backgroundColor="yellow" barStyle="dark-content"/>
                 <View>
                     <Text style={styles.titulo}>
                         <Icon name="road" size={35} color={commonStyles.colors.secundaria} /> Viagens PMO
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: '#ffff33',
+        backgroundColor: commonStyles.colors.principalClaro,
         padding: 20,
         alignItems: 'center',
         justifyContent: 'space-around'

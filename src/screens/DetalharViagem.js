@@ -10,6 +10,7 @@ import Titulo from '../components/Titulo'
 
 import NumberFormat from 'react-number-format'
 import Spinner from 'react-native-loading-spinner-overlay'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
 
 class DetalharViagem extends React.Component {
 
@@ -55,6 +56,7 @@ class DetalharViagem extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
                 <Spinner visible={this.state.isLoading} />
 
                 <Titulo titulo='Viagem Detalhada' />

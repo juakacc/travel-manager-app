@@ -24,6 +24,7 @@ import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import config from '../config'
 import Spinner from 'react-native-loading-spinner-overlay'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
 
 class Login extends React.Component {
 
@@ -71,6 +72,7 @@ class Login extends React.Component {
                     ios: 'padding',
                     android: null,
                 })} >
+                <GeneralStatusBarColor backgroundColor='white' barStyle="dark-content" />    
 
                 <Spinner visible={this.props.isSubmetendo} />
 
