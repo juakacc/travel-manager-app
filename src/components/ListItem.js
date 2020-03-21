@@ -53,7 +53,39 @@ export default class ListItem extends React.Component {
                 this.closeModal()
             })
         } else {
-            // get em veiculos 
+            axios.get(`veiculos/${this.props.item.id}`)
+            .then(veiculo => {
+                this.setState({
+                    isVisible: true,
+                    infos: [
+                        {
+                            id: 1,
+                            titulo: 'Nome: ',
+                            valor: veiculo.data.nome
+                        }, {
+                            id: 5,
+                            titulo: 'Marca: ',
+                            valor: veiculo.data.marca
+                        }, {
+                            id: 2,
+                            titulo: 'Placa: ',
+                            valor: veiculo.data.placa
+                        }, {
+                            id: 3,
+                            titulo: 'Renavam: ',
+                            valor: veiculo.data.renavam
+                        }, {
+                            id: 4,
+                            titulo: 'Quilometragem: ',
+                            valor: `${veiculo.data.quilometragem} KM`
+                        }
+                    ]
+                })
+            })
+            .catch(err => {
+                console.log(err)
+                this.closeModal()
+            })
         }
     }
     
@@ -88,7 +120,7 @@ export default class ListItem extends React.Component {
                                     <Text style={styles.infoValor}>{item.valor}</Text>
                                 </View>
                         })}
-                        <Botao title="Ocultar" onPress={this.closeModal} style={{ marginHorizontal: 15 }}/>
+                        <Botao title="Esconder" onPress={this.closeModal} style={{ width: 100 }} name='minus-circle' />
                     </View>
                 </Modal>
             </View>
@@ -129,9 +161,11 @@ const styles = StyleSheet.create({
     },
     infoTitulo: {
         color: 'white',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 16
     },
     infoValor: {
-        color: 'white'
+        color: 'white',
+        fontSize: 16
     }
 })

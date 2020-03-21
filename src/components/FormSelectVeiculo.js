@@ -82,15 +82,6 @@ class FormSelectVeiculo extends React.Component {
                             }
                         })}
                     />
-                    {/* <Picker
-                        selectedValue={this.state.veiculoSelec}
-                        onValueChange={(itemValue, itemIndex) => {
-                            this.setState({ veiculoSelec: itemValue })
-                        }}>
-                        {this.props.veiculos.map(item => {
-                            return (<Picker.Item label={item.nome} value={item.id} key={item.id}/>) 
-                        })}
-                    </Picker> */}
 
                     <Botao onPress={this.enviarVeiculo} title='Pegar Veículo' name='key' />
                     <Text style={styles.txtInfo}>Ao escolher um veículo será registrado o momento da saída</Text>

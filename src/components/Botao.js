@@ -7,7 +7,6 @@ import commonStyles from '../commonStyles'
 
 export default props => {
     const s = props.style ? props.style : {}
-    console.log(s)
 
     return (
         <TouchableOpacity style={[styles.buttonContainer, s]} onPress={props.onPress} disabled={props.isSubmetendo}>

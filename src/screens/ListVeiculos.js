@@ -59,6 +59,7 @@ class ListVeiculos extends React.Component {
                     renderItem={({item}) =>
                         <ListItem 
                             navigation={this.props.navigation}
+                            isEdit={this.props.isAdmin}
                             editScreen='CadastrarVeiculo'
                             item={{ id: item.id, title: item.nome }} />
                     }
@@ -78,10 +79,10 @@ class ListVeiculos extends React.Component {
                         this._listViewOffset = currentOffset  
                     }} />
 
-                <ActionButton 
+                {this.props.isAdmin && <ActionButton 
                     visible={this.state.buttonIsVisible}
                     navigation={this.props.navigation}
-                    toScreen='CadastrarVeiculo' />
+                    toScreen='CadastrarVeiculo' />}
             </SafeAreaView>
         )
     }
@@ -102,10 +103,16 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = ({ user }) => {
+    return {
+        isAdmin: user.permissoes.includes('admin')
+    }
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         set_mensagem: msg => dispatch(setMensagem(msg))
     }
 }
 
-export default connect(null, mapDispatchToProps)(ListVeiculos)
+export default connect(mapStateToProps, mapDispatchToProps)(ListVeiculos)
