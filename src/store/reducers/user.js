@@ -13,13 +13,14 @@ const initialState = {
 const reducer = (prevState = initialState, action) => {
     switch(action.type) {
         case USER_LOGGED_IN:
+            const permissoes = action.payload.permissoes ? action.payload.permissoes : ['motorista']
             return {
                 ...prevState,
                 id: action.payload.id,
                 nome: action.payload.nome,
                 apelido: action.payload.apelido,
                 token: action.payload.token,
-                permissoes: action.payload.permissoes
+                permissoes: permissoes
             }
         case USER_LOGGED_OUT:
             return {
