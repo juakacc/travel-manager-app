@@ -95,6 +95,8 @@ class IniciarViagem extends React.Component {
                 <Text style={styles.veiculo}>{ this.state.veiculoNome }</Text>
 
                 <Text style={styles.title}>Qual a quilometragem atual registrada no veículo?</Text>
+                <Text style={styles.title}>(Altere o valor prosposto para o real valor marcado no painel do veículo)</Text>
+                
                 <Input
                     keyboardType='numeric'
                     label='Quilometragem'

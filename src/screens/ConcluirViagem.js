@@ -41,6 +41,7 @@ class ConcluirViagem extends React.Component {
                     id,
                     saida,
                     km_inicial,
+                    km_final: km_inicial,
                     descricao,
                     veiculo: veiculo.id,
                     motorista: motorista.id
@@ -63,10 +64,17 @@ class ConcluirViagem extends React.Component {
             errQuilometragem: ''
         })
 
-        if(isNaN(this.state.km_final) || this.state.km_final <= 0) {
+        if(isNaN(this.state.km_final)) {
             this.setState({ 
                 errQuilometragem: 'Insira uma quilometragem válida!',
-                km_final: 0
+                km_final: this.state.km_inicial
+            })
+            return false
+        }
+        if (this.state.km_final < this.state.km_inicial) {
+            this.setState({ 
+                errQuilometragem: 'A quilometragem final não pode ser menor que a inicial!',
+                km_final: this.state.km_inicial
             })
             return false
         }
@@ -101,13 +109,15 @@ class ConcluirViagem extends React.Component {
 
                 <Titulo titulo='Concluir Viagem' />
                 <Text style={styles.title}>Complete os dados a seguir sobre a viagem</Text>
-                
+                <Text style={styles.title}>(Altere a quilometragem para a qual é registrada no painel do veículo)</Text>
+
                 <Input
                     keyboardType='numeric'
                     label='Quilometragem'
                     placeholder='KM atual'
                     errorMessage={this.state.errQuilometragem}
                     returnKeyType='next'
+                    value={`${this.state.km_final}`}
                     onChangeText={km_final => this.setState({ km_final })} />
                 
                 <Input 

@@ -8,7 +8,7 @@ import axios from 'axios'
 import { setMensagem } from '../store/actions/mensagem'
 
 import commonStyles from '../commonStyles'
-import { Input } from 'react-native-elements'
+import { Input, CheckBox } from 'react-native-elements'
 import Botao from '../components/Botao'
 import Spinner from 'react-native-loading-spinner-overlay'
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
@@ -21,6 +21,7 @@ const estadoInicial = {
     telefone: '',
     senha: '',
     confirm_senha: '',
+    admin: false,
 
     isEdit: false,
     motoristaId: 0,
@@ -130,12 +131,19 @@ class CadastrarPessoa extends React.Component {
 
     salvar = () => {
         if (this.isValid()) {
+            const permissoes = {
+                motorista: true
+            }
+            if (this.state.admin) {
+                permissoes.admin = true
+            }
             const usuario = {
                 nome: this.state.nome,
                 apelido: this.state.apelido.toLowerCase().trim(),
                 cnh: this.state.cnh,
                 categoria: this.state.categoria,
                 telefone: this.state.telefone,
+                permissoes,
                 senha: this.state.senha,
             }
             if (this.state.isEdit) {
@@ -204,6 +212,11 @@ class CadastrarPessoa extends React.Component {
 
                     { !this.state.isEdit ?
                     <View>
+                        <CheckBox
+                            title='Administrador?'
+                            checked={this.state.admin}
+                            onPress={() => this.setState({ admin: !this.state.admin })} />
+
                         <Input
                             label='Senha'
                             errorMessage={this.state.err_senha}
