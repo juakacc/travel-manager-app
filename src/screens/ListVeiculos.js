@@ -43,7 +43,7 @@ class ListVeiculos extends React.Component {
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener.remove()
     }
 
     render() {
@@ -90,7 +90,7 @@ class ListVeiculos extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        ...commonStyles.container
     },  
     actionButtonIcon: {
         fontSize: 20,

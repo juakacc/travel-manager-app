@@ -1,16 +1,14 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import {
     View, 
     Text,
     StyleSheet,
     TouchableOpacity,
-    Alert,
     KeyboardAvoidingView,
     Platform,
     TextInput,
-
-    SafeAreaView
+    Linking
 } from 'react-native'
 
 import Botao from '../components/Botao'
@@ -22,7 +20,7 @@ import { setMensagem } from '../store/actions/mensagem'
 import { connect } from 'react-redux'
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import config from '../config'
+import config from '../conf'
 import Spinner from 'react-native-loading-spinner-overlay'
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
 
@@ -50,6 +48,11 @@ class Login extends React.Component {
         if (this.isValid()) {
             this.props.onLogin({...this.state})
         }
+    }
+
+    esqueciSenha = () => {
+        const msg = `Solicitação de nova senha para: ${this.state.apelido}`
+        Linking.openURL(`whatsapp://send?phone=${config.phone}&text=${msg}`)
     }
 
     mostrar = () => {
@@ -107,7 +110,7 @@ class Login extends React.Component {
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity onPress={() => {Alert.alert('(83) 9 9184-7766 - Entre em contato e solicite uma nova senha')}}>
+                <TouchableOpacity onPress={this.esqueciSenha}>
                     <Text style={styles.esqueci}>Esqueci a senha</Text>
                 </TouchableOpacity>
 
@@ -127,11 +130,10 @@ class Login extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        ...commonStyles.container,
         padding: 10,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white'
+        justifyContent: 'center'
     },
     esqueci: {
         color: 'blue',

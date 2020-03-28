@@ -1,45 +1,60 @@
 import React from 'react'
-import { View, Text, StyleSheet, FlatList } from 'react-native'
-import ItemViagemConcluida from './ItemViagemConcluida'
+import { View, StyleSheet, FlatList, Text } from 'react-native'
+import Spinner from 'react-native-loading-spinner-overlay'
+
+import Header from '../components/Header'
+import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
+import commonStyles from '../commonStyles'
+import ItemViagemConcluida from '../components/ItemViagemConcluida'
 
 import axios from 'axios'
-import { connect } from 'react-redux'
 import { setMensagem } from '../store/actions/mensagem'
+import { connect } from 'react-redux'
+import Titulo from '../components/Titulo'
 
-class DisposicaoVeiculos extends React.Component {
+class DisposicaoAtual extends React.Component {
     _isMounted = false
-
+    
     state = {
-        viagens: []
+        viagens: [],
+        isLoading: false
     }
 
     componentDidMount() {
         this._isMounted = true
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
             
-            this.props.onComplete(false)
+            this.setState({ isLoading: true })
             axios.get('viagens?status=nao-concluida')
             .then(res => {
                 if (this._isMounted)
-                    this.setState({ viagens: res.data })
-                this.props.onComplete(true)
+                    this.setState({ 
+                        viagens: res.data,
+                        isLoading: false
+                    })
+                    // this.setState({ isLoading: false })
             })
             .catch(err => {
                 this.props.set_mensagem(err)
-                this.props.onComplete(true)
+                if (this._isMounted)
+                    this.setState({ isLoading: false })
             })  
         })
     }
 
     componentWillUnmount() {
-        this.focusListener.remove()
         this._isMounted = false
     }
 
-    render() {
+    render () {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Disposição atual dos veículos:</Text>
+                <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>
+
+                <Header navigation={this.props.navigation} />
+                <Titulo titulo='Viagens em andamento' />
+
+                <Spinner visible={this.state.isLoading} />             
 
                 <FlatList 
                     data={this.state.viagens}
@@ -56,10 +71,28 @@ class DisposicaoVeiculos extends React.Component {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        set_mensagem: msg => dispatch(setMensagem(msg))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(DisposicaoAtual)
+
 const styles = StyleSheet.create({
     container: {
-        height: 195
+        ...commonStyles.container
     },
+    textAlert: {
+        color: '#fff',
+        backgroundColor: '#f00',
+        padding: 5,
+        margin: 2,
+        borderRadius: 5,
+        textAlign: 'center',
+        fontWeight: "bold"
+    },
+
     title: {
         color: '#000',
         fontFamily: 'shelter',
@@ -82,11 +115,3 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 })
-
-const mapDispatchToProps = dispatch => {
-    return {
-        set_mensagem: msg => dispatch(setMensagem(msg))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(DisposicaoVeiculos)

@@ -4,7 +4,6 @@ import Botao from './Botao'
 import RNPickerSelect from 'react-native-picker-select'
 
 class FormSelectVeiculo extends React.Component {
-    // _isMounted = false
 
     state = {
         veiculoSelec: null
@@ -13,39 +12,11 @@ class FormSelectVeiculo extends React.Component {
     componentDidMount = () => {
         this.focusListener = this.props.navigation.addListener('didFocus', () => {
             this.setState({ veiculoSelec: null })
-            // if (this.props.veiculos.length > 0) {
-            //     this.setState({ veiculoSelec: this.props.veiculos[0].id })
-            // }
         })        
     }
 
-    // componentDidMount() {
-    //     // this._isMounted = true
-
-    //     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-
-    //         this.props.componenteOk(false)
-    //         axios.get('veiculos/disponiveis')
-    //         .then(res => {
-    //             // if(this._isMounted) {
-    //                 this.setState({ veiculos: res.data })
-                
-    //                 if (res.data.length > 0) {
-    //                     this.setState({ veiculoSelec: res.data[0].id })
-    //                 }
-    //             // }
-    //             this.props.componenteOk(true)
-    //         })
-    //         .catch(err => {
-    //             console.log(err || '')
-    //             this.props.componenteOk(true)
-    //         })
-    //     });
-    // }
-
     componentWillUnmount() {
         this.focusListener.remove()
-        // this._isMounted = false
     }
 
     enviarVeiculo = () => {
@@ -86,7 +57,7 @@ class FormSelectVeiculo extends React.Component {
                     <Botao onPress={this.enviarVeiculo} title='Pegar Veículo' name='key' />
                     <Text style={styles.txtInfo}>Ao escolher um veículo será registrado o momento da saída</Text>
                 </View> : 
-                    <Text style={styles.txtSemVeiculo}>Nenhum veículo disponível no momento. Aguarde até que um esteja disponível</Text>
+                    <Text style={styles.txtSemVeiculo}>Nenhum veículo disponível no momento. Aguarde (ou atualize a página) até que um esteja disponível</Text>
                 }
             </View>
         )

@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 
-import Navigator from './Navigator'
-import NavigatorMotorista from './NavigatorMotorista'
+import Navigator from './navigator/Navigator'
+import NavigatorMotorista from './navigator/NavigatorMotorista'
+import NavigatorService from './navigator/NavigatorService'
 
 import { connect } from 'react-redux'
 import { setMensagem } from './store/actions/mensagem'
 import { ToastAndroid } from 'react-native'
 
-import NavigatorService from './NavigatorService'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 class App extends Component {

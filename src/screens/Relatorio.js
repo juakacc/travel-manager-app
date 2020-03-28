@@ -34,7 +34,6 @@ export default class Relatorio extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 5
+        ...commonStyles.container
     }
 })

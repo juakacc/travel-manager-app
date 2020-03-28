@@ -18,10 +18,11 @@ class Logout extends React.Component {
         return (
             <View style={styles.container}>
                 <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
-                <Text>Você deseja realmente sair da aplicação? </Text>
+                <Text>Deseja realmente sair da aplicação? </Text>
 
-                <Botao title='Sair' 
-                    name='sign-out-alt' 
+                <Botao 
+                    name='sign-out-alt'
+                    style={{width: 100, height: 100, backgroundColor: '#F78181'}} 
                     onPress={() => this.logout()} />
             </View>
         )
@@ -30,10 +31,8 @@ class Logout extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 10,
-        paddingTop:50
+        ...commonStyles.container,
+        alignItems: 'center'
     }
 })
 

@@ -1,66 +1,25 @@
 import React from 'react'
 
-import Login from './screens/Login'
-import Home from './screens/Home'
-import Relatorio from './screens/Relatorio'
-import ConcluirViagem from './screens/ConcluirViagem'
-import IniciarViagem from './screens/IniciarViagem'
-import Splash from './screens/LoginOuApp'
-import CadastrarPessoa from './screens/CadastrarPessoa'
-import CadastrarVeiculo from './screens/CadastrarVeiculo'
-import Logout from './screens/Logout'
-import DetalharViagem from './screens/DetalharViagem'
-import Sobre from './screens/Sobre'
-import ListPessoas from './screens/ListPessoas'
-import ListVeiculos from './screens/ListVeiculos'
+import Login from '../screens/Login'
+import Relatorio from '../screens/Relatorio'
+import Splash from '../screens/LoginOuApp'
+import CadastrarPessoa from '../screens/CadastrarPessoa'
+import CadastrarVeiculo from '../screens/CadastrarVeiculo'
+import DetalharViagem from '../screens/DetalharViagem'
+import Sobre from '../screens/Sobre'
+import ListPessoas from '../screens/ListPessoas'
+import ListVeiculos from '../screens/ListVeiculos'
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createDrawerNavigator } from 'react-navigation-drawer'
 
-import { Text, View } from 'react-native'
-
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import commonStyles from './commonStyles'
-
-const Header = () => {
-    return (
-        <View>
-            <Text style={{ fontSize: 24 }}><Icon name="road" size={30} color="#a50" /> Viagens PMO</Text>
-        </View>
-    )
-}
-
-export const header = {
-    headerTitle: () => <Header />,
-    headerStyle: {
-        backgroundColor: commonStyles.colors.principal,
-    }
-}
-
-const ViagemStackNavigator = createStackNavigator({
-    Viagem: {
-        screen: Home
-    },
-    IniciarViagem: {
-        screen: IniciarViagem
-    },
-    ConcluirViagem: {
-        screen: ConcluirViagem
-    },
-    ViagemDetalhes: {
-        screen: DetalharViagem
-    }
-}, {
-    initialRouteName: 'Viagem',
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: ({ navigation }) => ({
-        ...header,
-        headerRight: <BotaoDrawer navigationProps={navigation} />
-    })
-})
+import { header, BotaoVoltar, BotaoDrawer } from './utils'
+import LogoutStackNavigator from './LogoutStackNavigator'
+import DisposicaoAtualStack from './DisposicaoAtualStack'
+import ViagemStack from './ViagemStack'
 
 const RelatorioStack = createStackNavigator({
     Relatorio: {
@@ -80,11 +39,19 @@ const RelatorioStack = createStackNavigator({
 
 const HomeBottomTabNavigator = createBottomTabNavigator({
     Home: { 
-        screen: ViagemStackNavigator,
+        screen: ViagemStack,
+        navigationOptions: {
+            title: 'Início',
+            tabBarIcon: ({tintColor}) => 
+                <Ionicons name='ios-car' size={30} color={tintColor} />
+        }
+    },
+    Disposicao: { 
+        screen: DisposicaoAtualStack,
         navigationOptions: {
             title: 'Viagens',
             tabBarIcon: ({tintColor}) => 
-                <Ionicons name='ios-car' size={30} color={tintColor} />
+                <Ionicons name='ios-body' size={30} color={tintColor} />
         }
     },
     Viagens: { 
@@ -96,32 +63,6 @@ const HomeBottomTabNavigator = createBottomTabNavigator({
         }
     }
 }, { })
-
-export const BotaoDrawer = props => (
-    <Ionicons 
-        name='ios-options' size={30}
-        style={{ marginRight:10 }}
-        onPress={() => props.navigationProps.toggleDrawer()} />
-)
-
-export const BotaoVoltar = props => (
-    <Icon 
-        name='home' size={25}
-        style={{ marginLeft: 20 }}
-        onPress={() => props.navigationProps.navigate('Home')} />
-)
-
-const LogoutStackNavigator = createStackNavigator({
-    Logout: {
-        screen: Logout
-    }
-}, {
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: ({ navigation }) => ({
-        ...header,
-        headerLeft: <BotaoVoltar navigationProps={navigation} />
-    })
-})
 
 const PessoasStack = createStackNavigator({
     PessoasScreen: {
@@ -181,18 +122,18 @@ const DrawerNavigator = createDrawerNavigator({
             drawerIcon: ({ tintColor }) => (<Ionicons name='ios-car' size={25} color={tintColor} />)
         }
     },
-    Logout: {
-        screen: LogoutStackNavigator,
-        navigationOptions: {
-            drawerLabel: 'Sair do App',
-            drawerIcon: () => (<Ionicons name='ios-power' size={25} color='red' />)
-        }
-    },
     Sobre: {
         screen: Sobre,
         navigationOptions: {
             drawerLabel: 'Sobre o App',
             drawerIcon: () => (<Ionicons name='ios-help-circle-outline' size={25} color='blue' />)
+        }
+    },
+    Logout: {
+        screen: LogoutStackNavigator,
+        navigationOptions: {
+            drawerLabel: 'Sair',
+            drawerIcon: () => (<Ionicons name='ios-power' size={25} color='red' />)
         }
     }
 }, {

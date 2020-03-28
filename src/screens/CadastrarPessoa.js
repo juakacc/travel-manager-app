@@ -44,35 +44,47 @@ class CadastrarPessoa extends React.Component {
     }
 
     componentDidMount = () => {
-        const motoristaId = this.props.navigation.getParam('itemId')
-        
-        if (motoristaId) {
-            this.setState({ isLoading: true })
-            axios.get(`motoristas/${motoristaId}`)
-            .then(res => {
-                const {nome, apelido, cnh, categoria, telefone} = res.data
+        this.focusListener = this.props.navigation.addListener('didFocus', () => {
 
-                this.setState({
-                    nome,
-                    apelido,
-                    cnh,
-                    categoria,
-                    telefone,
-                    isEdit: true,
-                    motoristaId,
-                    isLoading: false
+            const { editThis, itemId } = this.props.navigation.state.params
+            const motoristaId = (!itemId && editThis) ? this.props.motorista.id : itemId
+
+            if (motoristaId) {
+                this.setState({ isLoading: true })
+                axios.get(`motoristas/${motoristaId}`)
+                .then(res => {
+                    const {nome, apelido, cnh, categoria, telefone} = res.data
+    
+                    this.setState({
+                        nome,
+                        apelido,
+                        cnh,
+                        categoria,
+                        telefone,
+                        isEdit: true,
+                        motoristaId,
+                        isLoading: false
+                    })
                 })
-            })
-            .catch(err => {
-                this.props.set_mensagem(err)
-                this.setState({ isLoading: false })
-            })
-        }
+                .catch(err => {
+                    this.props.set_mensagem(err)
+                    this.setState({ isLoading: false })
+                })
+            }
+        })
+    }
+
+    componentWillUnmount = () => {
+        this.focusListener.remove()
     }
 
     componentDidUpdate = prevProps => {
         if (prevProps.isLoading && !this.props.isLoading) {
-            this.props.navigation.navigate('PessoasScreen')
+            if (this.props.navigation.getParam('editThis')) {
+                this.props.navigation.navigate('Home')
+            } else {
+                this.props.navigation.navigate('PessoasScreen')
+            }            
         }
     }
 
@@ -254,7 +266,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ user }) => {
     return {
         isLoading: user.isLoading,
-        isSubmetendo: user.isSubmetendo
+        isSubmetendo: user.isSubmetendo,
+        motorista: user
     }
 }
 

@@ -1,11 +1,15 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import config from '../config'
+import config from '../conf'
 import commonStyles from '../commonStyles'
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor'
 
 export default class Sobre extends React.Component {
+
+    enviarMsg = () => {
+        const msg = `Dúvidas, sugestões e reclamações: `
+        Linking.openURL(`whatsapp://send?phone=${config.phone}&text=${msg}`)
+    }
 
     render() {
         return (
@@ -17,9 +21,9 @@ export default class Sobre extends React.Component {
                 </View>
 
                 <View style={styles.containerInfo}>
-                    <Text style={styles.texto}>Dúvidas, sugestões e reclamações:</Text>
-                    <Text style={styles.texto}>(83) 9 9184-7766</Text>
-                    <Text style={styles.texto}>Entre em contato para que seja reparado</Text>
+                    <TouchableOpacity onPress={this.enviarMsg}>
+                        <Text style={[styles.texto, styles.button]}>Dúvidas, sugestões e reclamações?</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.containerInfo}>
@@ -52,5 +56,8 @@ const styles = StyleSheet.create({
         color: commonStyles.colors.secundaria,
         fontSize: 16,
         fontWeight: 'bold'
+    },
+    button: {
+        fontSize: 20
     }
 })

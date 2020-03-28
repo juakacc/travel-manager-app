@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Botao from './Botao'
-import functions from '../functions'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 export default class VeiculoAtual extends React.Component {
 
@@ -15,8 +15,8 @@ export default class VeiculoAtual extends React.Component {
         return (
                 <View style={styles.container}>
                     <Text style={styles.title}>Veículo que está com você: </Text>
-                    <Text style={styles.veiculo}>{this.props.viagem.veiculo.nome}</Text>
-                    <Text style={styles.saida}>Saída às {functions.getDateTimeString(this.props.viagem.saida)}</Text>
+                    <Text style={styles.veiculo}><Icon name='truck-pickup' size={20} /> {this.props.viagem.veiculo.nome}</Text>
+                    {/* <Text style={styles.saida}>Saída às {functions.getDateTimeString(this.props.viagem.saida)}</Text> */}
                     <Botao 
                         onPress={() => this.concluirViagem()}
                         title='Entregar veículo' 
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     veiculo: {
         textAlign: 'center',
-        fontSize: 15,
+        fontSize: 20,
         fontWeight: 'bold'
     },
     saida: {

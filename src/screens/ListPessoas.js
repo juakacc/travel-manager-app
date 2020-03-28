@@ -91,7 +91,7 @@ class ListPessoas extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        ...commonStyles.container
     },  
     actionButtonIcon: {
         fontSize: 20,

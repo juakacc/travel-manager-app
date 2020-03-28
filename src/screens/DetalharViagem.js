@@ -54,39 +54,46 @@ class DetalharViagem extends React.Component {
     }
 
     render() {
+        const { viagem, isLoading } = this.state
+
         return (
             <View style={styles.container}>
                 <GeneralStatusBarColor backgroundColor={commonStyles.colors.secundaria} barStyle="ligth-content"/>    
-                <Spinner visible={this.state.isLoading} />
+                <Spinner visible={isLoading} />
 
                 <Titulo titulo='Viagem Detalhada' />
 
-                <Text style={styles.info}>Motorista: {this.state.viagem.motorista.nome}
-                    </Text>
-                <Text style={styles.info}>Veículo: {this.state.viagem.veiculo.nome}
-                    </Text>
-                { this.state.viagem.descricao ?
-                    <Text style={styles.info}>Descrição sobre a viagem: {this.state.viagem.descricao}</Text>
-                    : null }
-                <Text style={styles.info}>Momento da saída: {functions.getDateTimeString(this.state.viagem.saida)}
-                    </Text>
-                <NumberFormat value={this.state.viagem.km_inicial} displayType={'text'} thousandSeparator={true}
-                    renderText={value => 
-                        <Text style={styles.info}>KM registrado na saída: {value} KM</Text>} 
-                />
-                
-                { this.state.viagem.chegada ? 
+                <Text style={styles.infoTitle}>Motorista: </Text>
+                <Text style={styles.infoValue}>{viagem.motorista.nome}</Text>
+
+                <Text style={styles.infoTitle}>Veículo: </Text>
+                <Text style={styles.infoValue}>{viagem.veiculo.nome}</Text>
+
+                { viagem.descricao ?
                     <View>
-                        <Text style={styles.info}>Momento da chegada: {functions.getDateTimeString(this.state.viagem.chegada)}</Text>
-                        <NumberFormat value={this.state.viagem.km_final} displayType={'text'} thousandSeparator={true}
+                        <Text style={styles.infoTitle}>Descrição sobre a viagem: </Text>
+                        <Text style={styles.infoValue}>{viagem.descricao}</Text>
+                    </View> : null }
+
+                <Text style={styles.infoTitle}>Momento da saída: </Text>
+                <Text style={styles.infoValue}>{functions.getDateTimeString(viagem.saida)}</Text>
+
+                <Text style={styles.infoTitle}>KM registrado na saída: </Text>
+                <NumberFormat value={viagem.km_inicial} displayType={'text'} thousandSeparator={true}
+                    renderText={value => 
+                        <Text style={styles.infoValue}>{value} KM</Text>} />
+                
+                { viagem.chegada ? 
+                    <View>
+                        <Text style={styles.infoTitle}>Momento da chegada: </Text>
+                        <Text style={styles.infoValue}>{functions.getDateTimeString(viagem.chegada)}</Text>
+
+                        <Text style={styles.infoTitle}>KM registrado na chegada: </Text>
+                        <NumberFormat value={viagem.km_final} displayType={'text'} thousandSeparator={true}
                             renderText={value =>
-                                <Text style={styles.info}>KM registrado na chegada: {value} KM</Text>}
-                        />
-                        
+                                <Text style={styles.infoValue}>{value} KM</Text>} />
                     </View>
-                : 
-                    <Text style={styles.emAndamento}>VIAGEM EM ANDAMENTO</Text>
-                }
+                : <Text style={styles.emAndamento}>VIAGEM EM ANDAMENTO</Text> }
             </View>
         )
     }
@@ -94,7 +101,8 @@ class DetalharViagem extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        ...commonStyles.container
+        ...commonStyles.container,
+        paddingHorizontal: 10
     },
     info: {
         marginLeft: 10,
@@ -104,6 +112,15 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    infoTitle: {
+        fontWeight: 'bold',
+        fontSize: 14
+    },
+    infoValue: {
+        fontSize: 15,
+        marginLeft: 10,
+        marginBottom: 10
     }
 })
 

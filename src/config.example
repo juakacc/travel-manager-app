@@ -1,0 +1,4 @@
+export default {
+    version: '1.1.0',
+    phone: '5583991223344' // <codigo><ddd><numero>
+}

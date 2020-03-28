@@ -1,7 +1,8 @@
 export default {
     container: {
         flex: 1,
-        padding: 5
+        padding: 5,
+        backgroundColor: 'white'
     },
     colors: {
         principal: '#ff0',

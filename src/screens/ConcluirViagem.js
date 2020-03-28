@@ -154,8 +154,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(ConcluirViagem)
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 5
+        ...commonStyles.container
     },
     title: {
         fontSize: 15,
