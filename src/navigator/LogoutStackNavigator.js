@@ -1,17 +1,20 @@
-import React from 'react'
+import React from 'react';
 
-import Logout from "../screens/Logout";
-import { header, BotaoVoltar } from "./utils";
-import { createStackNavigator } from "react-navigation-stack";
+import Logout from '../screens/Logout';
+import { header, BotaoVoltar } from './utils';
+import { createStackNavigator } from 'react-navigation-stack';
 
-export default LogoutStackNavigator = createStackNavigator({
+export default createStackNavigator(
+  {
     Logout: {
-        screen: Logout
-    }
-}, {
+      screen: Logout,
+    },
+  },
+  {
     headerLayoutPreset: 'center',
     defaultNavigationOptions: ({ navigation }) => ({
-        ...header,
-        headerLeft: <BotaoVoltar navigationProps={navigation} />
-    })
-})
+      ...header,
+      headerLeft: <BotaoVoltar navigationProps={navigation} />,
+    }),
+  },
+);

@@ -1,27 +1,29 @@
-import React from 'react'
+import React from 'react';
 
-import { createStackNavigator } from "react-navigation-stack";
-import Home from "../screens/Home";
-import IniciarViagem from "../screens/IniciarViagem";
-import ConcluirViagem from "../screens/ConcluirViagem";
-import DetalharViagem from "../screens/DetalharViagem";
-import { header, BotaoDrawer } from "./utils";
+import { createStackNavigator } from 'react-navigation-stack';
+import Home from '../screens/Home';
+import IniciarViagem from '../screens/IniciarViagem';
+import ConcluirViagem from '../screens/ConcluirViagem';
+import { header, BotaoDrawer } from './utils';
 
-export default ViagemStack = createStackNavigator({
+export default createStackNavigator(
+  {
     Viagem: {
-        screen: Home
+      screen: Home,
     },
     IniciarViagem: {
-        screen: IniciarViagem
+      screen: IniciarViagem,
     },
     ConcluirViagem: {
-        screen: ConcluirViagem
-    }
-}, {
+      screen: ConcluirViagem,
+    },
+  },
+  {
     initialRouteName: 'Viagem',
     headerLayoutPreset: 'center',
     defaultNavigationOptions: ({ navigation }) => ({
-        ...header,
-        headerRight: <BotaoDrawer navigationProps={navigation} />
-    })
-})
+      ...header,
+      headerRight: <BotaoDrawer navigationProps={navigation} />,
+    }),
+  },
+);

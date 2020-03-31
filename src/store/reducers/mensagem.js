@@ -1,21 +1,19 @@
-import { SET_MENSAGEM } from "../actions/actionTypes"
+import { SET_MENSAGEM } from '../actions/actionTypes';
 
 const initialState = {
-    // title: '',
-    message: ''
-}
+  message: '',
+};
 
 const reducer = (state = initialState, action) => {
-    switch(action.type) {
-        case SET_MENSAGEM:
-            return {
-                ...state,
-                // title: action.payload.title,
-                message: action.payload
-            }
-        default:
-            return state
-    }
-}
+  switch (action.type) {
+    case SET_MENSAGEM:
+      return {
+        ...state,
+        message: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 
-export default reducer
+export default reducer;
