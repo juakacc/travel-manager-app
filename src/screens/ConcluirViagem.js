@@ -130,9 +130,10 @@ class ConcluirViagem extends React.Component {
         />
 
         <Input
-          label="Comentário"
-          placeholder="Comentário sobre a viagem (opcional)"
+          label="Comentário (opcional)"
+          placeholder="Comentário sobre a viagem"
           returnKeyType="done"
+          value={this.state.descricao}
           onChangeText={descricao => this.setState({ descricao })}
         />
 

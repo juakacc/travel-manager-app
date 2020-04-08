@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { iniciarViagem } from '../store/actions/viagem';
 import { setMensagem } from '../store/actions/mensagem';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, KeyboardAvoidingView } from 'react-native';
 import { Input } from 'react-native-elements';
 
 import moment from 'moment';
@@ -17,9 +17,12 @@ import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 class IniciarViagem extends React.Component {
   state = {
     quilometragem: 0,
-    errQuilometragem: '',
+    descricao: '',
     veiculoId: 0,
+
     veiculoNome: '',
+
+    errQuilometragem: '',
   };
 
   componentDidUpdate = prevProps => {
@@ -76,6 +79,7 @@ class IniciarViagem extends React.Component {
 
       const viagem = {
         saida: dataAtual,
+        descricao: this.state.descricao,
         km_inicial: this.state.quilometragem,
         veiculo: this.state.veiculoId,
         motorista: this.props.motorista.id,
@@ -86,7 +90,7 @@ class IniciarViagem extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
         <GeneralStatusBarColor
           backgroundColor={commonStyles.colors.secundaria}
           barStyle="ligth-content"
@@ -114,13 +118,21 @@ class IniciarViagem extends React.Component {
           onChangeText={quilometragem => this.setState({ quilometragem })}
         />
 
+        <Input
+          label="Comentário (opcional)"
+          value={this.state.descricao}
+          placeholder="Comentário sobre a viagem"
+          returnKeyType="done"
+          onChangeText={descricao => this.setState({ descricao })}
+        />
+
         <Botao
           onPress={this.iniciarViagem}
           isSubmetendo={this.props.isSubmetendo}
           title="Iniciar viagem"
           name="route"
         />
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
