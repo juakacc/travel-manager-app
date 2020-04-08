@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Botao from './Botao';
 import RNPickerSelect from 'react-native-picker-select';
+import { Alert } from 'react-native';
 
 class FormSelectVeiculo extends React.Component {
   state = {
@@ -23,6 +24,8 @@ class FormSelectVeiculo extends React.Component {
       this.props.navigation.navigate('IniciarViagem', {
         idVeiculo: this.state.veiculoSelec,
       });
+    } else {
+      Alert.alert('Aviso', 'Selecione um veículo');
     }
   };
 

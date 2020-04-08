@@ -106,6 +106,7 @@ class IniciarViagem extends React.Component {
         </Text>
         <Text style={styles.title}>
           (Altere o valor prosposto para o real valor marcado no painel do
+          veículo)
         </Text>
 
         <Input

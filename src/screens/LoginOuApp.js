@@ -20,9 +20,10 @@ class Splash extends React.Component {
 
   render() {
     return (
-      <View style={[styles.container, styles.horizontal]}>
-        <ActivityIndicator size="large" color="#ff0" />
-      </View>
+      <View />
+      //   <View style={[styles.container, styles.horizontal]}>
+      // {/* <ActivityIndicator size="large" color="#ff0" /> */}
+      //   </View>
     );
   }
 }

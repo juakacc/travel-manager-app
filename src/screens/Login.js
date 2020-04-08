@@ -159,14 +159,14 @@ const styles = StyleSheet.create({
   inputs: {
     height: 45,
     marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
+    // borderBottomColor: '#FFFFFF',
     flex: 1,
   },
   inputIcon: {
     width: 30,
     height: 30,
     marginLeft: 15,
-    justifyContent: 'center',
+    textAlignVertical: 'center',
   },
   eye: {
     marginHorizontal: 10,
