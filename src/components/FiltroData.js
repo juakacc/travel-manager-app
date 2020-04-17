@@ -7,7 +7,7 @@ import {
   FlatList,
 } from 'react-native';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import ItemViagemConcluida from './ItemViagemConcluida';
 import Botao from './Botao';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -18,6 +18,7 @@ import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import commonStyles from '../commonStyles';
+import SemResultado from './SemResultado';
 
 class FiltroData extends React.Component {
   state = {
@@ -94,9 +95,9 @@ class FiltroData extends React.Component {
           <View>
             <TouchableHighlight onPress={this.showDatepicker}>
               <Text style={styles.dateTimeSelect}>
-                <Ionicons name="ios-calendar" size={15} />{' '}
+                <Icon name="calendar-alt" size={20} color="white" />{' '}
                 {functions.getDateString(this.state.datetime) + ' '}
-                <Ionicons name="ios-time" size={15} />{' '}
+                <Icon name="clock" size={20} color="white" />{' '}
                 {functions.getTimeString(this.state.datetime)}
               </Text>
             </TouchableHighlight>
@@ -131,11 +132,7 @@ class FiltroData extends React.Component {
               />
             )}
             keyExtractor={item => `${item.id}`}
-            ListEmptyComponent={
-              <Text style={styles.txtSemResultado}>
-                Nenhum resultado encontrado
-              </Text>
-            }
+            ListEmptyComponent={<SemResultado />}
           />
         </View>
       </View>
@@ -155,14 +152,10 @@ const styles = StyleSheet.create({
   },
   dateTimeSelect: {
     fontSize: 16,
-    textAlign: 'center',
+    color: 'white',
     backgroundColor: commonStyles.colors.secundaria,
     borderRadius: 10,
     padding: 10,
-  },
-  txtSemResultado: {
-    textAlign: 'center',
-    marginTop: 10,
   },
   resultados: {
     marginTop: 10,

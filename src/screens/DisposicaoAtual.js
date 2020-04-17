@@ -1,11 +1,19 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import Header from '../components/Header';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
 import ItemViagemConcluida from '../components/ItemViagemConcluida';
+import SemResultado from '../components/SemResultado';
 
 import axios from 'axios';
 import { setMensagem } from '../store/actions/mensagem';
@@ -23,26 +31,30 @@ class DisposicaoAtual extends React.Component {
   componentDidMount() {
     this._isMounted = true;
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      this.setState({ isLoading: true });
-      axios
-        .get('viagens?status=nao-concluida')
-        .then(res => {
-          if (this._isMounted) {
-            this.setState({
-              viagens: res.data,
-              isLoading: false,
-            });
-          }
-          // this.setState({ isLoading: false })
-        })
-        .catch(err => {
-          this.props.set_mensagem(err);
-          if (this._isMounted) {
-            this.setState({ isLoading: false });
-          }
-        });
+      this.carregarViagens();
     });
   }
+
+  carregarViagens = () => {
+    this.setState({ isLoading: true });
+    axios
+      .get('viagens?status=nao-concluida')
+      .then(res => {
+        if (this._isMounted) {
+          this.setState({
+            viagens: res.data,
+            isLoading: false,
+          });
+        }
+        // this.setState({ isLoading: false })
+      })
+      .catch(err => {
+        this.props.set_mensagem(err);
+        if (this._isMounted) {
+          this.setState({ isLoading: false });
+        }
+      });
+  };
 
   componentWillUnmount() {
     this._isMounted = false;
@@ -71,7 +83,12 @@ class DisposicaoAtual extends React.Component {
           )}
           keyExtractor={item => `${item.id}`}
           ListEmptyComponent={
-            <Text style={styles.txtSemViagem}>Nenhuma viagem em andamento</Text>
+            <TouchableOpacity onPress={this.carregarViagens}>
+              <View>
+                <SemResultado />
+                <Text>Toque para atualizar</Text>
+              </View>
+            </TouchableOpacity>
           }
         />
       </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -29,6 +29,8 @@ class DetalharViagem extends React.Component {
       },
     },
     isLoading: true,
+
+    y: new Animated.Value(0),
   };
 
   componentDidMount = async () => {
@@ -51,6 +53,11 @@ class DetalharViagem extends React.Component {
     } else {
       this.props.navigation.goBack();
     }
+
+    Animated.timing(this.state.y, {
+      toValue: 1,
+      duration: 500,
+    }).start();
   };
 
   render() {
@@ -64,7 +71,7 @@ class DetalharViagem extends React.Component {
         />
         <Spinner visible={isLoading} />
 
-        <Titulo titulo="Viagem Detalhada" />
+        <Titulo titulo={`Detalhes da Viagem #${viagem.id}`} />
 
         <Text style={styles.infoTitle}>Motorista: </Text>
         <Text style={styles.infoValue}>{viagem.motorista.nome}</Text>
@@ -110,7 +117,17 @@ class DetalharViagem extends React.Component {
             />
           </View>
         ) : (
-          <Text style={styles.emAndamento}>VIAGEM EM ANDAMENTO</Text>
+          <Animated.Text
+            use
+            style={[
+              styles.emAndamento,
+              {
+                opacity: this.state.y,
+              },
+            ]}
+          >
+            VIAGEM EM ANDAMENTO
+          </Animated.Text>
         )}
       </View>
     );
@@ -127,6 +144,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   emAndamento: {
+    backgroundColor: commonStyles.colors.secundaria,
+    color: '#fff',
+    padding: 10,
     marginVertical: 20,
     textAlign: 'center',
     fontWeight: 'bold',

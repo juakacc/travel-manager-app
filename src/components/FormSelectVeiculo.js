@@ -25,7 +25,7 @@ class FormSelectVeiculo extends React.Component {
         idVeiculo: this.state.veiculoSelec,
       });
     } else {
-      Alert.alert('Aviso', 'Selecione um veículo');
+      Alert.alert('Aviso', 'Selecione um veículo, por favor!');
     }
   };
 

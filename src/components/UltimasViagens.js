@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import ItemViagemConcluida from './ItemViagemConcluida';
+import SemResultado from './SemResultado';
 
 class UltimasViagens extends React.Component {
   state = {
@@ -47,11 +48,7 @@ class UltimasViagens extends React.Component {
             />
           )}
           keyExtractor={item => `${item.id}`}
-          ListEmptyComponent={
-            <Text style={styles.txtSemRegistro}>
-              Nenhum registro encontrado
-            </Text>
-          }
+          ListEmptyComponent={<SemResultado />}
         />
       </View>
     );
@@ -73,9 +70,5 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 15,
-  },
-  txtSemRegistro: {
-    margin: 10,
-    textAlign: 'center',
   },
 });

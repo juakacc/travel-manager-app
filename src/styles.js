@@ -8,8 +8,7 @@ const comumStyles = StyleSheet.create({
     borderRadius: 10,
   },
   btnText: {
-    fontSize: 16,
-    textAlign: 'center',
+    fontSize: 20,
   },
 });
 

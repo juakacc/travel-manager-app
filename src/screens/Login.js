@@ -9,6 +9,8 @@ import {
   Platform,
   TextInput,
   Linking,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 
 import Botao from '../components/Botao';
@@ -68,70 +70,78 @@ class Login extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.select({
-          ios: 'padding',
-          android: null,
-        })}
-      >
-        <GeneralStatusBarColor
-          backgroundColor="white"
-          barStyle="dark-content"
-        />
-
-        <Spinner visible={this.props.isSubmetendo} />
-
-        <Text style={styles.titulo}>
-          <Icon name="road" size={35} color={commonStyles.colors.secundaria} />{' '}
-          Viagens PMO
-        </Text>
-
-        <View style={styles.inputContainer}>
-          <Icon style={styles.inputIcon} name="user-alt" size={20} />
-          <TextInput
-            style={styles.inputs}
-            placeholder="Apelido"
-            autoCapitalize="none"
-            value={this.state.apelido}
-            returnKeyType="next"
-            underlineColorAndroid="transparent"
-            onChangeText={apelido => this.setState({ apelido: apelido })}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Icon style={styles.inputIcon} name="user-lock" size={20} />
-          <TextInput
-            style={styles.inputs}
-            placeholder="Senha"
-            autoCapitalize="none"
-            secureTextEntry={this.state.mostrar}
-            value={this.state.senha}
-            returnKeyType="done"
-            underlineColorAndroid="transparent"
-            onChangeText={senha => this.setState({ senha })}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.select({
+            ios: 'padding',
+            android: null,
+          })}
+        >
+          <GeneralStatusBarColor
+            backgroundColor="white"
+            barStyle="dark-content"
           />
 
-          <TouchableOpacity onPress={this.mostrar} style={styles.eye}>
-            <Icon name={this.state.mostrar ? 'eye' : 'eye-slash'} size={20} />
+          <Spinner visible={this.props.isSubmetendo} />
+
+          <Text style={styles.titulo}>
+            <Icon
+              name="road"
+              size={35}
+              color={commonStyles.colors.secundaria}
+            />{' '}
+            Viagens PMO
+          </Text>
+
+          <View style={styles.inputContainer}>
+            <Icon style={styles.inputIcon} name="user-alt" size={20} />
+            <TextInput
+              style={styles.inputs}
+              placeholder="Apelido"
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={this.state.apelido}
+              returnKeyType="next"
+              underlineColorAndroid="transparent"
+              onChangeText={apelido => this.setState({ apelido: apelido })}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Icon style={styles.inputIcon} name="user-lock" size={20} />
+            <TextInput
+              style={styles.inputs}
+              placeholder="Senha"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={this.state.mostrar}
+              value={this.state.senha}
+              returnKeyType="done"
+              underlineColorAndroid="transparent"
+              onChangeText={senha => this.setState({ senha })}
+            />
+
+            <TouchableOpacity onPress={this.mostrar} style={styles.eye}>
+              <Icon name={this.state.mostrar ? 'eye' : 'eye-slash'} size={20} />
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity onPress={this.esqueciSenha}>
+            <Text style={styles.esqueci}>Esqueci a senha</Text>
           </TouchableOpacity>
-        </View>
 
-        <TouchableOpacity onPress={this.esqueciSenha}>
-          <Text style={styles.esqueci}>Esqueci a senha</Text>
-        </TouchableOpacity>
+          <Botao
+            style={styles.buttonContainer}
+            title="Entrar"
+            isSubmetendo={this.props.isSubmetendo}
+            onPress={() => this.login()}
+            name="sign-in-alt"
+          />
 
-        <Botao
-          style={styles.buttonContainer}
-          title="Entrar"
-          isSubmetendo={this.props.isSubmetendo}
-          onPress={() => this.login()}
-          name="sign-in-alt"
-        />
-
-        <Text>Versão: {config.version}</Text>
-      </KeyboardAvoidingView>
+          <Text>Versão: {config.version}</Text>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     );
   }
 }

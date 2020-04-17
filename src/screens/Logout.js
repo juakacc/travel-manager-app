@@ -24,7 +24,8 @@ class Logout extends React.Component {
 
         <Botao
           name="sign-out-alt"
-          style={{ width: 100, height: 100, backgroundColor: '#F78181' }}
+          title="Sair"
+          style={styles.button}
           onPress={() => this.logout()}
         />
       </View>
@@ -36,6 +37,12 @@ const styles = StyleSheet.create({
   container: {
     ...commonStyles.container,
     alignItems: 'center',
+    paddingVertical: 50,
+  },
+  button: {
+    width: 100,
+    color: 'white',
+    backgroundColor: '#F54E2A',
   },
 });
 

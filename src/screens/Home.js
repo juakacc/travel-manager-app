@@ -177,10 +177,11 @@ const styles = StyleSheet.create({
   textAlert: {
     color: '#fff',
     backgroundColor: '#f00',
-    padding: 5,
+    padding: 10,
     margin: 2,
     borderRadius: 5,
     textAlign: 'center',
+    fontSize: 17,
     fontWeight: 'bold',
   },
   textoAviso: {
