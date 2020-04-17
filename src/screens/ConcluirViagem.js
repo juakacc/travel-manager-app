@@ -1,5 +1,11 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import { Input } from 'react-native-elements';
 
 import Botao from '../components/Botao';
@@ -104,46 +110,49 @@ class ConcluirViagem extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
-        <Spinner visible={this.props.isSubmetendo} />
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.container}>
+          <GeneralStatusBarColor
+            backgroundColor={commonStyles.colors.secundaria}
+            barStyle="ligth-content"
+          />
+          <Spinner visible={this.props.isSubmetendo} />
 
-        <Titulo titulo="Concluir Viagem" />
-        <Text style={styles.title}>
-          Complete os dados a seguir sobre a viagem
-        </Text>
-        <Text style={styles.title}>
-          (Altere a quilometragem para a qual é registrada no painel do veículo)
-        </Text>
+          <Titulo titulo="Concluir Viagem" />
+          <Text style={styles.title}>
+            Complete os dados a seguir sobre a viagem
+          </Text>
+          <Text style={styles.title}>
+            (Altere a quilometragem para a qual é registrada no painel do
+            veículo)
+          </Text>
 
-        <Input
-          keyboardType="numeric"
-          label="Quilometragem"
-          placeholder="KM atual"
-          errorMessage={this.state.errQuilometragem}
-          returnKeyType="next"
-          value={`${this.state.km_final}`}
-          onChangeText={km_final => this.setState({ km_final })}
-        />
+          <Input
+            keyboardType="numeric"
+            label="Quilometragem"
+            placeholder="KM atual"
+            errorMessage={this.state.errQuilometragem}
+            returnKeyType="next"
+            value={`${this.state.km_final}`}
+            onChangeText={km_final => this.setState({ km_final })}
+          />
 
-        <Input
-          label="Comentário (opcional)"
-          placeholder="Comentário sobre a viagem"
-          returnKeyType="done"
-          value={this.state.descricao}
-          onChangeText={descricao => this.setState({ descricao })}
-        />
+          <Input
+            label="Comentário (opcional)"
+            placeholder="Comentário sobre a viagem"
+            returnKeyType="done"
+            value={this.state.descricao}
+            onChangeText={descricao => this.setState({ descricao })}
+          />
 
-        <Botao
-          onPress={() => this.concluir()}
-          title="Concluir Viagem"
-          isSubmetendo={this.props.isSubmetendo}
-          name="route"
-        />
-      </View>
+          <Botao
+            onPress={() => this.concluir()}
+            title="Concluir Viagem"
+            isSubmetendo={this.props.isSubmetendo}
+            name="route"
+          />
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

@@ -4,22 +4,23 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import PTRView from 'react-native-pull-to-refresh';
 
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setMensagem } from '../store/actions/mensagem';
 
 import Header from '../components/Header';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import VeiculoAtual from '../components/VeiculoAtual';
 import FormSelectVeiculo from '../components/FormSelectVeiculo';
-import { connect } from 'react-redux';
-import { setMensagem } from '../store/actions/mensagem';
-import functions from '../functions';
-import NumberFormat from 'react-number-format';
+import PullRefresh from '../components/PullRefresh';
+import ViagemAtual from '../components/ViagemAtual';
 
 const textArray = [
   'NÃO ULTRAPASSE EM LUGAR INDEVIDO',
   'UTILIZE O CINTO DE SEGURANÇA',
   'LIGUE OS FARÓIS DO VEÍCULO',
+  'NÃO USE O CELULAR NO VOLANTE',
+  'EVITE MULTAS',
 ];
 
 class Home extends React.Component {
@@ -103,7 +104,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const textThatChanges = textArray[this.state.indice % textArray.length];
+    const alerta = textArray[this.state.indice % textArray.length];
 
     const { viagem, veiculos, isLoading } = this.state;
     const { navigation } = this.props;
@@ -116,12 +117,9 @@ class Home extends React.Component {
             barStyle="ligth-content"
           />
 
-          <Text style={styles.textoAviso}>
-            Puxe <Icon name="arrow-down" /> para atualizar os veículos
-            disponíveis
-          </Text>
-          <Header navigation={navigation} />
-          <Text style={styles.textAlert}>{textThatChanges}</Text>
+          <PullRefresh />
+          <Header />
+          <Text style={styles.textAlert}>{alerta}</Text>
 
           <Spinner visible={isLoading} />
 
@@ -130,26 +128,8 @@ class Home extends React.Component {
           ) : (
             <FormSelectVeiculo navigation={navigation} veiculos={veiculos} />
           )}
-          {viagem ? (
-            <View style={styles.detalhesView}>
-              <Text style={styles.txtDetalhes}>Detalhes da viagem</Text>
 
-              <Text style={styles.infoTitle}>Momento da saída: </Text>
-              <Text style={styles.infoValue}>
-                {functions.getDateTimeString(viagem.saida)}
-              </Text>
-
-              <Text style={styles.infoTitle}>KM registrado na saída: </Text>
-              <NumberFormat
-                value={viagem.km_inicial}
-                displayType={'text'}
-                thousandSeparator={true}
-                renderText={value => (
-                  <Text style={styles.infoValue}>{value} KM</Text>
-                )}
-              />
-            </View>
-          ) : null}
+          <ViagemAtual viagem={viagem} />
         </View>
       </PTRView>
     );
@@ -183,27 +163,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 17,
     fontWeight: 'bold',
-  },
-  textoAviso: {
-    alignSelf: 'center',
-  },
-
-  detalhesView: {
-    padding: 10,
-  },
-  txtDetalhes: {
-    alignSelf: 'center',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  infoTitle: {
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  infoValue: {
-    fontSize: 15,
-    marginLeft: 10,
-    marginBottom: 10,
   },
 });

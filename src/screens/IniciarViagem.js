@@ -2,7 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { iniciarViagem } from '../store/actions/viagem';
 import { setMensagem } from '../store/actions/mensagem';
-import { View, StyleSheet, Text, KeyboardAvoidingView } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { Input } from 'react-native-elements';
 
 import moment from 'moment';
@@ -90,50 +96,52 @@ class IniciarViagem extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
-        <Spinner visible={this.props.isSubmetendo} />
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <KeyboardAvoidingView style={styles.container}>
+          <GeneralStatusBarColor
+            backgroundColor={commonStyles.colors.secundaria}
+            barStyle="ligth-content"
+          />
+          <Spinner visible={this.props.isSubmetendo} />
 
-        <Titulo titulo="Iniciar Viagem" />
+          <Titulo titulo="Iniciar Viagem" />
 
-        <Text style={styles.veiculo}>{this.state.veiculoNome}</Text>
+          <Text style={styles.veiculo}>{this.state.veiculoNome}</Text>
 
-        <Text style={styles.title}>
-          Qual a quilometragem atual registrada no veículo?
-        </Text>
-        <Text style={styles.title}>
-          (Altere o valor prosposto para o real valor marcado no painel do
-          veículo)
-        </Text>
+          <Text style={styles.title}>
+            Qual a quilometragem atual registrada no veículo?
+          </Text>
+          <Text style={styles.title}>
+            (Altere o valor prosposto para o real valor marcado no painel do
+            veículo)
+          </Text>
 
-        <Input
-          keyboardType="numeric"
-          label="Quilometragem"
-          placeholder="KM atual do veículo"
-          value={`${this.state.quilometragem}`}
-          errorMessage={this.state.errQuilometragem}
-          returnKeyType="next"
-          onChangeText={quilometragem => this.setState({ quilometragem })}
-        />
+          <Input
+            keyboardType="numeric"
+            label="Quilometragem"
+            placeholder="KM atual do veículo"
+            value={`${this.state.quilometragem}`}
+            errorMessage={this.state.errQuilometragem}
+            returnKeyType="next"
+            onChangeText={quilometragem => this.setState({ quilometragem })}
+          />
 
-        <Input
-          label="Comentário (opcional)"
-          value={this.state.descricao}
-          placeholder="Comentário sobre a viagem"
-          returnKeyType="done"
-          onChangeText={descricao => this.setState({ descricao })}
-        />
+          <Input
+            label="Comentário (opcional)"
+            value={this.state.descricao}
+            placeholder="Comentário sobre a viagem"
+            returnKeyType="done"
+            onChangeText={descricao => this.setState({ descricao })}
+          />
 
-        <Botao
-          onPress={this.iniciarViagem}
-          isSubmetendo={this.props.isSubmetendo}
-          title="Iniciar viagem"
-          name="route"
-        />
-      </KeyboardAvoidingView>
+          <Botao
+            onPress={this.iniciarViagem}
+            isSubmetendo={this.props.isSubmetendo}
+            title="Iniciar viagem"
+            name="route"
+          />
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -151,7 +159,7 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
     fontSize: 20,
-    marginVertical: 10,
+    marginBottom: 10,
   },
 });
 

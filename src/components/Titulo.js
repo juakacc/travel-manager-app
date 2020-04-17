@@ -7,9 +7,10 @@ export default function (props) {
 
 const styles = StyleSheet.create({
   titulo: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 3,
+    marginTop: 10,
+    marginBottom: 20,
   },
 });

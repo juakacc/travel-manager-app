@@ -3,8 +3,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import Botao from './Botao';
 import RNPickerSelect from 'react-native-picker-select';
 import { Alert } from 'react-native';
+import commonStyles from '../commonStyles';
 
-class FormSelectVeiculo extends React.Component {
+export default class FormSelectVeiculo extends React.Component {
   state = {
     veiculoSelec: null,
   };
@@ -36,11 +37,13 @@ class FormSelectVeiculo extends React.Component {
       color: '#9EA0A4',
     };
 
+    const { veiculos } = this.props;
+
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Veículos disponíveis:</Text>
 
-        {this.props.veiculos.length > 0 ? (
+        {veiculos.length > 0 ? (
           <View>
             <RNPickerSelect
               onValueChange={value => this.setState({ veiculoSelec: value })}
@@ -54,15 +57,14 @@ class FormSelectVeiculo extends React.Component {
                 };
               })}
             />
-
             <Botao
               onPress={this.enviarVeiculo}
               title="Pegar Veículo"
               name="key"
             />
-            <Text style={styles.txtInfo}>
+            {/* <Text style={styles.txtInfo}>
               Ao escolher um veículo será registrado o momento da saída
-            </Text>
+            </Text> */}
           </View>
         ) : (
           <Text style={styles.txtSemVeiculo}>
@@ -75,17 +77,21 @@ class FormSelectVeiculo extends React.Component {
   }
 }
 
-export default FormSelectVeiculo;
-
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: '#000',
-    margin: 5,
+    // borderWidth: 1,
+    // borderColor: '#000',
+    backgroundColor: commonStyles.colors.secundaria,
+    borderRadius: 5,
+    // height: 150,
+    marginVertical: 5,
     padding: 5,
+    paddingVertical: 10,
   },
   title: {
     fontWeight: 'bold',
+    color: 'white',
+    fontSize: 16,
   },
   veiculo: {
     textAlign: 'center',
@@ -102,6 +108,8 @@ const styles = StyleSheet.create({
   },
   txtSemVeiculo: {
     margin: 10,
+    color: 'white',
+    fontSize: 16,
     textAlign: 'center',
   },
 });

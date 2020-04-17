@@ -11,6 +11,8 @@ import Titulo from '../components/Titulo';
 import NumberFormat from 'react-number-format';
 import Spinner from 'react-native-loading-spinner-overlay';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Dimensions } from 'react-native';
 
 class DetalharViagem extends React.Component {
   state = {
@@ -30,7 +32,7 @@ class DetalharViagem extends React.Component {
     },
     isLoading: true,
 
-    y: new Animated.Value(0),
+    fade: new Animated.Value(-100),
   };
 
   componentDidMount = async () => {
@@ -54,10 +56,12 @@ class DetalharViagem extends React.Component {
       this.props.navigation.goBack();
     }
 
-    Animated.timing(this.state.y, {
-      toValue: 1,
-      duration: 500,
-    }).start();
+    Animated.loop(
+      Animated.timing(this.state.fade, {
+        toValue: Dimensions.get('window').width,
+        duration: 4000,
+      }),
+    ).start();
   };
 
   render() {
@@ -117,17 +121,25 @@ class DetalharViagem extends React.Component {
             />
           </View>
         ) : (
-          <Animated.Text
-            use
+          <Animated.View
+            useNativeDriver
             style={[
-              styles.emAndamento,
+              styles.viewAnimated,
               {
-                opacity: this.state.y,
+                transform: [
+                  {
+                    translateX: this.state.fade,
+                  },
+                ],
               },
             ]}
           >
-            VIAGEM EM ANDAMENTO
-          </Animated.Text>
+            <Icon
+              name="car-side"
+              size={50}
+              color={commonStyles.colors.secundaria}
+            />
+          </Animated.View>
         )}
       </View>
     );
@@ -143,13 +155,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginVertical: 10,
   },
-  emAndamento: {
-    backgroundColor: commonStyles.colors.secundaria,
-    color: '#fff',
-    padding: 10,
-    marginVertical: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
+  viewAnimated: {
+    marginTop: 50,
   },
   infoTitle: {
     fontWeight: 'bold',
