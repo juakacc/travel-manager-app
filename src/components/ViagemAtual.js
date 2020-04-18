@@ -9,7 +9,7 @@ export default function ViagemAtual({ viagem }) {
   if (viagem) {
     return (
       <View style={styles.detalhesView}>
-        <Text style={styles.txtDetalhes}>Detalhes da viagem</Text>
+        <Text style={styles.txtDetalhes}>Detalhes da viagem #{viagem.id}</Text>
 
         <Text style={styles.infoTitle}>Momento da saída: </Text>
         <Text style={styles.infoValue}>

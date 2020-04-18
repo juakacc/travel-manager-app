@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Botao from './Botao';
+import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import Botao from './Botao';
+import commonStyles from '../commonStyles';
 
 export default class VeiculoAtual extends React.Component {
   concluirViagem = () => {
@@ -10,23 +12,48 @@ export default class VeiculoAtual extends React.Component {
     });
   };
 
+  state = {
+    positionX: new Animated.Value(Dimensions.get('screen').width),
+  };
+
+  componentDidMount() {
+    Animated.sequence([
+      Animated.delay(500),
+      Animated.spring(this.state.positionX, {
+        toValue: 0,
+        speed: 3,
+        bounciness: 20,
+      }),
+    ]).start();
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Veículo que está com você: </Text>
-        <Text style={styles.veiculo}>
-          <Icon name="truck-pickup" size={20} />{' '}
-          {this.props.viagem.veiculo.nome}
-        </Text>
-        {/* <Text style={styles.saida}>Saída às {functions.getDateTimeString(this.props.viagem.saida)}</Text> */}
+
+        <Animated.Text
+          useNativeDriver
+          style={[
+            styles.veiculo,
+            {
+              transform: [
+                {
+                  translateX: this.state.positionX,
+                },
+              ],
+            },
+          ]}
+        >
+          <Icon name="car-side" size={20} color="white" />
+          {` ${this.props.viagem.veiculo.nome}`}
+        </Animated.Text>
+
         <Botao
           onPress={() => this.concluirViagem()}
           title="Entregar veículo"
           name="key"
         />
-        <Text style={styles.txtInfo}>
-          Ao entregar o veículo você deverá informar a quilometragem atual
-        </Text>
       </View>
     );
   }
@@ -34,22 +61,23 @@ export default class VeiculoAtual extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: '#000',
-    margin: 5,
+    backgroundColor: commonStyles.colors.secundaria,
+    marginVertical: 5,
+    borderRadius: 5,
     padding: 5,
+    paddingVertical: 10,
   },
   title: {
     fontWeight: 'bold',
+    color: 'white',
+    fontSize: 16,
+    marginBottom: 10,
   },
   veiculo: {
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  saida: {
-    textAlign: 'center',
-    color: '#666',
+    color: '#fff',
   },
   txtInfo: {
     textAlign: 'center',

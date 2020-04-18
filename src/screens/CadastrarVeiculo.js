@@ -106,7 +106,7 @@ class CadastrarVeiculo extends React.Component {
     }
 
     if (this.state.placa.trim() === '') {
-      this.setState({ err_placa: 'Digite um nome válido' });
+      this.setState({ err_placa: 'Digite uma placa válida' });
       valid = false;
     }
 
@@ -179,76 +179,76 @@ class CadastrarVeiculo extends React.Component {
 
         <Titulo titulo="Cadastro de Veículo" />
 
-        {/* <ScrollView> */}
-        <Input
-          label="Nome"
-          errorMessage={this.state.err_nome}
-          returnKeyType="next"
-          value={this.state.nome}
-          onChangeText={nome => this.setState({ nome })}
-        />
+        <ScrollView>
+          <Input
+            label="Nome"
+            errorMessage={this.state.err_nome}
+            returnKeyType="next"
+            value={this.state.nome}
+            onChangeText={nome => this.setState({ nome })}
+          />
 
-        <Input
-          label="Placa"
-          errorMessage={this.state.err_placa}
-          returnKeyType="next"
-          value={this.state.placa}
-          onChangeText={placa => this.setState({ placa })}
-        />
+          <Input
+            label="Placa"
+            errorMessage={this.state.err_placa}
+            returnKeyType="next"
+            value={this.state.placa}
+            onChangeText={placa => this.setState({ placa })}
+          />
 
-        <Input
-          label="Renavam"
-          errorMessage={this.state.err_renavam}
-          returnKeyType="next"
-          value={this.state.renavam}
-          onChangeText={renavam => this.setState({ renavam })}
-        />
+          <Input
+            label="Renavam"
+            errorMessage={this.state.err_renavam}
+            returnKeyType="next"
+            value={this.state.renavam}
+            onChangeText={renavam => this.setState({ renavam })}
+          />
 
-        <Input
-          label="Marca"
-          errorMessage={this.state.err_marca}
-          returnKeyType="next"
-          value={this.state.marca}
-          onChangeText={marca => this.setState({ marca })}
-        />
+          <Input
+            label="Marca"
+            errorMessage={this.state.err_marca}
+            returnKeyType="next"
+            value={this.state.marca}
+            onChangeText={marca => this.setState({ marca })}
+          />
 
-        <Input
-          label="Modelo"
-          errorMessage={this.state.err_modelo}
-          returnKeyType="next"
-          value={this.state.modelo}
-          onChangeText={modelo => this.setState({ modelo })}
-        />
+          <Input
+            label="Modelo"
+            errorMessage={this.state.err_modelo}
+            returnKeyType="next"
+            value={this.state.modelo}
+            onChangeText={modelo => this.setState({ modelo })}
+          />
 
-        <Input
-          keyboardType="numeric"
-          label="Quilometragem"
-          errorMessage={this.state.err_quilometragem}
-          returnKeyType="next"
-          value={`${this.state.quilometragem}`}
-          onChangeText={q => this.setKM(q)}
-        />
+          <Input
+            keyboardType="numeric"
+            label="Quilometragem"
+            errorMessage={this.state.err_quilometragem}
+            returnKeyType="next"
+            value={`${this.state.quilometragem}`}
+            onChangeText={q => this.setKM(q)}
+          />
 
-        <Text style={styles.labelCnh}>CNH Requerida</Text>
+          <Text style={styles.labelCnh}>CNH Requerida</Text>
 
-        <Picker
-          selectedValue={this.state.cnh_requerida}
-          onValueChange={cnh_requerida => this.setState({ cnh_requerida })}
-        >
-          <Picker.Item label="A" value="A" />
-          <Picker.Item label="B" value="B" />
-          <Picker.Item label="C" value="C" />
-          <Picker.Item label="D" value="D" />
-          <Picker.Item label="E" value="E" />
-        </Picker>
+          <Picker
+            selectedValue={this.state.cnh_requerida}
+            onValueChange={cnh_requerida => this.setState({ cnh_requerida })}
+          >
+            <Picker.Item label="A" value="A" />
+            <Picker.Item label="B" value="B" />
+            <Picker.Item label="C" value="C" />
+            <Picker.Item label="D" value="D" />
+            <Picker.Item label="E" value="E" />
+          </Picker>
 
-        <Botao
-          onPress={() => this.salvarVeiculo()}
-          title="Salvar"
-          name="save"
-          isSubmetendo={this.props.isSubmetendo}
-        />
-        {/* </ScrollView> */}
+          <Botao
+            onPress={() => this.salvarVeiculo()}
+            title="Salvar"
+            name="save"
+            isSubmetendo={this.props.isSubmetendo}
+          />
+        </ScrollView>
       </KeyboardAvoidingView>
     );
   }

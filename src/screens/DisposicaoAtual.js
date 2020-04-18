@@ -42,9 +42,7 @@ class DisposicaoAtual extends React.Component {
       .then(res => {
         if (this._isMounted) {
           this.setState({
-            viagens: res.data.filter(
-              viagem => viagem.motorista.id !== this.props.motorista.id,
-            ),
+            viagens: res.data,
             isLoading: false,
           });
         }

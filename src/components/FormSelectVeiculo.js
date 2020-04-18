@@ -79,8 +79,6 @@ export default class FormSelectVeiculo extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    // borderWidth: 1,
-    // borderColor: '#000',
     backgroundColor: commonStyles.colors.secundaria,
     borderRadius: 5,
     // height: 150,
@@ -97,10 +95,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 15,
     fontWeight: 'bold',
-  },
-  saida: {
-    textAlign: 'center',
-    color: '#666',
   },
   txtInfo: {
     textAlign: 'center',

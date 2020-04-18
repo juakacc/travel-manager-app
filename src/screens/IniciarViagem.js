@@ -106,19 +106,21 @@ class IniciarViagem extends React.Component {
 
           <Titulo titulo="Iniciar Viagem" />
 
-          <Text style={styles.veiculo}>{this.state.veiculoNome}</Text>
+          <Text style={styles.txtVeiculo}>
+            Veículo:
+            <Text style={styles.veiculo}> {this.state.veiculoNome}</Text>
+          </Text>
 
           <Text style={styles.title}>
             Qual a quilometragem atual registrada no veículo?
           </Text>
           <Text style={styles.title}>
-            (Altere o valor prosposto para o real valor marcado no painel do
-            veículo)
+            (Altere o valor prosposto para o valor marcado no painel do veículo)
           </Text>
 
           <Input
             keyboardType="numeric"
-            label="Quilometragem"
+            label="Quilometragem *"
             placeholder="KM atual do veículo"
             value={`${this.state.quilometragem}`}
             errorMessage={this.state.errQuilometragem}
@@ -161,6 +163,8 @@ const styles = StyleSheet.create({
   },
   veiculo: {
     color: 'red',
+  },
+  txtVeiculo: {
     textAlign: 'center',
     fontSize: 20,
     marginBottom: 10,

@@ -130,7 +130,7 @@ class ConcluirViagem extends React.Component {
 
           <Input
             keyboardType="numeric"
-            label="Quilometragem"
+            label="Quilometragem *"
             placeholder="KM atual"
             errorMessage={this.state.errQuilometragem}
             returnKeyType="next"

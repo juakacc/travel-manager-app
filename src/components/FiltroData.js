@@ -6,17 +6,17 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import ItemViagemConcluida from './ItemViagemConcluida';
-import Botao from './Botao';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import functions from '../functions';
 import moment from 'moment';
 
-import { setMensagem } from '../store/actions/mensagem';
-import { connect } from 'react-redux';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setMensagem } from '../store/actions/mensagem';
+
+import ItemViagemConcluida from './ItemViagemConcluida';
+import Botao from './Botao';
+import functions from '../functions';
 import commonStyles from '../commonStyles';
 import SemResultado from './SemResultado';
 
@@ -95,9 +95,9 @@ class FiltroData extends React.Component {
           <View>
             <TouchableHighlight onPress={this.showDatepicker}>
               <Text style={styles.dateTimeSelect}>
-                <Icon name="calendar-alt" size={20} color="white" />{' '}
+                <Icon name="calendar-alt" size={18} color="white" />{' '}
                 {functions.getDateString(this.state.datetime) + ' '}
-                <Icon name="clock" size={20} color="white" />{' '}
+                <Icon name="clock" size={18} color="white" />{' '}
                 {functions.getTimeString(this.state.datetime)}
               </Text>
             </TouchableHighlight>
@@ -107,7 +107,6 @@ class FiltroData extends React.Component {
             style={styles.botao}
             onPress={() => this.pesquisar()}
             isSubmetendo={this.state.isSubmetendo}
-            title="Pesquisar"
             name="search"
           />
         </View>

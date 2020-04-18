@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 
-import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { setMensagem } from '../store/actions/mensagem';
 
 import ItemViagemConcluida from './ItemViagemConcluida';
 import SemResultado from './SemResultado';
@@ -65,7 +65,7 @@ export default connect(null, mapDispatchToProps)(UltimasViagens);
 
 const styles = StyleSheet.create({
   container: {
-    height: 150,
+    height: 170,
   },
   title: {
     fontWeight: 'bold',

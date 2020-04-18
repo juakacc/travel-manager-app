@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { Text, StyleSheet, Animated, Dimensions } from 'react-native';
 
 import { connect } from 'react-redux';
 import { userLoggout } from '../store/actions/user';
@@ -10,21 +10,18 @@ import commonStyles from '../commonStyles';
 
 class Logout extends React.Component {
   state = {
-    positionY: new Animated.Value(200),
+    positionY: new Animated.Value(Dimensions.get('window').height),
   };
 
   componentDidMount() {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    Animated.sequence([
+      Animated.delay(500),
       Animated.spring(this.state.positionY, {
         toValue: 0,
         speed: 5,
-        bounciness: 20,
-      }).start();
-    });
-  }
-
-  componentWillUnmount() {
-    this.focusListener.remove();
+        bounciness: 15,
+      }),
+    ]).start();
   }
 
   logout = () => {

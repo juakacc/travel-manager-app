@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import PTRView from 'react-native-pull-to-refresh';
 
@@ -31,6 +31,8 @@ class Home extends React.Component {
     veiculos: [],
     isLoading: false,
     indice: 0,
+
+    fadeIn: new Animated.Value(0),
   };
 
   componentDidMount() {
@@ -45,6 +47,13 @@ class Home extends React.Component {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.loadViagem();
     });
+    Animated.sequence([
+      Animated.delay(500),
+      Animated.timing(this.state.fadeIn, {
+        toValue: 1,
+        duration: 1000,
+      }),
+    ]).start();
   }
 
   loadViagem = async () => {
@@ -119,7 +128,17 @@ class Home extends React.Component {
 
           <PullRefresh />
           <Header />
-          <Text style={styles.textAlert}>{alerta}</Text>
+          <Animated.Text
+            useNativeDriver
+            style={[
+              styles.textAlert,
+              {
+                opacity: this.state.fadeIn,
+              },
+            ]}
+          >
+            {alerta}
+          </Animated.Text>
 
           <Spinner visible={isLoading} />
 
@@ -128,7 +147,6 @@ class Home extends React.Component {
           ) : (
             <FormSelectVeiculo navigation={navigation} veiculos={veiculos} />
           )}
-
           <ViagemAtual viagem={viagem} />
         </View>
       </PTRView>
@@ -158,7 +176,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     backgroundColor: '#f00',
     padding: 10,
-    margin: 2,
     borderRadius: 5,
     textAlign: 'center',
     fontSize: 17,
