@@ -195,38 +195,40 @@ class CadastrarPessoa extends React.Component {
 
           <ScrollView>
             <Input
-              label="Nome"
+              label="Nome *"
+              value={this.state.nome}
               errorMessage={this.state.err_nome}
               returnKeyType="next"
-              onSubmitEditing={() => {
-                this.input_2.focus();
-              }}
-              value={this.state.nome}
+              onSubmitEditing={() => this.apelido.focus()}
+              blurOnSubmit={false}
               onChangeText={nome => this.setState({ nome })}
             />
 
             <Input
-              label="Apelido"
-              autoCapitalize="none"
-              ref={input => {
-                this.input_2 = input;
-              }}
-              errorMessage={this.state.err_apelido}
-              returnKeyType="next"
+              label="Apelido *"
               value={this.state.apelido}
+              errorMessage={this.state.err_apelido}
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="next"
+              ref={input => (this.apelido = input)}
+              onSubmitEditing={() => this.cnh.focus()}
+              blurOnSubmit={false}
               onChangeText={apelido => this.setState({ apelido })}
             />
 
             <Input
-              label="CNH"
+              label="CNH *"
+              value={this.state.cnh}
               errorMessage={this.state.err_cnh}
               returnKeyType="next"
-              value={this.state.cnh}
+              ref={input => (this.cnh = input)}
+              onSubmitEditing={() => this.telefone.focus()}
+              blurOnSubmit={false}
               onChangeText={cnh => this.setState({ cnh })}
             />
 
-            <Text style={styles.txtCategoria}>Categoria</Text>
-
+            <Text style={styles.txtCategoria}>Categoria *</Text>
             <Picker
               selectedValue={this.state.categoria}
               onValueChange={categoria => this.setState({ categoria })}
@@ -243,43 +245,51 @@ class CadastrarPessoa extends React.Component {
             </Picker>
 
             <Input
-              label="Telefone"
-              keyboardType="numeric"
-              errorMessage={this.state.err_telefone}
-              returnKeyType="next"
+              label="Telefone *"
               value={this.state.telefone}
+              errorMessage={this.state.err_telefone}
+              keyboardType="numeric"
+              returnKeyType="next"
+              ref={input => (this.telefone = input)}
+              onSubmitEditing={() => this.senha.focus()}
+              blurOnSubmit={false}
               onChangeText={telefone => this.setState({ telefone })}
             />
 
-            {!this.state.isEdit ? (
+            {!this.state.isEdit && (
               <View>
                 <CheckBox
-                  title="Administrador?"
+                  title="É administrador?"
                   checked={this.state.admin}
                   onPress={() => this.setState({ admin: !this.state.admin })}
                 />
 
                 <Input
-                  label="Senha"
+                  label="Senha *"
+                  value={this.state.senha}
                   errorMessage={this.state.err_senha}
                   returnKeyType="next"
+                  ref={input => (this.senha = input)}
+                  onSubmitEditing={() => this.confirmSenha.focus()}
+                  blurOnSubmit={false}
                   secureTextEntry={true}
-                  value={this.state.senha}
                   onChangeText={senha => this.setState({ senha })}
                 />
 
                 <Input
-                  label="Confirmar senha"
+                  label="Confirmar senha *"
+                  value={`${this.state.confirm_senha}`}
                   secureTextEntry={true}
                   errorMessage={this.state.err_confirm_senha}
                   returnKeyType="done"
-                  value={`${this.state.confirm_senha}`}
+                  ref={input => (this.confirmSenha = input)}
+                  onSubmitEditing={this.salvar}
                   onChangeText={confirm_senha =>
                     this.setState({ confirm_senha })
                   }
                 />
               </View>
-            ) : null}
+            )}
 
             <Botao
               onPress={() => this.salvar()}
