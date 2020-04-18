@@ -7,18 +7,19 @@ import {
   Keyboard,
 } from 'react-native';
 import { Input } from 'react-native-elements';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-import Botao from '../components/Botao';
 import moment from 'moment';
 
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { setMensagem } from '../store/actions/mensagem';
+
 import { concluirViagem } from '../store/actions/viagem';
 import Titulo from '../components/Titulo';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { setMensagem } from '../store/actions/mensagem';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
+import Botao from '../components/Botao';
 
 class ConcluirViagem extends React.Component {
   state = {
@@ -133,6 +134,8 @@ class ConcluirViagem extends React.Component {
             placeholder="KM atual"
             errorMessage={this.state.errQuilometragem}
             returnKeyType="next"
+            onSubmitEditing={() => this.input_2.focus()}
+            blurOnSubmit={false}
             value={`${this.state.km_final}`}
             onChangeText={km_final => this.setState({ km_final })}
           />
@@ -140,7 +143,9 @@ class ConcluirViagem extends React.Component {
           <Input
             label="Comentário (opcional)"
             placeholder="Comentário sobre a viagem"
+            ref={input => (this.input_2 = input)}
             returnKeyType="done"
+            onSubmitEditing={this.concluir}
             value={this.state.descricao}
             onChangeText={descricao => this.setState({ descricao })}
           />

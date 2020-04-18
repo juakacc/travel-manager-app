@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Picker } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Picker,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { Input } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Botao from '../components/Botao';
@@ -26,7 +33,7 @@ class CadastrarVeiculo extends React.Component {
 
     isEdit: false,
     veiculoId: 0,
-    isLoading: true,
+    isLoading: false,
 
     err_nome: '',
     err_placa: '',
@@ -47,7 +54,7 @@ class CadastrarVeiculo extends React.Component {
     const veiculoId = this.props.navigation.getParam('itemId');
 
     if (veiculoId) {
-      //   this.setState({ isLoading: true });
+      this.setState({ isLoading: true });
       axios
         .get(`veiculos/${veiculoId}`)
         .then(res => {
@@ -160,7 +167,10 @@ class CadastrarVeiculo extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        style={styles.container}
+      >
         <GeneralStatusBarColor
           backgroundColor={commonStyles.colors.secundaria}
           barStyle="ligth-content"
@@ -169,86 +179,77 @@ class CadastrarVeiculo extends React.Component {
 
         <Titulo titulo="Cadastro de Veículo" />
 
-        <ScrollView>
-          <Input
-            label="Nome"
-            errorMessage={this.state.err_nome}
-            returnKeyType="next"
-            value={this.state.nome}
-            onChangeText={nome => this.setState({ nome })}
-          />
+        {/* <ScrollView> */}
+        <Input
+          label="Nome"
+          errorMessage={this.state.err_nome}
+          returnKeyType="next"
+          value={this.state.nome}
+          onChangeText={nome => this.setState({ nome })}
+        />
 
-          <Input
-            label="Placa"
-            errorMessage={this.state.err_placa}
-            returnKeyType="next"
-            value={this.state.placa}
-            onChangeText={placa => this.setState({ placa })}
-          />
+        <Input
+          label="Placa"
+          errorMessage={this.state.err_placa}
+          returnKeyType="next"
+          value={this.state.placa}
+          onChangeText={placa => this.setState({ placa })}
+        />
 
-          <Input
-            label="Renavam"
-            errorMessage={this.state.err_renavam}
-            returnKeyType="next"
-            value={this.state.renavam}
-            onChangeText={renavam => this.setState({ renavam })}
-          />
+        <Input
+          label="Renavam"
+          errorMessage={this.state.err_renavam}
+          returnKeyType="next"
+          value={this.state.renavam}
+          onChangeText={renavam => this.setState({ renavam })}
+        />
 
-          <Input
-            label="Marca"
-            errorMessage={this.state.err_marca}
-            returnKeyType="next"
-            value={this.state.marca}
-            onChangeText={marca => this.setState({ marca })}
-          />
+        <Input
+          label="Marca"
+          errorMessage={this.state.err_marca}
+          returnKeyType="next"
+          value={this.state.marca}
+          onChangeText={marca => this.setState({ marca })}
+        />
 
-          <Input
-            label="Modelo"
-            errorMessage={this.state.err_modelo}
-            returnKeyType="next"
-            value={this.state.modelo}
-            onChangeText={modelo => this.setState({ modelo })}
-          />
+        <Input
+          label="Modelo"
+          errorMessage={this.state.err_modelo}
+          returnKeyType="next"
+          value={this.state.modelo}
+          onChangeText={modelo => this.setState({ modelo })}
+        />
 
-          <Input
-            keyboardType="numeric"
-            label="Quilometragem"
-            errorMessage={this.state.err_quilometragem}
-            returnKeyType="next"
-            value={`${this.state.quilometragem}`}
-            onChangeText={q => this.setKM(q)}
-          />
+        <Input
+          keyboardType="numeric"
+          label="Quilometragem"
+          errorMessage={this.state.err_quilometragem}
+          returnKeyType="next"
+          value={`${this.state.quilometragem}`}
+          onChangeText={q => this.setKM(q)}
+        />
 
-          <Text
-            style={{
-              marginLeft: 10,
-              fontWeight: 'bold',
-              color: 'gray',
-              fontSize: 15,
-            }}
-          >
-            CNH Requerida
-          </Text>
+        <Text style={styles.labelCnh}>CNH Requerida</Text>
 
-          <Picker
-            selectedValue={this.state.cnh_requerida}
-            onValueChange={cnh_requerida => this.setState({ cnh_requerida })}
-          >
-            <Picker.Item label="A" value="A" />
-            <Picker.Item label="B" value="B" />
-            <Picker.Item label="C" value="C" />
-            <Picker.Item label="D" value="D" />
-            <Picker.Item label="E" value="E" />
-          </Picker>
+        <Picker
+          selectedValue={this.state.cnh_requerida}
+          onValueChange={cnh_requerida => this.setState({ cnh_requerida })}
+        >
+          <Picker.Item label="A" value="A" />
+          <Picker.Item label="B" value="B" />
+          <Picker.Item label="C" value="C" />
+          <Picker.Item label="D" value="D" />
+          <Picker.Item label="E" value="E" />
+        </Picker>
 
-          <Botao
-            onPress={() => this.salvarVeiculo()}
-            title="Salvar"
-            name="save"
-            isSubmetendo={this.props.isSubmetendo}
-          />
-        </ScrollView>
-      </View>
+        <Botao
+          onPress={() => this.salvarVeiculo()}
+          title="Salvar"
+          name="save"
+          isSubmetendo={this.props.isSubmetendo}
+        />
+        {/* </ScrollView> */}
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -256,6 +257,12 @@ class CadastrarVeiculo extends React.Component {
 const styles = StyleSheet.create({
   container: {
     ...commonStyles.container,
+  },
+  labelCnh: {
+    marginLeft: 10,
+    fontWeight: 'bold',
+    color: 'gray',
+    fontSize: 15,
   },
 });
 

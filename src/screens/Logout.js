@@ -1,13 +1,32 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Botao from '../components/Botao';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 
 import { connect } from 'react-redux';
 import { userLoggout } from '../store/actions/user';
+
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 
 class Logout extends React.Component {
+  state = {
+    positionY: new Animated.Value(200),
+  };
+
+  componentDidMount() {
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      Animated.spring(this.state.positionY, {
+        toValue: 0,
+        speed: 5,
+        bounciness: 20,
+      }).start();
+    });
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
+
   logout = () => {
     this.props.onLogout();
     this.props.navigation.navigate('Auth');
@@ -15,7 +34,19 @@ class Logout extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <Animated.View
+        useNativeDriver
+        style={[
+          styles.container,
+          {
+            transform: [
+              {
+                translateY: this.state.positionY,
+              },
+            ],
+          },
+        ]}
+      >
         <GeneralStatusBarColor
           backgroundColor={commonStyles.colors.secundaria}
           barStyle="ligth-content"
@@ -28,7 +59,7 @@ class Logout extends React.Component {
           style={styles.button}
           onPress={() => this.logout()}
         />
-      </View>
+      </Animated.View>
     );
   }
 }

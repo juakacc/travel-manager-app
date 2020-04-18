@@ -123,6 +123,8 @@ class IniciarViagem extends React.Component {
             value={`${this.state.quilometragem}`}
             errorMessage={this.state.errQuilometragem}
             returnKeyType="next"
+            onSubmitEditing={() => this.input_02.focus()}
+            blurOnSubmit={false}
             onChangeText={quilometragem => this.setState({ quilometragem })}
           />
 
@@ -131,6 +133,8 @@ class IniciarViagem extends React.Component {
             value={this.state.descricao}
             placeholder="Comentário sobre a viagem"
             returnKeyType="done"
+            ref={input => (this.input_02 = input)}
+            onSubmitEditing={this.iniciarViagem}
             onChangeText={descricao => this.setState({ descricao })}
           />
 
