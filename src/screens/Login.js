@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Animated,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -29,13 +30,17 @@ class Login extends React.Component {
     apelido: '',
     senha: '',
     mostrar: true,
-    positionY: new Animated.Value(600),
+    positionY: new Animated.Value(Dimensions.get('window').height),
   };
 
   componentDidMount() {
-    Animated.spring(this.state.positionY, {
-      toValue: 0,
-    }).start();
+    Animated.sequence([
+      Animated.delay(500),
+      Animated.spring(this.state.positionY, {
+        toValue: 0,
+        bounciness: 20,
+      }),
+    ]).start();
   }
 
   isValid = () => {
