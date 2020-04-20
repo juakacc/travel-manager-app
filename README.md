@@ -1,1 +1,1 @@
-# [Baixar](https://github.com/juakacc/travel-manager/releases/download/v1.1.0/viagensPMO-1.2.0.apk)
+# [Baixar última versão](https://github.com/juakacc/travel-manager/releases/download/v1.2.1/viagensPMO-1.2.1.apk)
