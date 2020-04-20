@@ -2,7 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { iniciarViagem } from '../store/actions/viagem';
 import { setMensagem } from '../store/actions/mensagem';
-import { View, StyleSheet, Text } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { Input } from 'react-native-elements';
 
 import moment from 'moment';
@@ -17,9 +23,12 @@ import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 class IniciarViagem extends React.Component {
   state = {
     quilometragem: 0,
-    errQuilometragem: '',
+    descricao: '',
     veiculoId: 0,
+
     veiculoNome: '',
+
+    errQuilometragem: '',
   };
 
   componentDidUpdate = prevProps => {
@@ -76,6 +85,7 @@ class IniciarViagem extends React.Component {
 
       const viagem = {
         saida: dataAtual,
+        descricao: this.state.descricao,
         km_inicial: this.state.quilometragem,
         veiculo: this.state.veiculoId,
         motorista: this.props.motorista.id,
@@ -86,41 +96,58 @@ class IniciarViagem extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
-        <Spinner visible={this.props.isSubmetendo} />
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <KeyboardAvoidingView style={styles.container}>
+          <GeneralStatusBarColor
+            backgroundColor={commonStyles.colors.secundaria}
+            barStyle="ligth-content"
+          />
+          <Spinner visible={this.props.isSubmetendo} />
 
-        <Titulo titulo="Iniciar Viagem" />
+          <Titulo titulo="Iniciar Viagem" />
 
-        <Text style={styles.veiculo}>{this.state.veiculoNome}</Text>
+          <Text style={styles.txtVeiculo}>
+            Veículo:
+            <Text style={styles.veiculo}> {this.state.veiculoNome}</Text>
+          </Text>
 
-        <Text style={styles.title}>
-          Qual a quilometragem atual registrada no veículo?
-        </Text>
-        <Text style={styles.title}>
-          (Altere o valor prosposto para o real valor marcado no painel do
-        </Text>
+          <Text style={styles.title}>
+            Qual a quilometragem atual registrada no veículo?
+          </Text>
+          <Text style={styles.title}>
+            (Altere o valor prosposto para o valor marcado no painel do veículo)
+          </Text>
 
-        <Input
-          keyboardType="numeric"
-          label="Quilometragem"
-          placeholder="KM atual do veículo"
-          value={`${this.state.quilometragem}`}
-          errorMessage={this.state.errQuilometragem}
-          returnKeyType="next"
-          onChangeText={quilometragem => this.setState({ quilometragem })}
-        />
+          <Input
+            keyboardType="numeric"
+            label="Quilometragem *"
+            placeholder="KM atual do veículo"
+            value={`${this.state.quilometragem}`}
+            errorMessage={this.state.errQuilometragem}
+            returnKeyType="next"
+            onSubmitEditing={() => this.input_02.focus()}
+            blurOnSubmit={false}
+            onChangeText={quilometragem => this.setState({ quilometragem })}
+          />
 
-        <Botao
-          onPress={this.iniciarViagem}
-          isSubmetendo={this.props.isSubmetendo}
-          title="Iniciar viagem"
-          name="route"
-        />
-      </View>
+          <Input
+            label="Comentário (opcional)"
+            value={this.state.descricao}
+            placeholder="Comentário sobre a viagem"
+            returnKeyType="done"
+            ref={input => (this.input_02 = input)}
+            onSubmitEditing={this.iniciarViagem}
+            onChangeText={descricao => this.setState({ descricao })}
+          />
+
+          <Botao
+            onPress={this.iniciarViagem}
+            isSubmetendo={this.props.isSubmetendo}
+            title="Iniciar viagem"
+            name="route"
+          />
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -136,9 +163,11 @@ const styles = StyleSheet.create({
   },
   veiculo: {
     color: 'red',
+  },
+  txtVeiculo: {
     textAlign: 'center',
     fontSize: 20,
-    marginVertical: 10,
+    marginBottom: 10,
   },
 });
 

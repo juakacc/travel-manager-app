@@ -1,16 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, Picker, ScrollView } from 'react-native';
-import Titulo from '../components/Titulo';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Picker,
+  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { Input, CheckBox } from 'react-native-elements';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { salvar_usuario, editar_usuario } from '../store/actions/user';
+import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { setMensagem } from '../store/actions/mensagem';
 
+import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
-import { Input, CheckBox } from 'react-native-elements';
 import Botao from '../components/Botao';
-import Spinner from 'react-native-loading-spinner-overlay';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 
 const estadoInicial = {
@@ -44,9 +52,11 @@ class CadastrarPessoa extends React.Component {
 
   componentDidMount = () => {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      const { editThis, itemId } = this.props.navigation.state.params;
-      const motoristaId =
-        !itemId && editThis ? this.props.motorista.id : itemId;
+      const editThis = this.props.navigation.getParam('editThis');
+
+      const motoristaId = editThis
+        ? this.props.motorista.id
+        : this.props.navigation.getParam('itemId');
 
       if (motoristaId) {
         this.setState({ isLoading: true });
@@ -173,111 +183,123 @@ class CadastrarPessoa extends React.Component {
       : 'Cadastro de Pessoa';
 
     return (
-      <View style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
-        <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />
-
-        <Titulo titulo={titulo} />
-
-        <ScrollView>
-          <Input
-            label="Nome"
-            errorMessage={this.state.err_nome}
-            returnKeyType="next"
-            value={this.state.nome}
-            onChangeText={nome => this.setState({ nome })}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.container}>
+          <GeneralStatusBarColor
+            backgroundColor={commonStyles.colors.secundaria}
+            barStyle="ligth-content"
           />
+          <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />
 
-          <Input
-            label="Apelido"
-            autoCapitalize="none"
-            errorMessage={this.state.err_apelido}
-            returnKeyType="next"
-            value={this.state.apelido}
-            onChangeText={apelido => this.setState({ apelido })}
-          />
+          <Titulo titulo={titulo} />
 
-          <Input
-            label="CNH"
-            errorMessage={this.state.err_cnh}
-            returnKeyType="next"
-            value={this.state.cnh}
-            onChangeText={cnh => this.setState({ cnh })}
-          />
+          <ScrollView>
+            <Input
+              label="Nome *"
+              value={this.state.nome}
+              errorMessage={this.state.err_nome}
+              returnKeyType="next"
+              onSubmitEditing={() => this.apelido.focus()}
+              blurOnSubmit={false}
+              onChangeText={nome => this.setState({ nome })}
+            />
 
-          <Text
-            style={{
-              marginLeft: 10,
-              fontWeight: 'bold',
-              color: 'gray',
-              fontSize: 15,
-            }}
-          >
-            Categoria
-          </Text>
-          <Picker
-            selectedValue={this.state.categoria}
-            onValueChange={categoria => this.setState({ categoria })}
-          >
-            <Picker.Item label="A" value="A" />
-            <Picker.Item label="B" value="B" />
-            <Picker.Item label="C" value="C" />
-            <Picker.Item label="D" value="D" />
-            <Picker.Item label="E" value="E" />
-            <Picker.Item label="AB" value="AB" />
-            <Picker.Item label="AC" value="AC" />
-            <Picker.Item label="AD" value="AD" />
-            <Picker.Item label="AE" value="AE" />
-          </Picker>
+            <Input
+              label="Apelido *"
+              value={this.state.apelido}
+              errorMessage={this.state.err_apelido}
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="next"
+              ref={input => (this.apelido = input)}
+              onSubmitEditing={() => this.cnh.focus()}
+              blurOnSubmit={false}
+              onChangeText={apelido => this.setState({ apelido })}
+            />
 
-          <Input
-            label="Telefone"
-            keyboardType="numeric"
-            errorMessage={this.state.err_telefone}
-            returnKeyType="next"
-            value={this.state.telefone}
-            onChangeText={telefone => this.setState({ telefone })}
-          />
+            <Input
+              label="CNH *"
+              value={this.state.cnh}
+              errorMessage={this.state.err_cnh}
+              returnKeyType="next"
+              ref={input => (this.cnh = input)}
+              onSubmitEditing={() => this.telefone.focus()}
+              blurOnSubmit={false}
+              onChangeText={cnh => this.setState({ cnh })}
+            />
 
-          {!this.state.isEdit ? (
-            <View>
-              <CheckBox
-                title="Administrador?"
-                checked={this.state.admin}
-                onPress={() => this.setState({ admin: !this.state.admin })}
-              />
+            <Text style={styles.txtCategoria}>Categoria *</Text>
+            <Picker
+              selectedValue={this.state.categoria}
+              onValueChange={categoria => this.setState({ categoria })}
+            >
+              <Picker.Item label="A" value="A" />
+              <Picker.Item label="B" value="B" />
+              <Picker.Item label="C" value="C" />
+              <Picker.Item label="D" value="D" />
+              <Picker.Item label="E" value="E" />
+              <Picker.Item label="AB" value="AB" />
+              <Picker.Item label="AC" value="AC" />
+              <Picker.Item label="AD" value="AD" />
+              <Picker.Item label="AE" value="AE" />
+            </Picker>
 
-              <Input
-                label="Senha"
-                errorMessage={this.state.err_senha}
-                returnKeyType="next"
-                secureTextEntry={true}
-                value={this.state.senha}
-                onChangeText={senha => this.setState({ senha })}
-              />
+            <Input
+              label="Telefone *"
+              value={this.state.telefone}
+              errorMessage={this.state.err_telefone}
+              keyboardType="numeric"
+              returnKeyType="next"
+              ref={input => (this.telefone = input)}
+              onSubmitEditing={() => this.senha.focus()}
+              blurOnSubmit={false}
+              onChangeText={telefone => this.setState({ telefone })}
+            />
 
-              <Input
-                label="Confirmar senha"
-                secureTextEntry={true}
-                errorMessage={this.state.err_confirm_senha}
-                returnKeyType="done"
-                value={`${this.state.confirm_senha}`}
-                onChangeText={confirm_senha => this.setState({ confirm_senha })}
-              />
-            </View>
-          ) : null}
+            {!this.state.isEdit && (
+              <View>
+                <CheckBox
+                  title="É administrador?"
+                  checked={this.state.admin}
+                  onPress={() => this.setState({ admin: !this.state.admin })}
+                />
 
-          <Botao
-            onPress={() => this.salvar()}
-            title="Salvar"
-            name="save"
-            isSubmetendo={this.props.isSubmetendo}
-          />
-        </ScrollView>
-      </View>
+                <Input
+                  label="Senha *"
+                  value={this.state.senha}
+                  errorMessage={this.state.err_senha}
+                  returnKeyType="next"
+                  ref={input => (this.senha = input)}
+                  onSubmitEditing={() => this.confirmSenha.focus()}
+                  blurOnSubmit={false}
+                  secureTextEntry={true}
+                  onChangeText={senha => this.setState({ senha })}
+                />
+
+                <Input
+                  label="Confirmar senha *"
+                  value={`${this.state.confirm_senha}`}
+                  secureTextEntry={true}
+                  errorMessage={this.state.err_confirm_senha}
+                  returnKeyType="done"
+                  ref={input => (this.confirmSenha = input)}
+                  onSubmitEditing={this.salvar}
+                  onChangeText={confirm_senha =>
+                    this.setState({ confirm_senha })
+                  }
+                />
+              </View>
+            )}
+
+            <Botao
+              onPress={() => this.salvar()}
+              title="Salvar"
+              name="save"
+              isSubmetendo={this.props.isSubmetendo}
+            />
+          </ScrollView>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -285,6 +307,12 @@ class CadastrarPessoa extends React.Component {
 const styles = StyleSheet.create({
   container: {
     ...commonStyles.container,
+  },
+  txtCategoria: {
+    marginLeft: 10,
+    fontWeight: 'bold',
+    color: 'gray',
+    fontSize: 15,
   },
 });
 

@@ -32,7 +32,7 @@ class ItemViagemConcluida extends React.Component {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 10,
     marginVertical: 3,
     borderRadius: 5,
     flex: 1,

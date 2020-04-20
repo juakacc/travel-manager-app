@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   View,
   Text,
@@ -9,27 +8,40 @@ import {
   Platform,
   TextInput,
   Linking,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Animated,
+  Dimensions,
 } from 'react-native';
-
-import Botao from '../components/Botao';
-
-import commonStyles from '../commonStyles';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { login } from '../store/actions/user';
 import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import config from '../conf';
-import Spinner from 'react-native-loading-spinner-overlay';
+import Botao from '../components/Botao';
+import commonStyles from '../commonStyles';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import config from '../conf';
 
 class Login extends React.Component {
   state = {
     apelido: '',
     senha: '',
     mostrar: true,
+    positionY: new Animated.Value(Dimensions.get('window').height),
   };
+
+  componentDidMount() {
+    Animated.sequence([
+      Animated.delay(500),
+      Animated.spring(this.state.positionY, {
+        toValue: 0,
+        bounciness: 20,
+      }),
+    ]).start();
+  }
 
   isValid = () => {
     if (this.state.apelido.trim() === '') {
@@ -68,70 +80,102 @@ class Login extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.select({
-          ios: 'padding',
-          android: null,
-        })}
-      >
-        <GeneralStatusBarColor
-          backgroundColor="white"
-          barStyle="dark-content"
-        />
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <Animated.View
+          style={[
+            styles.container,
+            {
+              transform: [
+                {
+                  translateY: this.state.positionY,
+                },
+              ],
+            },
+          ]}
+        >
+          <KeyboardAvoidingView
+            style={styles.center}
+            behavior={Platform.select({
+              ios: 'padding',
+              android: null,
+            })}
+          >
+            <GeneralStatusBarColor
+              backgroundColor="white"
+              barStyle="dark-content"
+            />
 
-        <Spinner visible={this.props.isSubmetendo} />
+            <Spinner visible={this.props.isSubmetendo} />
 
-        <Text style={styles.titulo}>
-          <Icon name="road" size={35} color={commonStyles.colors.secundaria} />{' '}
-          Viagens PMO
-        </Text>
+            <Text style={styles.titulo}>
+              <Icon
+                name="road"
+                size={35}
+                color={commonStyles.colors.secundaria}
+              />{' '}
+              Viagens PMO
+            </Text>
 
-        <View style={styles.inputContainer}>
-          <Icon style={styles.inputIcon} name="user-alt" size={20} />
-          <TextInput
-            style={styles.inputs}
-            placeholder="Apelido"
-            autoCapitalize="none"
-            value={this.state.apelido}
-            returnKeyType="next"
-            underlineColorAndroid="transparent"
-            onChangeText={apelido => this.setState({ apelido: apelido })}
-          />
-        </View>
+            <View style={styles.inputContainer}>
+              <Icon style={styles.inputIcon} name="user-alt" size={20} />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Apelido"
+                autoCapitalize="none"
+                autoCorrect={false}
+                value={this.state.apelido}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  this.input_2.focus();
+                }}
+                blurOnSubmit={false}
+                underlineColorAndroid="transparent"
+                onChangeText={apelido => this.setState({ apelido: apelido })}
+              />
+            </View>
 
-        <View style={styles.inputContainer}>
-          <Icon style={styles.inputIcon} name="user-lock" size={20} />
-          <TextInput
-            style={styles.inputs}
-            placeholder="Senha"
-            autoCapitalize="none"
-            secureTextEntry={this.state.mostrar}
-            value={this.state.senha}
-            returnKeyType="done"
-            underlineColorAndroid="transparent"
-            onChangeText={senha => this.setState({ senha })}
-          />
+            <View style={styles.inputContainer}>
+              <Icon style={styles.inputIcon} name="user-lock" size={20} />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Senha"
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry={this.state.mostrar}
+                value={this.state.senha}
+                returnKeyType="done"
+                ref={input => {
+                  this.input_2 = input;
+                }}
+                onSubmitEditing={this.login}
+                underlineColorAndroid="transparent"
+                onChangeText={senha => this.setState({ senha })}
+              />
 
-          <TouchableOpacity onPress={this.mostrar} style={styles.eye}>
-            <Icon name={this.state.mostrar ? 'eye' : 'eye-slash'} size={20} />
-          </TouchableOpacity>
-        </View>
+              <TouchableOpacity onPress={this.mostrar} style={styles.eye}>
+                <Icon
+                  name={this.state.mostrar ? 'eye' : 'eye-slash'}
+                  size={20}
+                />
+              </TouchableOpacity>
+            </View>
 
-        <TouchableOpacity onPress={this.esqueciSenha}>
-          <Text style={styles.esqueci}>Esqueci a senha</Text>
-        </TouchableOpacity>
+            <TouchableOpacity onPress={this.esqueciSenha}>
+              <Text style={styles.esqueci}>Esqueci a senha</Text>
+            </TouchableOpacity>
 
-        <Botao
-          style={styles.buttonContainer}
-          title="Entrar"
-          isSubmetendo={this.props.isSubmetendo}
-          onPress={() => this.login()}
-          name="sign-in-alt"
-        />
+            <Botao
+              style={styles.buttonContainer}
+              title="Entrar"
+              // isSubmetendo={this.props.isSubmetendo}
+              onPress={() => this.login()}
+              name="sign-in-alt"
+            />
 
-        <Text>Versão: {config.version}</Text>
-      </KeyboardAvoidingView>
+            <Text>Versão: {config.version}</Text>
+          </KeyboardAvoidingView>
+        </Animated.View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -140,8 +184,10 @@ const styles = StyleSheet.create({
   container: {
     ...commonStyles.container,
     padding: 10,
-    alignItems: 'center',
     justifyContent: 'center',
+  },
+  center: {
+    alignItems: 'center',
   },
   esqueci: {
     color: 'blue',
@@ -159,14 +205,14 @@ const styles = StyleSheet.create({
   inputs: {
     height: 45,
     marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
+    // borderBottomColor: '#FFFFFF',
     flex: 1,
   },
   inputIcon: {
     width: 30,
     height: 30,
     marginLeft: 15,
-    justifyContent: 'center',
+    textAlignVertical: 'center',
   },
   eye: {
     marginHorizontal: 10,

@@ -10,11 +10,13 @@ class Header extends React.Component {
   };
 
   render() {
+    const [nome] = this.props.nome ? this.props.nome.split(' ') : [''];
+
     return (
       <View style={styles.container}>
         <View style={styles.rowContainer}>
-          <Text style={styles.user}>Bem vindo, {this.props.nome}</Text>
-          <Text>{functions.getDateString()}</Text>
+          <Text style={styles.user}>Bem vindo, {nome}</Text>
+          <Text style={styles.user}>{functions.getDateString()}</Text>
         </View>
       </View>
     );
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   user: {
-    fontSize: 14,
+    fontSize: 16,
   },
 });
 

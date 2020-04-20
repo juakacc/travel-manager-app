@@ -1,18 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, Picker } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  Picker,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { Input } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-import Botao from '../components/Botao';
-import Titulo from '../components/Titulo';
-import commonStyles from '../commonStyles';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo';
 import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import Spinner from 'react-native-loading-spinner-overlay';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import Botao from '../components/Botao';
+import Titulo from '../components/Titulo';
+import commonStyles from '../commonStyles';
 
 class CadastrarVeiculo extends React.Component {
   state = {
@@ -26,7 +32,7 @@ class CadastrarVeiculo extends React.Component {
 
     isEdit: false,
     veiculoId: 0,
-    isLoading: true,
+    isLoading: false,
 
     err_nome: '',
     err_placa: '',
@@ -47,7 +53,7 @@ class CadastrarVeiculo extends React.Component {
     const veiculoId = this.props.navigation.getParam('itemId');
 
     if (veiculoId) {
-      //   this.setState({ isLoading: true });
+      this.setState({ isLoading: true });
       axios
         .get(`veiculos/${veiculoId}`)
         .then(res => {
@@ -99,7 +105,7 @@ class CadastrarVeiculo extends React.Component {
     }
 
     if (this.state.placa.trim() === '') {
-      this.setState({ err_placa: 'Digite um nome válido' });
+      this.setState({ err_placa: 'Digite uma placa válida' });
       valid = false;
     }
 
@@ -160,7 +166,10 @@ class CadastrarVeiculo extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        style={styles.container}
+      >
         <GeneralStatusBarColor
           backgroundColor={commonStyles.colors.secundaria}
           barStyle="ligth-content"
@@ -171,65 +180,60 @@ class CadastrarVeiculo extends React.Component {
 
         <ScrollView>
           <Input
-            label="Nome"
+            label="Nome *"
+            value={this.state.nome}
             errorMessage={this.state.err_nome}
             returnKeyType="next"
-            value={this.state.nome}
+            onSubmitEditing={() => this.placa.focus()}
+            blurOnSubmit={false}
             onChangeText={nome => this.setState({ nome })}
           />
 
           <Input
-            label="Placa"
+            label="Placa *"
+            value={this.state.placa}
             errorMessage={this.state.err_placa}
             returnKeyType="next"
-            value={this.state.placa}
+            ref={input => (this.placa = input)}
+            onSubmitEditing={() => this.renavam.focus()}
+            blurOnSubmit={false}
             onChangeText={placa => this.setState({ placa })}
           />
 
           <Input
-            label="Renavam"
+            label="Renavam *"
+            value={this.state.renavam}
             errorMessage={this.state.err_renavam}
             returnKeyType="next"
-            value={this.state.renavam}
+            ref={input => (this.renavam = input)}
+            onSubmitEditing={() => this.marca.focus()}
+            blurOnSubmit={false}
             onChangeText={renavam => this.setState({ renavam })}
           />
 
           <Input
-            label="Marca"
+            label="Marca *"
+            value={this.state.marca}
             errorMessage={this.state.err_marca}
             returnKeyType="next"
-            value={this.state.marca}
+            ref={input => (this.marca = input)}
+            onSubmitEditing={() => this.modelo.focus()}
+            blurOnSubmit={false}
             onChangeText={marca => this.setState({ marca })}
           />
 
           <Input
-            label="Modelo"
+            label="Modelo *"
+            value={this.state.modelo}
             errorMessage={this.state.err_modelo}
             returnKeyType="next"
-            value={this.state.modelo}
+            ref={input => (this.modelo = input)}
+            onSubmitEditing={() => this.quilometragem.focus()}
+            blurOnSubmit={false}
             onChangeText={modelo => this.setState({ modelo })}
           />
 
-          <Input
-            keyboardType="numeric"
-            label="Quilometragem"
-            errorMessage={this.state.err_quilometragem}
-            returnKeyType="next"
-            value={`${this.state.quilometragem}`}
-            onChangeText={q => this.setKM(q)}
-          />
-
-          <Text
-            style={{
-              marginLeft: 10,
-              fontWeight: 'bold',
-              color: 'gray',
-              fontSize: 15,
-            }}
-          >
-            CNH Requerida
-          </Text>
-
+          <Text style={styles.labelCnh}>CNH Requerida *</Text>
           <Picker
             selectedValue={this.state.cnh_requerida}
             onValueChange={cnh_requerida => this.setState({ cnh_requerida })}
@@ -241,6 +245,17 @@ class CadastrarVeiculo extends React.Component {
             <Picker.Item label="E" value="E" />
           </Picker>
 
+          <Input
+            label="Quilometragem"
+            value={`${this.state.quilometragem}`}
+            errorMessage={this.state.err_quilometragem}
+            keyboardType="numeric"
+            returnKeyType="done"
+            ref={input => (this.quilometragem = input)}
+            onSubmitEditing={this.salvarVeiculo}
+            onChangeText={q => this.setKM(q)}
+          />
+
           <Botao
             onPress={() => this.salvarVeiculo()}
             title="Salvar"
@@ -248,7 +263,7 @@ class CadastrarVeiculo extends React.Component {
             isSubmetendo={this.props.isSubmetendo}
           />
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -256,6 +271,12 @@ class CadastrarVeiculo extends React.Component {
 const styles = StyleSheet.create({
   container: {
     ...commonStyles.container,
+  },
+  labelCnh: {
+    marginLeft: 10,
+    fontWeight: 'bold',
+    color: 'gray',
+    fontSize: 15,
   },
 });
 

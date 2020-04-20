@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -11,6 +11,8 @@ import Titulo from '../components/Titulo';
 import NumberFormat from 'react-number-format';
 import Spinner from 'react-native-loading-spinner-overlay';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Dimensions } from 'react-native';
 
 class DetalharViagem extends React.Component {
   state = {
@@ -29,6 +31,8 @@ class DetalharViagem extends React.Component {
       },
     },
     isLoading: true,
+
+    fade: new Animated.Value(-100),
   };
 
   componentDidMount = async () => {
@@ -51,6 +55,13 @@ class DetalharViagem extends React.Component {
     } else {
       this.props.navigation.goBack();
     }
+
+    Animated.loop(
+      Animated.timing(this.state.fade, {
+        toValue: Dimensions.get('window').width,
+        duration: 4000,
+      }),
+    ).start();
   };
 
   render() {
@@ -64,7 +75,7 @@ class DetalharViagem extends React.Component {
         />
         <Spinner visible={isLoading} />
 
-        <Titulo titulo="Viagem Detalhada" />
+        <Titulo titulo={`Detalhes da Viagem #${viagem.id}`} />
 
         <Text style={styles.infoTitle}>Motorista: </Text>
         <Text style={styles.infoValue}>{viagem.motorista.nome}</Text>
@@ -110,7 +121,25 @@ class DetalharViagem extends React.Component {
             />
           </View>
         ) : (
-          <Text style={styles.emAndamento}>VIAGEM EM ANDAMENTO</Text>
+          <Animated.View
+            useNativeDriver
+            style={[
+              styles.viewAnimated,
+              {
+                transform: [
+                  {
+                    translateX: this.state.fade,
+                  },
+                ],
+              },
+            ]}
+          >
+            <Icon
+              name="car-side"
+              size={50}
+              color={commonStyles.colors.secundaria}
+            />
+          </Animated.View>
         )}
       </View>
     );
@@ -126,10 +155,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginVertical: 10,
   },
-  emAndamento: {
-    marginVertical: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
+  viewAnimated: {
+    marginTop: 50,
   },
   infoTitle: {
     fontWeight: 'bold',

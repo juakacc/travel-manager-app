@@ -1,16 +1,24 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import Header from '../components/Header';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
 import ItemViagemConcluida from '../components/ItemViagemConcluida';
+import SemResultado from '../components/SemResultado';
 
 import axios from 'axios';
 import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import Titulo from '../components/Titulo';
+import PullRefresh from '../components/PullRefresh';
 
 class DisposicaoAtual extends React.Component {
   _isMounted = false;
@@ -23,26 +31,29 @@ class DisposicaoAtual extends React.Component {
   componentDidMount() {
     this._isMounted = true;
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      this.setState({ isLoading: true });
-      axios
-        .get('viagens?status=nao-concluida')
-        .then(res => {
-          if (this._isMounted) {
-            this.setState({
-              viagens: res.data,
-              isLoading: false,
-            });
-          }
-          // this.setState({ isLoading: false })
-        })
-        .catch(err => {
-          this.props.set_mensagem(err);
-          if (this._isMounted) {
-            this.setState({ isLoading: false });
-          }
-        });
+      this.carregarViagens();
     });
   }
+
+  carregarViagens = () => {
+    this.setState({ isLoading: true });
+    axios
+      .get('viagens?status=nao-concluida')
+      .then(res => {
+        if (this._isMounted) {
+          this.setState({
+            viagens: res.data,
+            isLoading: false,
+          });
+        }
+      })
+      .catch(err => {
+        this.props.set_mensagem(err);
+        if (this._isMounted) {
+          this.setState({ isLoading: false });
+        }
+      });
+  };
 
   componentWillUnmount() {
     this._isMounted = false;
@@ -56,7 +67,7 @@ class DisposicaoAtual extends React.Component {
           barStyle="ligth-content"
         />
 
-        <Header navigation={this.props.navigation} />
+        <PullRefresh />
         <Titulo titulo="Viagens em andamento" />
 
         <Spinner visible={this.state.isLoading} />
@@ -70,8 +81,15 @@ class DisposicaoAtual extends React.Component {
             />
           )}
           keyExtractor={item => `${item.id}`}
+          onRefresh={() => this.carregarViagens()}
+          refreshing={this.state.isLoading}
           ListEmptyComponent={
-            <Text style={styles.txtSemViagem}>Nenhuma viagem em andamento</Text>
+            <TouchableOpacity onPress={this.carregarViagens}>
+              <View style={styles.viewSemResultado}>
+                <SemResultado />
+                <Text>Toque para atualizar</Text>
+              </View>
+            </TouchableOpacity>
           }
         />
       </View>
@@ -85,7 +103,13 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(DisposicaoAtual);
+const mapStateToProps = ({ user }) => {
+  return {
+    motorista: user,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DisposicaoAtual);
 
 const styles = StyleSheet.create({
   container: {
@@ -100,7 +124,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
-
   title: {
     color: '#000',
     fontFamily: 'shelter',
@@ -121,5 +144,8 @@ const styles = StyleSheet.create({
   txtSemViagem: {
     marginTop: 10,
     textAlign: 'center',
+  },
+  viewSemResultado: {
+    alignItems: 'center',
   },
 });

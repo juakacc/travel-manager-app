@@ -28,10 +28,10 @@ export default props => {
         />
       ) : (
         <View style={styles.btnView}>
-          {props.name ? <Icon name={props.name} size={20} /> : null}
-          {props.title ? (
-            <Text style={comumStyles.btnText}>{' ' + props.title}</Text>
-          ) : null}
+          {props.name && <Icon name={props.name} size={20} />}
+          {props.title && (
+            <Text style={[comumStyles.btnText]}>{' ' + props.title}</Text>
+          )}
         </View>
       )}
     </TouchableOpacity>
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   },
   btnView: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
   },
 });

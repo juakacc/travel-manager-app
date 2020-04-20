@@ -138,7 +138,7 @@ class ListItem extends React.Component {
             <Botao
               title="Esconder"
               onPress={this.closeModal}
-              style={{ width: 100 }}
+              style={{ width: 200 }}
               name="minus-circle"
             />
           </View>

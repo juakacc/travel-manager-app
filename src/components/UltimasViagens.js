@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 
-import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { setMensagem } from '../store/actions/mensagem';
 
 import ItemViagemConcluida from './ItemViagemConcluida';
+import SemResultado from './SemResultado';
 
 class UltimasViagens extends React.Component {
   state = {
@@ -47,11 +48,7 @@ class UltimasViagens extends React.Component {
             />
           )}
           keyExtractor={item => `${item.id}`}
-          ListEmptyComponent={
-            <Text style={styles.txtSemRegistro}>
-              Nenhum registro encontrado
-            </Text>
-          }
+          ListEmptyComponent={<SemResultado />}
         />
       </View>
     );
@@ -68,14 +65,10 @@ export default connect(null, mapDispatchToProps)(UltimasViagens);
 
 const styles = StyleSheet.create({
   container: {
-    height: 150,
+    height: 170,
   },
   title: {
     fontWeight: 'bold',
     fontSize: 15,
-  },
-  txtSemRegistro: {
-    margin: 10,
-    textAlign: 'center',
   },
 });
