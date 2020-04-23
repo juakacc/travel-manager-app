@@ -182,6 +182,8 @@ class CadastrarPessoa extends React.Component {
       ? 'Edição de Pessoa'
       : 'Cadastro de Pessoa';
 
+    const { isEdit } = this.state;
+
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
@@ -249,14 +251,16 @@ class CadastrarPessoa extends React.Component {
               value={this.state.telefone}
               errorMessage={this.state.err_telefone}
               keyboardType="numeric"
-              returnKeyType="next"
+              returnKeyType={isEdit ? 'done' : 'next'}
               ref={input => (this.telefone = input)}
-              onSubmitEditing={() => this.senha.focus()}
+              onSubmitEditing={() =>
+                isEdit ? this.salvar() : this.senha.focus()
+              }
               blurOnSubmit={false}
               onChangeText={telefone => this.setState({ telefone })}
             />
 
-            {!this.state.isEdit && (
+            {!isEdit && (
               <View>
                 <CheckBox
                   title="É administrador?"
