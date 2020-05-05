@@ -2,6 +2,8 @@ import React from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import PTRView from 'react-native-pull-to-refresh';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { FloatingAction } from 'react-native-floating-action';
 
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -33,6 +35,7 @@ class Home extends React.Component {
     indice_msg: 0,
 
     fadeIn: new Animated.Value(0),
+    fabOpen: false,
   };
 
   componentDidMount() {
@@ -123,19 +126,65 @@ class Home extends React.Component {
     this.focusListener.remove();
   }
 
+  fabPressed = name => {
+    switch (name) {
+      case 'bt_service':
+        console.log('Serviçooo');
+        break;
+      case 'bt_fuel':
+        console.log('Abastecimentooo');
+        break;
+    }
+  };
+
   render() {
-    const { viagem, veiculos, isLoading, indice_msg } = this.state;
+    const { viagem, veiculos, isLoading, indice_msg, fabOpen } = this.state;
     const { navigation } = this.props;
     const alerta = textArray[indice_msg % textArray.length];
 
+    const actions = [
+      {
+        text: 'Serviço',
+        icon: (
+          <Icon
+            name="wrench"
+            size={20}
+            color={commonStyles.colors.secundaria}
+          />
+        ),
+        name: 'bt_service',
+        color: commonStyles.colors.principal,
+      },
+      {
+        text: 'Abastecimento',
+        icon: (
+          <Icon
+            name="gas-pump"
+            size={20}
+            color={commonStyles.colors.secundaria}
+          />
+        ),
+        name: 'bt_fuel',
+        color: commonStyles.colors.principal,
+      },
+    ];
+
+    const icon = (
+      <Icon
+        name="plus"
+        color={commonStyles.colors.secundaria}
+        size={20}
+        style={fabOpen ? { transform: [{ rotate: '45deg' }] } : {}}
+      />
+    );
+
     return (
-      <PTRView onRefresh={this.loadViagem}>
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <PTRView onRefresh={this.loadViagem}>
           <GeneralStatusBarColor
             backgroundColor={commonStyles.colors.secundaria}
             barStyle="ligth-content"
           />
-
           <PullRefresh />
           <Header />
           <Animated.Text
@@ -158,8 +207,18 @@ class Home extends React.Component {
             <FormSelectVeiculo navigation={navigation} veiculos={veiculos} />
           )}
           <ViagemAtual viagem={viagem} />
-        </View>
-      </PTRView>
+        </PTRView>
+
+        <FloatingAction
+          actions={actions}
+          onPressItem={this.fabPressed}
+          floatingIcon={icon}
+          onOpen={() => this.setState({ fabOpen: true })}
+          onClose={() => this.setState({ fabOpen: false })}
+          overlayColor={'rgba(170, 85, 0, 0.5)'}
+          color={commonStyles.colors.principal}
+        />
+      </View>
     );
   }
 }
