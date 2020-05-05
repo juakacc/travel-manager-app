@@ -187,6 +187,7 @@ class CadastrarVeiculo extends React.Component {
             onSubmitEditing={() => this.placa.focus()}
             blurOnSubmit={false}
             onChangeText={nome => this.setState({ nome })}
+            autoFocus
           />
 
           <Input

@@ -204,6 +204,7 @@ class CadastrarPessoa extends React.Component {
               onSubmitEditing={() => this.apelido.focus()}
               blurOnSubmit={false}
               onChangeText={nome => this.setState({ nome })}
+              autoFocus
             />
 
             <Input

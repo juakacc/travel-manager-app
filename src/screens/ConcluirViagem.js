@@ -5,8 +5,9 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
-import { Input } from 'react-native-elements';
+import { Input, CheckBox } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import moment from 'moment';
@@ -31,6 +32,7 @@ class ConcluirViagem extends React.Component {
 
     descricao: '',
     km_final: 0,
+    sem_movimentacao: false,
 
     errQuilometragem: '',
   };
@@ -67,22 +69,33 @@ class ConcluirViagem extends React.Component {
   };
 
   isValid = () => {
+    const { km_inicial, km_final, sem_movimentacao } = this.state;
+
     this.setState({
       errQuilometragem: '',
     });
 
-    if (isNaN(this.state.km_final)) {
+    if (isNaN(km_final)) {
       this.setState({
         errQuilometragem: 'Insira uma quilometragem válida!',
-        km_final: this.state.km_inicial,
+        km_final: km_inicial,
       });
       return false;
     }
-    if (this.state.km_final < this.state.km_inicial) {
+
+    if (km_inicial === km_final && !sem_movimentacao) {
+      Alert.alert(
+        'KM inicial = KM final',
+        'Para viagens sem movimentação marque a opção!',
+      );
+      return false;
+    }
+
+    if (km_final < km_inicial) {
       this.setState({
         errQuilometragem:
           'A quilometragem final não pode ser menor que a inicial!',
-        km_final: this.state.km_inicial,
+        km_final: km_inicial,
       });
       return false;
     }
@@ -93,16 +106,29 @@ class ConcluirViagem extends React.Component {
     if (this.isValid()) {
       const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm');
 
+      const {
+        id,
+        saida,
+        descricao,
+        km_inicial,
+        km_final,
+        veiculo,
+        motorista,
+        sem_movimentacao,
+      } = this.state;
+
       const dados = {
-        id: this.state.id,
+        id: id,
         viagem: {
-          saida: this.state.saida,
+          saida: saida,
           chegada: dataAtual,
-          descricao: this.state.descricao,
-          km_inicial: this.state.km_inicial,
-          km_final: this.state.km_final,
-          veiculo: this.state.veiculo,
-          motorista: this.state.motorista,
+          descricao: sem_movimentacao
+            ? `Sem movimentação: ${descricao}`
+            : descricao,
+          km_inicial: km_inicial,
+          km_final: km_final,
+          veiculo: veiculo,
+          motorista: motorista,
         },
       };
       this.props.onConcluirViagem(dados);
@@ -128,6 +154,17 @@ class ConcluirViagem extends React.Component {
             veículo)
           </Text>
 
+          <CheckBox
+            title="Viagem sem movimentação?"
+            checked={this.state.sem_movimentacao}
+            onPress={() =>
+              this.setState({
+                sem_movimentacao: !this.state.sem_movimentacao,
+                km_final: this.state.km_inicial,
+              })
+            }
+          />
+
           <Input
             keyboardType="numeric"
             label="Quilometragem *"
@@ -138,6 +175,8 @@ class ConcluirViagem extends React.Component {
             blurOnSubmit={false}
             value={`${this.state.km_final}`}
             onChangeText={km_final => this.setState({ km_final })}
+            disabled={this.state.sem_movimentacao}
+            disabledInputStyle={{ backgroundColor: 'gray' }}
           />
 
           <Input
