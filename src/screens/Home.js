@@ -132,7 +132,9 @@ class Home extends React.Component {
         console.log('Serviçooo');
         break;
       case 'bt_fuel':
-        console.log('Abastecimentooo');
+        this.props.navigation.navigate('AbastecerVeiculo', {
+          veiculo: this.state.viagem.veiculo,
+        });
         break;
     }
   };

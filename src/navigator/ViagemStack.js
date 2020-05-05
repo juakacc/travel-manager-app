@@ -5,6 +5,7 @@ import Home from '../screens/Home';
 import IniciarViagem from '../screens/IniciarViagem';
 import ConcluirViagem from '../screens/ConcluirViagem';
 import { header, BotaoDrawer } from './utils';
+import NewToFuel from '../screens/NewToFuel';
 
 export default createStackNavigator(
   {
@@ -16,6 +17,9 @@ export default createStackNavigator(
     },
     ConcluirViagem: {
       screen: ConcluirViagem,
+    },
+    AbastecerVeiculo: {
+      screen: NewToFuel,
     },
   },
   {
