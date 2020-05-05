@@ -20,6 +20,7 @@ import { header, BotaoVoltar, BotaoDrawer } from './utils';
 import LogoutStackNavigator from './LogoutStackNavigator';
 import DisposicaoAtualStack from './DisposicaoAtualStack';
 import ViagemStack from './ViagemStack';
+import commonStyles from '../commonStyles';
 
 const RelatorioStack = createStackNavigator(
   {
@@ -67,6 +68,32 @@ const HomeBottomTabNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => (
           <Ionicons name="ios-albums" size={30} color={tintColor} />
         ),
+      },
+    },
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: 'white',
+      inactiveTintColor: '#4F2500',
+      labelStyle: {
+        fontSize: 14,
+      },
+      style: {
+        backgroundColor: commonStyles.colors.secundaria,
+        paddingVertical: 10,
+        height: 70,
+        marginTop: 10,
+      },
+    },
+  },
+);
+
+const TesteStack = createStackNavigator(
+  {
+    Teste: {
+      screen: HomeBottomTabNavigator,
+      navigationOptions: {
+        header: null,
       },
     },
   },
@@ -118,7 +145,7 @@ const VeiculoStack = createStackNavigator(
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: {
-      screen: HomeBottomTabNavigator,
+      screen: TesteStack,
       navigationOptions: {
         drawerLabel: 'Tela Inicial',
         drawerIcon: ({ tintColor }) => (
@@ -166,13 +193,25 @@ const DrawerNavigator = createDrawerNavigator(
   },
 );
 
+const LoginStack = createStackNavigator(
+  {
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
+  {},
+);
+
 const SwitchNavigator = createSwitchNavigator(
   {
     Splash: {
       screen: Splash,
     },
     Auth: {
-      screen: Login,
+      screen: LoginStack,
     },
     App: {
       screen: DrawerNavigator,

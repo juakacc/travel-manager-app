@@ -30,23 +30,34 @@ class Home extends React.Component {
     viagem: null,
     veiculos: [],
     isLoading: false,
-    indice: 0,
+    indice_msg: 0,
 
     fadeIn: new Animated.Value(0),
   };
 
   componentDidMount() {
     this._isMounted = true;
+    this.animar();
+
     this.timeout = setInterval(() => {
       if (this._isMounted) {
-        let indice = this.state.indice + 1;
-        this.setState({ indice });
+        let indice_msg = this.state.indice_msg + 1;
+        this.setState({ indice_msg });
       }
     }, 5000);
 
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this.focusListener = this.props.navigation.addListener('willFocus', () => {
       this.loadViagem();
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.motorista.id !== this.props.motorista.id) {
+      this.loadViagem();
+    }
+  }
+
+  animar = () => {
     Animated.sequence([
       Animated.delay(500),
       Animated.timing(this.state.fadeIn, {
@@ -54,12 +65,11 @@ class Home extends React.Component {
         duration: 1000,
       }),
     ]).start();
-  }
+  };
 
-  loadViagem = async () => {
+  loadViagem = () => {
     this.setLoading(true);
-
-    await axios
+    axios
       .get(`viagens/atual/${this.props.motorista.id}`)
       .then(res => {
         if (this._isMounted) {
@@ -74,17 +84,18 @@ class Home extends React.Component {
           this.setState({ viagem: null });
         }
 
-        if (err.response && err.response.status !== 404) {
+        if (err.response && err.response.status === 404) {
+          // Não encontrou viagem
+          this.loadVeiculos();
+        } else {
           this.props.set_mensagem(err);
           this.setLoading(false);
-        } else {
-          this.loadVeiculos();
         }
       });
   };
 
-  loadVeiculos = async () => {
-    await axios
+  loadVeiculos = () => {
+    axios
       .get('veiculos/disponiveis')
       .then(res => {
         if (this._isMounted) {
@@ -113,10 +124,9 @@ class Home extends React.Component {
   }
 
   render() {
-    const alerta = textArray[this.state.indice % textArray.length];
-
-    const { viagem, veiculos, isLoading } = this.state;
+    const { viagem, veiculos, isLoading, indice_msg } = this.state;
     const { navigation } = this.props;
+    const alerta = textArray[indice_msg % textArray.length];
 
     return (
       <PTRView onRefresh={this.loadViagem}>

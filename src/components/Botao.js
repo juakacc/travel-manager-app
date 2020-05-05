@@ -22,7 +22,7 @@ export default props => {
     >
       {props.isSubmetendo ? (
         <ActivityIndicator
-          animating={true}
+          animating
           size="small"
           color={commonStyles.colors.secundaria}
         />
@@ -40,6 +40,7 @@ export default props => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
+    elevation: 5,
     height: 40,
     justifyContent: 'center',
     marginVertical: 10,

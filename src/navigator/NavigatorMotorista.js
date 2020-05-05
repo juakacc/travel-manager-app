@@ -16,6 +16,7 @@ import LogoutStackNavigator from './LogoutStackNavigator';
 import DisposicaoAtualStack from './DisposicaoAtualStack';
 import ViagemStack from './ViagemStack';
 import CadastrarPessoa from '../screens/CadastrarPessoa';
+import commonStyles from '../commonStyles';
 
 const PessoasStack = createStackNavigator(
   {
@@ -77,7 +78,21 @@ const HomeBottomTabNavigator = createBottomTabNavigator(
       },
     },
   },
-  {},
+  {
+    tabBarOptions: {
+      activeTintColor: 'white',
+      inactiveTintColor: '#4F2500',
+      labelStyle: {
+        fontSize: 14,
+      },
+      style: {
+        backgroundColor: commonStyles.colors.secundaria,
+        paddingVertical: 10,
+        height: 70,
+        marginTop: 10,
+      },
+    },
+  },
 );
 
 const DrawerNavigator = createDrawerNavigator(

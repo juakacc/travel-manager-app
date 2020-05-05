@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { userLogged } from '../store/actions/user';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,12 +19,7 @@ class Splash extends React.Component {
   };
 
   render() {
-    return (
-      <View />
-      //   <View style={[styles.container, styles.horizontal]}>
-      // {/* <ActivityIndicator size="large" color="#ff0" /> */}
-      //   </View>
-    );
+    return <View style={styles.container}></View>;
   }
 }
 
@@ -39,11 +34,6 @@ export default connect(null, mapDispatchToProps)(Splash);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-  },
-  horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
+    backgroundColor: 'white',
   },
 });
