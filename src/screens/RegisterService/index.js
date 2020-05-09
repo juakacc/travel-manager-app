@@ -30,27 +30,43 @@ export default function RegisterService({ navigation }) {
   const [veiculo, setVeiculo] = useState(() => {
     return navigation.getParam('veiculo');
   });
-
-  const [km, setKm] = useState(() => {
-    return veiculo.quilometragem;
-  });
+  const [km, setKm] = useState(veiculo.quilometragem);
+  const [nextKm, setNextKm] = useState(km);
   const [description, setDescription] = useState('');
-
-  const [dateShow, setDateShow] = useState('__/__/____');
+  const [dateShow, setDateShow] = useState('___/___/_____');
   const [date, setDate] = useState(new Date(moment()));
+
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [kmError, setKmError] = useState('');
-  const [ltError, setLtError] = useState('');
+  const [nextKmError, setNextKmError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+
+  const descriptionTxt = useRef(null);
 
   const isValid = () => {
     setKmError('');
-    setLtError('');
+    setNextKmError('');
+    setDescriptionError('');
+
     let valid = true;
 
     if (isNaN(km)) {
-      setKmError('Quilometragem inválida');
+      setKmError('Quilometragem atual inválida');
       valid = false;
+    }
+
+    if (description.trim().length === 0) {
+      setDescriptionError('Informe uma descrição para o serviço');
+      valid = false;
+    }
+
+    if (nextKm.toString().length > 0) {
+      // Tem algum valor
+      if (isNaN(nextKm)) {
+        setNextKmError('Quilometragem inválida');
+        valid = false;
+      }
     }
     return valid;
   };
@@ -88,7 +104,7 @@ export default function RegisterService({ navigation }) {
           backgroundColor={commonStyles.colors.secundaria}
           barStyle="ligth-content"
         />
-        <Titulo titulo="Tela de serviço" />
+        <Titulo titulo="Cadastro de serviço" />
 
         <Text style={styles.txtVeiculo}>
           Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
@@ -96,21 +112,24 @@ export default function RegisterService({ navigation }) {
 
         <Input
           keyboardType="numeric"
-          label="Quilometragem *"
+          label="KM atual *"
           value={`${km}`}
           errorMessage={kmError}
           returnKeyType="next"
+          onSubmitEditing={() => descriptionTxt.current.focus()}
           blurOnSubmit={false}
-          onChangeText={km => setKm(km)}
+          onChangeText={value => {
+            setKm(value);
+            setNextKm(value);
+          }}
         />
 
         <Input
           label="Descrição *"
           value={description}
-          returnKeyType="done"
-          // ref={input => (this.input_02 = input)}
-          onSubmitEditing={save}
-          onChangeText={d => setDescription(d)}
+          ref={descriptionTxt}
+          errorMessage={descriptionError}
+          onChangeText={value => setDescription(value)}
         />
 
         <ContainerRevisao>
@@ -118,16 +137,14 @@ export default function RegisterService({ navigation }) {
 
           <Input
             keyboardType="numeric"
-            label="Quilometragem *"
-            value={`${km}`}
-            errorMessage={kmError}
-            returnKeyType="next"
-            blurOnSubmit={false}
-            onChangeText={km => setKm(km)}
+            label="Próximo KM"
+            value={`${nextKm}`}
+            errorMessage={nextKmError}
+            onChangeText={value => setNextKm(value)}
           />
 
           <TextAlertRevisao>
-            Altere a data caso o veículo necessite de notificação
+            Altere a data caso o veículo realize revisão por data
           </TextAlertRevisao>
 
           <TouchableOpacity onPress={() => setShowDatePicker(true)}>

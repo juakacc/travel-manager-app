@@ -176,7 +176,7 @@ class ConcluirViagem extends React.Component {
             value={`${this.state.km_final}`}
             onChangeText={km_final => this.setState({ km_final })}
             disabled={this.state.sem_movimentacao}
-            disabledInputStyle={{ backgroundColor: 'gray' }}
+            disabledInputStyle={{ backgroundColor: '#a50' }}
           />
 
           <Input

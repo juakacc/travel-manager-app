@@ -15,7 +15,7 @@ export const TituloRevisao = styled.Text`
 
 export const ContainerRevisao = styled.View`
   padding: 10px;
-  margin: 5px;
+  margin: 10px;
   border-style: solid;
   border-width: 2px;
   border-radius: 5px;
@@ -25,6 +25,7 @@ export const ContainerRevisao = styled.View`
 
 export const TextAlertRevisao = styled.Text`
   font-size: 14px;
+  font-weight: bold;
   color: #f00;
   align-self: center;
   margin-top: 10px;

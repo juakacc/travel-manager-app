@@ -120,7 +120,7 @@ const DrawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Atualizar Dados',
         drawerIcon: ({ tintColor }) => (
-          <Ionicons name="ios-build" size={25} color={tintColor} />
+          <Ionicons name="ios-create" size={25} color={tintColor} />
         ),
       },
     },
@@ -129,7 +129,7 @@ const DrawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Sobre o App',
         drawerIcon: () => (
-          <Ionicons name="ios-help-circle-outline" size={25} color="blue" />
+          <Ionicons name="ios-help-circle" size={25} color="blue" />
         ),
       },
     },

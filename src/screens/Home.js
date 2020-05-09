@@ -150,18 +150,6 @@ class Home extends React.Component {
 
     const actions = [
       {
-        text: 'Serviço',
-        icon: (
-          <Icon
-            name="wrench"
-            size={20}
-            color={commonStyles.colors.secundaria}
-          />
-        ),
-        name: 'bt_service',
-        color: commonStyles.colors.principal,
-      },
-      {
         text: 'Abastecimento',
         icon: (
           <Icon
@@ -171,6 +159,18 @@ class Home extends React.Component {
           />
         ),
         name: 'bt_fuel',
+        color: commonStyles.colors.principal,
+      },
+      {
+        text: 'Serviço',
+        icon: (
+          <Icon
+            name="wrench"
+            size={20}
+            color={commonStyles.colors.secundaria}
+          />
+        ),
+        name: 'bt_service',
         color: commonStyles.colors.principal,
       },
     ];

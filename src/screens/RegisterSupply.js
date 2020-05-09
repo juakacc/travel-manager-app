@@ -69,7 +69,7 @@ export default function RegisterSupply({ navigation }) {
           backgroundColor={commonStyles.colors.secundaria}
           barStyle="ligth-content"
         />
-        <Titulo titulo="Tela de abastecimento" />
+        <Titulo titulo="Cadastro de abastecimento" />
 
         <Text style={styles.txtVeiculo}>
           Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
