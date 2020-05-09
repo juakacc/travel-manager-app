@@ -14,7 +14,7 @@ import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
 
-export default function NewToFuel({ navigation }) {
+export default function RegisterSupply({ navigation }) {
   const [veiculo, setVeiculo] = useState(() => {
     return navigation.getParam('veiculo');
   });
@@ -72,10 +72,7 @@ export default function NewToFuel({ navigation }) {
         <Titulo titulo="Tela de abastecimento" />
 
         <Text style={styles.txtVeiculo}>
-          Veículo:{' '}
-          <Text style={styles.veiculo}>
-            {navigation.getParam('veiculo').nome}
-          </Text>
+          Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
         </Text>
 
         <Input

@@ -127,13 +127,17 @@ class Home extends React.Component {
   }
 
   fabPressed = name => {
+    const { veiculo } = this.state.viagem;
+
     switch (name) {
       case 'bt_service':
-        console.log('Serviçooo');
+        this.props.navigation.navigate('RegisterService', {
+          veiculo: veiculo,
+        });
         break;
       case 'bt_fuel':
-        this.props.navigation.navigate('AbastecerVeiculo', {
-          veiculo: this.state.viagem.veiculo,
+        this.props.navigation.navigate('RegisterSupply', {
+          veiculo: veiculo,
         });
         break;
     }
@@ -211,15 +215,17 @@ class Home extends React.Component {
           <ViagemAtual viagem={viagem} />
         </PTRView>
 
-        <FloatingAction
-          actions={actions}
-          onPressItem={this.fabPressed}
-          floatingIcon={icon}
-          onOpen={() => this.setState({ fabOpen: true })}
-          onClose={() => this.setState({ fabOpen: false })}
-          overlayColor={'rgba(170, 85, 0, 0.5)'}
-          color={commonStyles.colors.principal}
-        />
+        {viagem?.veiculo && (
+          <FloatingAction
+            actions={actions}
+            onPressItem={this.fabPressed}
+            floatingIcon={icon}
+            onOpen={() => this.setState({ fabOpen: true })}
+            onClose={() => this.setState({ fabOpen: false })}
+            overlayColor={'rgba(170, 85, 0, 0.5)'}
+            color={commonStyles.colors.principal}
+          />
+        )}
       </View>
     );
   }
