@@ -1,7 +1,7 @@
 import { SET_MENSAGEM } from './actionTypes';
 
 import { userLoggout } from '../actions/user';
-import NavigatorService from '../../navigator/NavigatorService';
+// import NavigatorService from '../../navigator/NavigatorService';
 
 export const setMensagem = msg => {
   return dispatch => {
@@ -16,7 +16,7 @@ export const setMensagem = msg => {
         if (msg.response.data.tokenExpirado) {
           dispatch(set_mensagem_string('Token expirado, refaça o login.'));
           dispatch(userLoggout());
-          NavigatorService.navigate('Auth');
+          // NavigatorService.navigate('Auth');
         } else {
           dispatch(
             set_mensagem_string(msg.response.data.mensagem || msg_padrao),

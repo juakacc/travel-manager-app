@@ -1,19 +1,18 @@
 import React from 'react';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import Login from '../screens/Login';
 import Relatorio from '../screens/Relatorio';
-import Splash from '../screens/LoginOuApp';
 import CadastrarPessoa from '../screens/CadastrarPessoa';
 import CadastrarVeiculo from '../screens/CadastrarVeiculo';
 import DetalharViagem from '../screens/DetalharViagem';
 import Sobre from '../screens/Sobre';
 import ListPessoas from '../screens/ListPessoas';
 import ListVeiculos from '../screens/ListVeiculos';
-
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { header, BotaoVoltar, BotaoDrawer } from './utils';
@@ -22,204 +21,79 @@ import DisposicaoAtualStack from './DisposicaoAtualStack';
 import ViagemStack from './ViagemStack';
 import commonStyles from '../commonStyles';
 
-const RelatorioStack = createStackNavigator(
-  {
-    Relatorio: {
-      screen: Relatorio,
-    },
-    ViagemDetalhes: {
-      screen: DetalharViagem,
-    },
-  },
-  {
-    initialRouteName: 'Relatorio',
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: ({ navigation }) => ({
-      ...header,
-      headerRight: <BotaoDrawer navigationProps={navigation} />,
-    }),
-  },
-);
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
-const HomeBottomTabNavigator = createBottomTabNavigator(
-  {
-    Home: {
-      screen: ViagemStack,
-      navigationOptions: {
-        title: 'Início',
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-car" size={30} color={tintColor} />
-        ),
-      },
-    },
-    Disposicao: {
-      screen: DisposicaoAtualStack,
-      navigationOptions: {
-        title: 'Viagens',
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-body" size={30} color={tintColor} />
-        ),
-      },
-    },
-    Viagens: {
-      screen: RelatorioStack,
-      navigationOptions: {
-        title: 'Relatórios',
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-albums" size={30} color={tintColor} />
-        ),
-      },
-    },
-  },
-  {
-    tabBarOptions: {
-      activeTintColor: 'white',
-      inactiveTintColor: '#4F2500',
-      labelStyle: {
-        fontSize: 14,
-      },
-      style: {
-        backgroundColor: commonStyles.colors.secundaria,
-        paddingVertical: 10,
-        height: 70,
-        marginTop: 10,
-      },
-    },
-  },
-);
+function RelatorioStack() {
+  return (
+    <Stack.Navigator initialRouteName="Relatorio">
+      <Stack.Screen component={Relatorio} name="Relatorio" />
+      <Stack.Screen component={DetalharViagem} name="ViagemDetalhes" />
+    </Stack.Navigator>
+  );
+}
 
-const TesteStack = createStackNavigator(
-  {
-    Teste: {
-      screen: HomeBottomTabNavigator,
-      navigationOptions: {
-        header: null,
-      },
-    },
-  },
-  {},
-);
+function HomeBottomTabNavigator() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen component={ViagemStack} name="Home" />
+      <Tab.Screen component={DisposicaoAtualStack} name="Disposicao" />
+      <Tab.Screen component={RelatorioStack} name="Viagens" />
+    </Tab.Navigator>
+  );
+}
 
-const PessoasStack = createStackNavigator(
-  {
-    PessoasScreen: {
-      screen: ListPessoas,
-      navigationOptions: ({ navigation }) => ({
-        headerLeft: <BotaoVoltar navigationProps={navigation} />,
-      }),
-    },
-    CadastrarPessoa: {
-      screen: CadastrarPessoa,
-    },
-  },
-  {
-    initialRouteName: 'PessoasScreen',
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: {
-      ...header,
-    },
-  },
-);
+function PessoasStack() {
+  return (
+    <Stack.Navigator initialRouteName="PessoasScreen">
+      <Stack.Screen component={ListPessoas} name="PessoasScreen" />
+      <Stack.Screen component={CadastrarPessoa} name="CadastrarPessoa" />
+    </Stack.Navigator>
+  );
+}
 
-const VeiculoStack = createStackNavigator(
-  {
-    VeiculosScreen: {
-      screen: ListVeiculos,
-      navigationOptions: ({ navigation }) => ({
-        headerLeft: <BotaoVoltar navigationProps={navigation} />,
-      }),
-    },
-    CadastrarVeiculo: {
-      screen: CadastrarVeiculo,
-    },
-  },
-  {
-    initialRouteName: 'VeiculosScreen',
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: {
-      ...header,
-    },
-  },
-);
+function VeiculoStack() {
+  return (
+    <Stack.Navigator initialRouteName="VeiculosScreen">
+      <Stack.Screen component={ListVeiculos} name="VeiculosScreen" />
+      <Stack.Screen component={CadastrarVeiculo} name="CadastrarVeiculo" />
+    </Stack.Navigator>
+  );
+}
 
-const DrawerNavigator = createDrawerNavigator(
-  {
-    Home: {
-      screen: TesteStack,
-      navigationOptions: {
-        drawerLabel: 'Tela Inicial',
-        drawerIcon: ({ tintColor }) => (
-          <Ionicons name="ios-home" size={25} color={tintColor} />
-        ),
-      },
-    },
-    Pessoas: {
-      screen: PessoasStack,
-      navigationOptions: {
-        drawerLabel: 'Pessoas',
-        drawerIcon: ({ tintColor }) => (
-          <Ionicons name="ios-person-add" size={25} color={tintColor} />
-        ),
-      },
-    },
-    Veiculos: {
-      screen: VeiculoStack,
-      navigationOptions: {
-        drawerLabel: 'Veículos',
-        drawerIcon: ({ tintColor }) => (
-          <Ionicons name="ios-car" size={25} color={tintColor} />
-        ),
-      },
-    },
-    Sobre: {
-      screen: Sobre,
-      navigationOptions: {
-        drawerLabel: 'Sobre o App',
-        drawerIcon: () => (
-          <Ionicons name="ios-help-circle-outline" size={25} color="blue" />
-        ),
-      },
-    },
-    Logout: {
-      screen: LogoutStackNavigator,
-      navigationOptions: {
-        drawerLabel: 'Sair',
-        drawerIcon: () => <Ionicons name="ios-power" size={25} color="red" />,
-      },
-    },
-  },
-  {
-    drawerPosition: 'right',
-  },
-);
+export function DrawerNavigator() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen component={HomeBottomTabNavigator} name="Home" />
+      <Drawer.Screen component={PessoasStack} name="Pessoas" />
+      <Drawer.Screen component={VeiculoStack} name="Veiculos" />
+      <Drawer.Screen component={Sobre} name="Sobre" />
+      <Drawer.Screen component={LogoutStackNavigator} name="Logout" />
+    </Drawer.Navigator>
+  );
+}
 
-const LoginStack = createStackNavigator(
-  {
-    Login: {
-      screen: Login,
-      navigationOptions: {
-        header: null,
-      },
-    },
-  },
-  {},
-);
+export function LoginStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen component={Login} name="Login" />
+    </Stack.Navigator>
+  );
+}
 
-const SwitchNavigator = createSwitchNavigator(
-  {
-    Splash: {
-      screen: Splash,
-    },
-    Auth: {
-      screen: LoginStack,
-    },
-    App: {
-      screen: DrawerNavigator,
-    },
-  },
-  {
-    initialRouteName: 'Splash',
-  },
-);
-
-export default createAppContainer(SwitchNavigator);
+// export default function Navigation() {
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator>
+//         {false ? (
+//           <>
+//             <Stack.Screen component={DrawerNavigator} name="App" />
+//           </>
+//         ) : (
+//           <Stack.Screen component={LoginStack} name="Auth" />
+//         )}
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }
