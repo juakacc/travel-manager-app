@@ -26,7 +26,6 @@ class Logout extends React.Component {
 
   logout = () => {
     this.props.onLogout();
-    this.props.navigation.navigate('Login');
   };
 
   render() {

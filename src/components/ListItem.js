@@ -16,8 +16,10 @@ class ListItem extends React.Component {
   };
 
   editar = () => {
-    this.props.navigation.navigate(this.props.editScreen, {
-      itemId: this.props.item.id,
+    const { editScreen, item, navigation } = this.props;
+
+    navigation.push(editScreen, {
+      itemId: item.id,
     });
   };
 

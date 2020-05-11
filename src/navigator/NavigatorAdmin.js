@@ -7,15 +7,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Relatorio from '../screens/Relatorio';
 
+import ListVeiculos from '../screens/ListVeiculos';
 import CadastrarVeiculo from '../screens/CadastrarVeiculo';
+import ListPessoas from '../screens/ListPessoas';
+import CadastrarPessoa from '../screens/CadastrarPessoa';
 import DetalharViagem from '../screens/DetalharViagem';
 import Sobre from '../screens/Sobre';
-import ListVeiculos from '../screens/ListVeiculos';
 
 import { headerOptions } from './utils';
-import LogoutStackNavigator from './LogoutStackNavigator';
 import DisposicaoAtualStack from './DisposicaoAtualStack';
 import ViagemStack from './ViagemStack';
+import LogoutStack from './LogoutStack';
 import commonStyles from '../commonStyles';
 
 const Stack = createStackNavigator();
@@ -161,7 +163,7 @@ export default function DrawerNavigator() {
         }}
       />
       <Drawer.Screen
-        component={LogoutStackNavigator}
+        component={LogoutStack}
         name="Logout"
         options={{
           title: 'Sair',

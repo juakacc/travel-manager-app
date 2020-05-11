@@ -10,10 +10,10 @@ import { Input } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo';
-import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo';
+import { setMensagem } from '../store/actions/mensagem';
 
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import Botao from '../components/Botao';
@@ -45,7 +45,7 @@ class CadastrarVeiculo extends React.Component {
 
   componentDidUpdate = prevProps => {
     if (prevProps.isLoading && !this.props.isLoading) {
-      this.props.navigation.navigate('VeiculosScreen');
+      this.props.navigation.goBack();
     }
   };
 

@@ -11,10 +11,10 @@ import {
 import { Input, CheckBox } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import { salvar_usuario, editar_usuario } from '../store/actions/user';
-import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { salvar_usuario, editar_usuario } from '../store/actions/user';
+import { setMensagem } from '../store/actions/mensagem';
 
 import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
@@ -88,13 +88,7 @@ class CadastrarPessoa extends React.Component {
 
   componentDidUpdate = prevProps => {
     if (prevProps.isLoading && !this.props.isLoading) {
-      // @VALIDAR
       this.props.navigation.goBack();
-      // if (this.props.route.params.editThis) {
-      //   this.props.navigation.navigate('Home');
-      // } else {
-      //   this.props.navigation.navigate('PessoasScreen');
-      // }
     }
   };
 

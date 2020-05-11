@@ -9,19 +9,15 @@ import ListVeiculos from '../screens/ListVeiculos';
 import CadastrarPessoa from '../screens/CadastrarPessoa';
 
 import { headerOptions } from './utils';
-import LogoutStackNavigator from './LogoutStackNavigator';
 import DisposicaoAtualStack from './DisposicaoAtualStack';
 import ViagemStack from './ViagemStack';
+import LogoutStack from './LogoutStack';
 import commonStyles from '../commonStyles';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-// Passar parametro
-// params: {
-//     editThis: true,
-//   },
 function PessoasStack() {
   return (
     <Stack.Navigator
@@ -30,7 +26,13 @@ function PessoasStack() {
         ...headerOptions(navigation, true),
       })}
     >
-      <Stack.Screen component={CadastrarPessoa} name="CadastrarPessoa" />
+      <Stack.Screen
+        component={CadastrarPessoa}
+        name="CadastrarPessoa"
+        initialParams={{
+          editThis: true,
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -135,7 +137,7 @@ export default function DrawerNavigator() {
         }}
       />
       <Drawer.Screen
-        component={LogoutStackNavigator}
+        component={LogoutStack}
         name="Logout"
         options={{
           title: 'Sair',
