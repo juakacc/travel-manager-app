@@ -1,166 +1,149 @@
-// import React from 'react';
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-// import Login from '../screens/Login';
-// import Splash from '../screens/LoginOuApp';
-// import Sobre from '../screens/Sobre';
-// import ListVeiculos from '../screens/ListVeiculos';
+import Sobre from '../screens/Sobre';
+import ListVeiculos from '../screens/ListVeiculos';
+import CadastrarPessoa from '../screens/CadastrarPessoa';
 
-// import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-// import { createStackNavigator } from 'react-navigation-stack';
-// import { createDrawerNavigator } from 'react-navigation-drawer';
+import { headerOptions } from './utils';
+import LogoutStackNavigator from './LogoutStackNavigator';
+import DisposicaoAtualStack from './DisposicaoAtualStack';
+import ViagemStack from './ViagemStack';
+import commonStyles from '../commonStyles';
 
-// import Ionicons from 'react-native-vector-icons/Ionicons';
-// import { createBottomTabNavigator } from 'react-navigation-tabs';
-// import { header, BotaoVoltar } from './utils';
-// import LogoutStackNavigator from './LogoutStackNavigator';
-// import DisposicaoAtualStack from './DisposicaoAtualStack';
-// import ViagemStack from './ViagemStack';
-// import CadastrarPessoa from '../screens/CadastrarPessoa';
-// import commonStyles from '../commonStyles';
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
-// const PessoasStack = createStackNavigator(
-//   {
-//     PessoasScreen: {
-//       screen: CadastrarPessoa,
-//       params: {
-//         editThis: true,
-//       },
-//       navigationOptions: ({ navigation }) => ({
-//         headerLeft: <BotaoVoltar navigationProps={navigation} />,
-//       }),
-//     },
+// Passar parametro
+// params: {
+//     editThis: true,
 //   },
-//   {
-//     initialRouteName: 'PessoasScreen',
-//     headerLayoutPreset: 'center',
-//     defaultNavigationOptions: {
-//       ...header,
-//     },
-//   },
-// );
+function PessoasStack() {
+  return (
+    <Stack.Navigator
+      initialRouteName="PessoasScreen"
+      screenOptions={({ navigation }) => ({
+        ...headerOptions(navigation, true),
+      })}
+    >
+      <Stack.Screen component={CadastrarPessoa} name="CadastrarPessoa" />
+    </Stack.Navigator>
+  );
+}
 
-// const VeiculoStack = createStackNavigator(
-//   {
-//     VeiculosScreen: {
-//       screen: ListVeiculos,
-//       navigationOptions: ({ navigation }) => ({
-//         headerLeft: <BotaoVoltar navigationProps={navigation} />,
-//       }),
-//     },
-//   },
-//   {
-//     initialRouteName: 'VeiculosScreen',
-//     headerLayoutPreset: 'center',
-//     defaultNavigationOptions: {
-//       ...header,
-//     },
-//   },
-// );
+function VeiculoStack() {
+  return (
+    <Stack.Navigator
+      initialRouteName="VeiculosScreen"
+      screenOptions={({ navigation }) => ({
+        ...headerOptions(navigation, true),
+      })}
+    >
+      <Stack.Screen component={ListVeiculos} name="VeiculosScreen" />
+    </Stack.Navigator>
+  );
+}
 
-// const HomeBottomTabNavigator = createBottomTabNavigator(
-//   {
-//     Home: {
-//       screen: ViagemStack,
-//       navigationOptions: {
-//         title: 'Início',
-//         tabBarIcon: ({ tintColor }) => (
-//           <Ionicons name="ios-car" size={30} color={tintColor} />
-//         ),
-//       },
-//     },
-//     Viagens: {
-//       screen: DisposicaoAtualStack,
-//       navigationOptions: {
-//         title: 'Viagens',
-//         tabBarIcon: ({ tintColor }) => (
-//           <Ionicons name="ios-body" size={30} color={tintColor} />
-//         ),
-//       },
-//     },
-//   },
-//   {
-//     tabBarOptions: {
-//       activeTintColor: 'white',
-//       inactiveTintColor: '#4F2500',
-//       labelStyle: {
-//         fontSize: 14,
-//       },
-//       style: {
-//         backgroundColor: commonStyles.colors.secundaria,
-//         paddingVertical: 10,
-//         height: 70,
-//         marginTop: 10,
-//       },
-//     },
-//   },
-// );
+function HomeBottomTabNavigator() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      tabBarOptions={{
+        keyboardHidesTabBar: true,
+        activeTintColor: '#fff',
+        inactiveTintColor: '#4F2500',
+        labelStyle: {
+          fontSize: 14,
+        },
+        style: {
+          backgroundColor: commonStyles.colors.secundaria,
+          paddingVertical: 10,
+          height: 70,
+          marginTop: 5,
+        },
+      }}
+    >
+      <Tab.Screen
+        component={ViagemStack}
+        name="Home"
+        options={{
+          title: 'Início',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="ios-car" size={30} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        component={DisposicaoAtualStack}
+        name="Disposicao"
+        options={{
+          title: 'Viagens',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="ios-body" size={30} color={color} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
 
-// const DrawerNavigator = createDrawerNavigator(
-//   {
-//     Home: {
-//       screen: HomeBottomTabNavigator,
-//       navigationOptions: {
-//         drawerLabel: 'Tela Inicial',
-//         drawerIcon: ({ tintColor }) => (
-//           <Ionicons name="ios-home" size={25} color={tintColor} />
-//         ),
-//       },
-//     },
-//     Veiculos: {
-//       screen: VeiculoStack,
-//       navigationOptions: {
-//         drawerLabel: 'Veículos',
-//         drawerIcon: ({ tintColor }) => (
-//           <Ionicons name="ios-car" size={25} color={tintColor} />
-//         ),
-//       },
-//     },
-//     Pessoas: {
-//       screen: PessoasStack,
-//       navigationOptions: {
-//         drawerLabel: 'Atualizar Dados',
-//         drawerIcon: ({ tintColor }) => (
-//           <Ionicons name="ios-create" size={25} color={tintColor} />
-//         ),
-//       },
-//     },
-//     Sobre: {
-//       screen: Sobre,
-//       navigationOptions: {
-//         drawerLabel: 'Sobre o App',
-//         drawerIcon: () => (
-//           <Ionicons name="ios-help-circle" size={25} color="blue" />
-//         ),
-//       },
-//     },
-//     Logout: {
-//       screen: LogoutStackNavigator,
-//       navigationOptions: {
-//         drawerLabel: 'Sair',
-//         drawerIcon: () => <Ionicons name="ios-power" size={25} color="red" />,
-//       },
-//     },
-//   },
-//   {
-//     drawerPosition: 'right',
-//   },
-// );
-
-// const SwitchNavigator = createSwitchNavigator(
-//   {
-//     Splash: {
-//       screen: Splash,
-//     },
-//     Auth: {
-//       screen: Login,
-//     },
-//     App: {
-//       screen: DrawerNavigator,
-//     },
-//   },
-//   {
-//     initialRouteName: 'Splash',
-//   },
-// );
-
-// export default createAppContainer(SwitchNavigator);
+export default function DrawerNavigator() {
+  return (
+    <Drawer.Navigator drawerPosition="right">
+      <Drawer.Screen
+        component={HomeBottomTabNavigator}
+        name="Home"
+        options={{
+          title: 'Tela Inicial',
+          drawerIcon: ({ color }) => (
+            <Ionicons name="ios-home" size={25} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        component={VeiculoStack}
+        name="Veiculos"
+        options={{
+          title: 'Veículos',
+          drawerIcon: ({ color }) => (
+            <Ionicons name="ios-car" size={25} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        component={PessoasStack}
+        name="Pessoas"
+        options={{
+          title: 'Atualizar Dados',
+          drawerIcon: ({ color }) => (
+            <Ionicons name="ios-create" size={25} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        component={Sobre}
+        name="Sobre"
+        options={{
+          title: 'Sobre o App',
+          drawerIcon: () => (
+            <Ionicons name="ios-help-circle-outline" size={25} color="#00f" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        component={LogoutStackNavigator}
+        name="Logout"
+        options={{
+          title: 'Sair',
+          drawerIcon: () => (
+            <Ionicons name="ios-power" size={25} color="#f00" />
+          ),
+        }}
+      />
+    </Drawer.Navigator>
+  );
+}

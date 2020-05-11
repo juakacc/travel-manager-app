@@ -6,11 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Relatorio from '../screens/Relatorio';
-import CadastrarPessoa from '../screens/CadastrarPessoa';
+
 import CadastrarVeiculo from '../screens/CadastrarVeiculo';
 import DetalharViagem from '../screens/DetalharViagem';
 import Sobre from '../screens/Sobre';
-import ListPessoas from '../screens/ListPessoas';
 import ListVeiculos from '../screens/ListVeiculos';
 
 import { headerOptions } from './utils';
@@ -118,7 +117,7 @@ function VeiculoStack() {
   );
 }
 
-export function DrawerNavigator() {
+export default function DrawerNavigator() {
   return (
     <Drawer.Navigator drawerPosition="right">
       <Drawer.Screen

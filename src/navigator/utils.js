@@ -6,15 +6,22 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import commonStyles from '../commonStyles';
 
 export const headerOptions = (navigation, btnBack = false) => {
-  return {
+  const header = {
     headerTitle: () => <Header />,
     headerTitleAlign: 'center',
     headerStyle: {
       backgroundColor: commonStyles.colors.principal,
     },
     headerRight: () => <BotaoDrawer navigation={navigation} />,
-    headerLeft: btnBack ? () => <BotaoVoltar navigation={navigation} /> : null,
   };
+
+  if (btnBack) {
+    return Object.assign({}, header, {
+      headerLeft: () => <BotaoVoltar navigation={navigation} />,
+    });
+  } else {
+    return header;
+  }
 };
 
 const Header = () => {

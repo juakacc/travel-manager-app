@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { DrawerNavigator } from './navigator/Navigator';
+import getNavigator from './navigator';
 import LoginStack from './navigator/LoginStack';
-// import NavigatorMotorista from './navigator/NavigatorMotorista';
 // import NavigatorService from './navigator/NavigatorService';
 
 import { connect } from 'react-redux';
@@ -16,6 +13,7 @@ import { setMensagem } from './store/actions/mensagem';
 import { ToastAndroid } from 'react-native';
 
 import { userLogged } from './store/actions/user';
+import Login from './screens/Login';
 
 const Stack = createStackNavigator();
 
@@ -44,9 +42,11 @@ class App extends Component {
         <NavigationContainer>
           <Stack.Navigator headerMode="none">
             {user.token ? (
-              <Stack.Screen component={DrawerNavigator} name="App" />
+              getNavigator(user.permissoes.includes('admin'))
             ) : (
-              <Stack.Screen component={LoginStack} name="Auth" />
+              // <Stack.Screen component={DrawerNavigator} name="App" />
+              // <Stack.Screen component={LoginStack} name="Auth" />
+              <Stack.Screen component={Login} name="Login" />
             )}
           </Stack.Navigator>
         </NavigationContainer>
