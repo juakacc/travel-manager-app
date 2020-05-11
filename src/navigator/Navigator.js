@@ -5,7 +5,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import Login from '../screens/Login';
 import Relatorio from '../screens/Relatorio';
 import CadastrarPessoa from '../screens/CadastrarPessoa';
 import CadastrarVeiculo from '../screens/CadastrarVeiculo';
@@ -173,13 +172,5 @@ export function DrawerNavigator() {
         }}
       />
     </Drawer.Navigator>
-  );
-}
-
-export function LoginStack() {
-  return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen component={Login} name="Login" />
-    </Stack.Navigator>
   );
 }

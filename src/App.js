@@ -6,7 +6,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { LoginStack, DrawerNavigator } from './navigator/Navigator';
+import { DrawerNavigator } from './navigator/Navigator';
+import LoginStack from './navigator/LoginStack';
 // import NavigatorMotorista from './navigator/NavigatorMotorista';
 // import NavigatorService from './navigator/NavigatorService';
 
