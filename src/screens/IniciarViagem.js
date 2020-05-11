@@ -53,7 +53,8 @@ class IniciarViagem extends React.Component {
   };
 
   componentDidMount = () => {
-    const veiculoId = this.props.navigation.getParam('idVeiculo');
+    const { route } = this.props;
+    const { idVeiculo: veiculoId } = route.params;
 
     if (!veiculoId) {
       this.props.setMensagem('Veículo inválido');

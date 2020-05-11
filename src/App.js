@@ -37,37 +37,20 @@ class App extends Component {
 
   render() {
     const { user } = this.props;
-    console.log(user);
-    // if (this.props.isAdmin) {
+
     return (
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator>
-            {user.token ? ( // autenticado
+          <Stack.Navigator headerMode="none">
+            {user.token ? (
               <Stack.Screen component={DrawerNavigator} name="App" />
             ) : (
               <Stack.Screen component={LoginStack} name="Auth" />
             )}
           </Stack.Navigator>
         </NavigationContainer>
-        {/* <Navigator
-        // ref={navigatorRef => {
-        //   NavigatorService.setTopLevelNavigator(navigatorRef);
-        // }}
-        /> */}
       </SafeAreaProvider>
     );
-    // } else {
-    //   return (
-    //     <SafeAreaProvider>
-    //       <NavigatorMotorista
-    //         ref={navigatorRef => {
-    //           NavigatorService.setTopLevelNavigator(navigatorRef);
-    //         }}
-    //       />
-    //     </SafeAreaProvider>
-    //   );
-    // }
   }
 }
 
@@ -75,7 +58,6 @@ const mapStateToProps = ({ mensagem, user }) => {
   return {
     message: mensagem.message,
     user: user,
-    // isAdmin: user.permissoes.includes('admin'),
   };
 };
 

@@ -2,35 +2,21 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import DisposicaoAtual from '../screens/DisposicaoAtual';
-import { header, BotaoDrawer } from './utils';
+import { headerOptions } from './utils';
 import DetalharViagem from '../screens/DetalharViagem';
 
 const Stack = createStackNavigator();
 
 export default function () {
-  retur(
-    <Stack.Navigator>
+  return (
+    <Stack.Navigator
+      initialRouteName="DisposicaoAtual"
+      screenOptions={({ navigation }) => ({
+        ...headerOptions(navigation),
+      })}
+    >
       <Stack.Screen component={DisposicaoAtual} name="DisposicaoAtual" />
       <Stack.Screen component={DetalharViagem} name="ViagemDetalhes" />
-    </Stack.Navigator>,
+    </Stack.Navigator>
   );
 }
-
-// export default createStackNavigator(
-//   {
-//     DisposicaoAtual: {
-//       screen: DisposicaoAtual,
-//     },
-//     ViagemDetalhes: {
-//       screen: DetalharViagem,
-//     },
-//   },
-//   {
-//     initialRouteName: 'DisposicaoAtual',
-//     headerLayoutPreset: 'center',
-//     defaultNavigationOptions: ({ navigation }) => ({
-//       ...header,
-//       headerRight: <BotaoDrawer navigationProps={navigation} />,
-//     }),
-//   },
-// );

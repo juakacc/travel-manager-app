@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Login from '../screens/Login';
 import Relatorio from '../screens/Relatorio';
@@ -14,8 +14,7 @@ import Sobre from '../screens/Sobre';
 import ListPessoas from '../screens/ListPessoas';
 import ListVeiculos from '../screens/ListVeiculos';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { header, BotaoVoltar, BotaoDrawer } from './utils';
+import { headerOptions } from './utils';
 import LogoutStackNavigator from './LogoutStackNavigator';
 import DisposicaoAtualStack from './DisposicaoAtualStack';
 import ViagemStack from './ViagemStack';
@@ -27,7 +26,12 @@ const Tab = createBottomTabNavigator();
 
 function RelatorioStack() {
   return (
-    <Stack.Navigator initialRouteName="Relatorio">
+    <Stack.Navigator
+      initialRouteName="Relatorio"
+      screenOptions={({ navigation }) => ({
+        ...headerOptions(navigation),
+      })}
+    >
       <Stack.Screen component={Relatorio} name="Relatorio" />
       <Stack.Screen component={DetalharViagem} name="ViagemDetalhes" />
     </Stack.Navigator>
@@ -36,17 +40,64 @@ function RelatorioStack() {
 
 function HomeBottomTabNavigator() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen component={ViagemStack} name="Home" />
-      <Tab.Screen component={DisposicaoAtualStack} name="Disposicao" />
-      <Tab.Screen component={RelatorioStack} name="Viagens" />
+    <Tab.Navigator
+      initialRouteName="Home"
+      tabBarOptions={{
+        activeTintColor: '#fff',
+        inactiveTintColor: '#4F2500',
+        labelStyle: {
+          fontSize: 14,
+        },
+        style: {
+          backgroundColor: commonStyles.colors.secundaria,
+          paddingVertical: 10,
+          height: 70,
+          marginTop: 5,
+        },
+      }}
+    >
+      <Tab.Screen
+        component={ViagemStack}
+        name="Home"
+        options={{
+          title: 'Início',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="ios-car" size={30} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        component={DisposicaoAtualStack}
+        name="Disposicao"
+        options={{
+          title: 'Viagens',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="ios-body" size={30} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        component={RelatorioStack}
+        name="Viagens"
+        options={{
+          title: 'Relatórios',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="ios-albums" size={30} color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
 
 function PessoasStack() {
   return (
-    <Stack.Navigator initialRouteName="PessoasScreen">
+    <Stack.Navigator
+      initialRouteName="PessoasScreen"
+      screenOptions={({ navigation }) => ({
+        ...headerOptions(navigation, true),
+      })}
+    >
       <Stack.Screen component={ListPessoas} name="PessoasScreen" />
       <Stack.Screen component={CadastrarPessoa} name="CadastrarPessoa" />
     </Stack.Navigator>
@@ -55,7 +106,12 @@ function PessoasStack() {
 
 function VeiculoStack() {
   return (
-    <Stack.Navigator initialRouteName="VeiculosScreen">
+    <Stack.Navigator
+      initialRouteName="VeiculosScreen"
+      screenOptions={({ navigation }) => ({
+        ...headerOptions(navigation, true),
+      })}
+    >
       <Stack.Screen component={ListVeiculos} name="VeiculosScreen" />
       <Stack.Screen component={CadastrarVeiculo} name="CadastrarVeiculo" />
     </Stack.Navigator>
@@ -64,36 +120,65 @@ function VeiculoStack() {
 
 export function DrawerNavigator() {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen component={HomeBottomTabNavigator} name="Home" />
-      <Drawer.Screen component={PessoasStack} name="Pessoas" />
-      <Drawer.Screen component={VeiculoStack} name="Veiculos" />
-      <Drawer.Screen component={Sobre} name="Sobre" />
-      <Drawer.Screen component={LogoutStackNavigator} name="Logout" />
+    <Drawer.Navigator drawerPosition="right">
+      <Drawer.Screen
+        component={HomeBottomTabNavigator}
+        name="Home"
+        options={{
+          title: 'Tela Inicial',
+          drawerIcon: ({ color }) => (
+            <Ionicons name="ios-home" size={25} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        component={PessoasStack}
+        name="Pessoas"
+        options={{
+          title: 'Pessoas',
+          drawerIcon: ({ color }) => (
+            <Ionicons name="ios-person-add" size={25} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        component={VeiculoStack}
+        name="Veiculos"
+        options={{
+          title: 'Veículos',
+          drawerIcon: ({ color }) => (
+            <Ionicons name="ios-car" size={25} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        component={Sobre}
+        name="Sobre"
+        options={{
+          title: 'Sobre o App',
+          drawerIcon: () => (
+            <Ionicons name="ios-help-circle-outline" size={25} color="#00f" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        component={LogoutStackNavigator}
+        name="Logout"
+        options={{
+          title: 'Sair',
+          drawerIcon: () => (
+            <Ionicons name="ios-power" size={25} color="#f00" />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 }
 
 export function LoginStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator headerMode="none">
       <Stack.Screen component={Login} name="Login" />
     </Stack.Navigator>
   );
 }
-
-// export default function Navigation() {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator>
-//         {false ? (
-//           <>
-//             <Stack.Screen component={DrawerNavigator} name="App" />
-//           </>
-//         ) : (
-//           <Stack.Screen component={LoginStack} name="Auth" />
-//         )}
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }

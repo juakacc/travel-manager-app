@@ -21,7 +21,7 @@ export default class Relatorio extends React.Component {
           barStyle="ligth-content"
         />
         <View>
-          <Spinner visible={!this.state.componentOk} />
+          {/* <Spinner visible={!this.state.componentOk} /> */}
 
           <Titulo titulo="Relatórios" />
 
