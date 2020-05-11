@@ -36,7 +36,7 @@ class DetalharViagem extends React.Component {
   };
 
   componentDidMount = async () => {
-    const idViagem = this.props.navigation.getParam('idViagem');
+    const { idViagem } = this.props.route.params;
 
     if (idViagem) {
       // this.setState({ isLoading: true });

@@ -30,7 +30,7 @@ class DisposicaoAtual extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this._focusListener = this.props.navigation.addListener('focus', () => {
       this.carregarViagens();
     });
   }
@@ -56,6 +56,7 @@ class DisposicaoAtual extends React.Component {
   };
 
   componentWillUnmount() {
+    this._focusListener();
     this._isMounted = false;
   }
 

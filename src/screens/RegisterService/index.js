@@ -26,9 +26,9 @@ import {
   TextAlertRevisao,
 } from './styles';
 
-export default function RegisterService({ navigation }) {
+export default function RegisterService({ route, navigation }) {
   const [veiculo, setVeiculo] = useState(() => {
-    return navigation.getParam('veiculo');
+    return route.params.veiculo;
   });
   const [km, setKm] = useState(veiculo.quilometragem);
   const [nextKm, setNextKm] = useState(km);

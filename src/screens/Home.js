@@ -49,7 +49,7 @@ class Home extends React.Component {
       }
     }, 5000);
 
-    this.focusListener = this.props.navigation.addListener('willFocus', () => {
+    this._focusListener = this.props.navigation.addListener('focus', () => {
       this.loadViagem();
     });
   }
@@ -123,7 +123,7 @@ class Home extends React.Component {
   componentWillUnmount() {
     clearInterval(this.timeout);
     this._isMounted = false;
-    this.focusListener.remove();
+    this._focusListener();
   }
 
   fabPressed = name => {

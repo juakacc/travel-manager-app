@@ -125,7 +125,7 @@ class ListItem extends React.Component {
           </View>
         )}
 
-        <Modal isVisible={this.state.isVisible}>
+        <Modal isVisible={this.state.isVisible} backdropColor="#a50">
           <View style={styles.modalContainer}>
             {this.state.infos.map(item => {
               return (

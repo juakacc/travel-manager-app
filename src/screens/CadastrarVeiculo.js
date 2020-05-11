@@ -50,7 +50,7 @@ class CadastrarVeiculo extends React.Component {
   };
 
   componentDidMount = () => {
-    const veiculoId = this.props.navigation.getParam('itemId');
+    const { itemId: veiculoId } = this.props.route.params;
 
     if (veiculoId) {
       this.setState({ isLoading: true });

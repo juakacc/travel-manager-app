@@ -51,12 +51,10 @@ class CadastrarPessoa extends React.Component {
   }
 
   componentDidMount = () => {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      const editThis = this.props.navigation.getParam('editThis');
+    this._focusListener = this.props.navigation.addListener('focus', () => {
+      const { editThis, itemId } = this.props.route.params;
 
-      const motoristaId = editThis
-        ? this.props.motorista.id
-        : this.props.navigation.getParam('itemId');
+      const motoristaId = editThis ? this.props.motorista.id : itemId;
 
       if (motoristaId) {
         this.setState({ isLoading: true });
@@ -85,16 +83,18 @@ class CadastrarPessoa extends React.Component {
   };
 
   componentWillUnmount = () => {
-    this.focusListener.remove();
+    this._focusListener();
   };
 
   componentDidUpdate = prevProps => {
     if (prevProps.isLoading && !this.props.isLoading) {
-      if (this.props.navigation.getParam('editThis')) {
-        this.props.navigation.navigate('Home');
-      } else {
-        this.props.navigation.navigate('PessoasScreen');
-      }
+      // @VALIDAR
+      this.props.navigation.goBack();
+      // if (this.props.route.params.editThis) {
+      //   this.props.navigation.navigate('Home');
+      // } else {
+      //   this.props.navigation.navigate('PessoasScreen');
+      // }
     }
   };
 

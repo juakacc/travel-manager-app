@@ -11,13 +11,13 @@ export default class FormSelectVeiculo extends React.Component {
   };
 
   componentDidMount = () => {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this._focusListener = this.props.navigation.addListener('focus', () => {
       this.setState({ veiculoSelec: null });
     });
   };
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this._focusListener();
   }
 
   enviarVeiculo = () => {

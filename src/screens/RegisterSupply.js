@@ -14,9 +14,9 @@ import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
 
-export default function RegisterSupply({ navigation }) {
+export default function RegisterSupply({ route, navigation }) {
   const [veiculo, setVeiculo] = useState(() => {
-    return navigation.getParam('veiculo');
+    return route.params.veiculo;
   });
 
   const [km, setKm] = useState(() => {

@@ -43,6 +43,7 @@ function HomeBottomTabNavigator() {
     <Tab.Navigator
       initialRouteName="Home"
       tabBarOptions={{
+        keyboardHidesTabBar: true,
         activeTintColor: '#fff',
         inactiveTintColor: '#4F2500',
         labelStyle: {

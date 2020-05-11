@@ -38,7 +38,7 @@ class ConcluirViagem extends React.Component {
   };
 
   componentDidMount = () => {
-    const id = this.props.navigation.getParam('viagemId');
+    const { viagemId: id } = this.props.route.params;
 
     if (id) {
       axios
