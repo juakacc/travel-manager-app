@@ -95,7 +95,18 @@ function HomeBottomTabNavigator() {
 
 export default function DrawerNavigator() {
   return (
-    <Drawer.Navigator drawerPosition="right">
+    <Drawer.Navigator
+      drawerPosition="right"
+      drawerContentOptions={{
+        activeTintColor: '#a50',
+      }}
+      drawerStyle={{
+        width: 200,
+        borderTopLeftRadius: 20,
+        borderBottomLeftRadius: 20,
+        elevation: 5,
+      }}
+    >
       <Drawer.Screen
         component={HomeBottomTabNavigator}
         name="Home"
