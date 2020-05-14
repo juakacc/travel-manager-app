@@ -1,9 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-  Alert,
   Keyboard,
   TouchableWithoutFeedback,
   TouchableOpacity,
@@ -12,7 +10,10 @@ import { Input } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import axios from 'axios';
 
+import { setMensagem } from '../../store/actions/mensagem';
 import GeneralStatusBarColor from '../../components/GeneralStatusBarColor';
 import Titulo from '../../components/Titulo';
 import commonStyles from '../../commonStyles';
@@ -24,24 +25,32 @@ import {
   TituloRevisao,
   DateShowRevisao,
   TextAlertRevisao,
+  styles,
 } from './styles';
 
-export default function RegisterService({ route, navigation }) {
-  const [veiculo, setVeiculo] = useState(() => {
-    return route.params.veiculo;
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
   });
+  return ref.current;
+}
+
+function RegisterService({ route, navigation, ...props }) {
+  const [veiculo, setVeiculo] = useState(route.params.veiculo);
   const [km, setKm] = useState(veiculo.quilometragem);
   const [nextKm, setNextKm] = useState(km);
   const [description, setDescription] = useState('');
   const [dateShow, setDateShow] = useState('___/___/_____');
   const [date, setDate] = useState(new Date(moment()));
-
   const [showDatePicker, setShowDatePicker] = useState(false);
-
   const [kmError, setKmError] = useState('');
   const [nextKmError, setNextKmError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+  const [isLoading, setLoading] = useState(false);
+  const [isSub, setSub] = useState(false);
 
+  const prevLoading = usePrevious(isLoading);
   const descriptionTxt = useRef(null);
 
   const isValid = () => {
@@ -74,12 +83,35 @@ export default function RegisterService({ route, navigation }) {
   const save = () => {
     if (isValid()) {
       const event = {
-        km,
-        id: veiculo.id,
+        quilometragem: km,
+        descricao: description,
+        veiculo: veiculo.id,
+        revisao: {
+          quilometragem: nextKm,
+          descricao: description,
+          momento: moment(date).format('YYYY-MM-DD[T]HH:mm:ss').toString(),
+        },
       };
-      Alert.alert('Saving data');
+
+      setLoading(true);
+      setSub(true);
+      axios
+        .post('/servicos', event)
+        .then(res => {
+          setSub(false);
+          setLoading(false);
+          props.onSetMensagem('Serviço salvo com sucesso');
+        })
+        .catch(err => {
+          setSub(false);
+          props.onSetMensagem(err);
+        });
     }
   };
+
+  useEffect(() => {
+    if (prevLoading && !isLoading) navigation.goBack();
+  }, [isLoading]);
 
   const onChange = (event, selectedDate) => {
     setShowDatePicker(false);
@@ -89,7 +121,7 @@ export default function RegisterService({ route, navigation }) {
 
       setDate(currentDate);
       setDateShow(moment(currentDate).format('DD/MM/YYYY'));
-      console.log('server: ', moment(currentDate).format());
+      // console.log('server: ', moment(currentDate).format());
     }
   };
 
@@ -169,7 +201,7 @@ export default function RegisterService({ route, navigation }) {
 
         <Botao
           onPress={save}
-          // isSubmetendo={this.props.isSubmetendo}
+          isSubmetendo={isSub}
           title="Concluir"
           name="check"
         />
@@ -178,20 +210,10 @@ export default function RegisterService({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  veiculo: {
-    color: 'red',
-  },
-  txtVeiculo: {
-    textAlign: 'center',
-    fontSize: 20,
-    marginBottom: 10,
-  },
-  tipo: {
-    marginLeft: 10,
-    marginVertical: 5,
-    fontWeight: 'bold',
-    fontSize: 15,
-    color: 'gray',
-  },
-});
+const mapDispatchToProps = dispatch => {
+  return {
+    onSetMensagem: msg => dispatch(setMensagem(msg)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(RegisterService);

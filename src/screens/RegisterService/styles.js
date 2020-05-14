@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { StyleSheet } from 'react-native';
 
 export const Container = styled.View`
   flex: 1;
@@ -46,3 +47,21 @@ export const DateShowRevisao = styled.Text`
 `;
 
 export const DescriptionTxt = styled.TextInput``;
+
+export const styles = StyleSheet.create({
+  veiculo: {
+    color: 'red',
+  },
+  txtVeiculo: {
+    textAlign: 'center',
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  tipo: {
+    marginLeft: 10,
+    marginVertical: 5,
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'gray',
+  },
+});

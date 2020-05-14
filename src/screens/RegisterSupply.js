@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,26 +9,36 @@ import {
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
 
+import axios from 'axios';
+import { setMensagem } from '../store/actions/mensagem';
+
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
+import { connect } from 'react-redux';
 
-export default function RegisterSupply({ route, navigation }) {
-  const [veiculo, setVeiculo] = useState(() => {
-    return route.params.veiculo;
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
   });
+  return ref.current;
+}
 
-  const [km, setKm] = useState(() => {
-    return veiculo.quilometragem;
-  });
+function RegisterSupply({ route, navigation, ...props }) {
+  const [veiculo, setVeiculo] = useState(route.params.veiculo);
+  const [km, setKm] = useState(veiculo.quilometragem);
   const [litros, setLitros] = useState(0);
   const [tipo, setTipo] = useState('gasolina');
-
   const [kmError, setKmError] = useState('');
   const [ltError, setLtError] = useState('');
+  const [isLoading, setLoading] = useState(false);
+  const [isSub, setSub] = useState(false);
 
   const litrosTxt = useRef(null);
+
+  const prevLoading = usePrevious(isLoading);
 
   const isValid = () => {
     setKmError('');
@@ -49,14 +59,33 @@ export default function RegisterSupply({ route, navigation }) {
   const save = () => {
     if (isValid()) {
       const event = {
-        km,
-        litros,
+        quilometragem: km,
+        quantidade: litros,
         tipo,
-        id: veiculo.id,
+        veiculo: veiculo.id,
       };
-      Alert.alert('Saving data');
+
+      setLoading(true);
+      setSub(true);
+      axios
+        .post('/abastecimentos', event)
+        .then(res => {
+          setLoading(false);
+          setSub(false);
+          props.onSetMensagem('Abastecimento salvo com sucesso');
+        })
+        .catch(err => {
+          setSub(false);
+          props.onSetMensagem(err);
+        });
     }
   };
+
+  useEffect(() => {
+    if (prevLoading && !isLoading) {
+      navigation.goBack();
+    }
+  }, [isLoading]);
 
   return (
     <TouchableWithoutFeedback
@@ -104,7 +133,7 @@ export default function RegisterSupply({ route, navigation }) {
         <Input
           keyboardType="numeric"
           label="Litros *"
-          value={`${litros}`}
+          value={litros !== 0 ? `${litros}` : ''}
           errorMessage={ltError}
           returnKeyType="done"
           ref={litrosTxt}
@@ -115,7 +144,7 @@ export default function RegisterSupply({ route, navigation }) {
 
         <Botao
           onPress={save}
-          // isSubmetendo={this.props.isSubmetendo}
+          isSubmetendo={isSub}
           title="Concluir"
           name="check"
         />
@@ -123,6 +152,14 @@ export default function RegisterSupply({ route, navigation }) {
     </TouchableWithoutFeedback>
   );
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onSetMensagem: msg => dispatch(setMensagem(msg)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(RegisterSupply);
 
 const styles = StyleSheet.create({
   container: {
