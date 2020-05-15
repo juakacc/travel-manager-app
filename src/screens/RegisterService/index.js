@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-import { Input } from 'react-native-elements';
+import { Input, CheckBox } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
@@ -49,6 +49,7 @@ function RegisterService({ route, navigation, ...props }) {
   const [descriptionError, setDescriptionError] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [isSub, setSub] = useState(false);
+  const [showRevision, setShowRevision] = useState(false);
 
   const prevLoading = usePrevious(isLoading);
   const descriptionTxt = useRef(null);
@@ -93,6 +94,8 @@ function RegisterService({ route, navigation, ...props }) {
         },
       };
 
+      if (!showRevision) delete event.revisao;
+
       setLoading(true);
       setSub(true);
       axios
@@ -121,7 +124,6 @@ function RegisterService({ route, navigation, ...props }) {
 
       setDate(currentDate);
       setDateShow(moment(currentDate).format('DD/MM/YYYY'));
-      // console.log('server: ', moment(currentDate).format());
     }
   };
 
@@ -164,7 +166,13 @@ function RegisterService({ route, navigation, ...props }) {
           onChangeText={value => setDescription(value)}
         />
 
-        <ContainerRevisao>
+        <CheckBox
+          title="Agendar revisão?"
+          checked={showRevision}
+          onPress={() => setShowRevision(!showRevision)}
+        />
+
+        <ContainerRevisao show={showRevision}>
           <TituloRevisao>Troca/Revisão</TituloRevisao>
 
           <Input

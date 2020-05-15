@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { StyleSheet } from 'react-native';
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
   flex: 1;
   padding: 5px;
   background-color: #fff;
@@ -22,6 +22,7 @@ export const ContainerRevisao = styled.View`
   border-radius: 5px;
   border-color: #000;
   justify-content: center;
+  display: ${props => (props.show ? 'flex' : 'none')};
 `;
 
 export const TextAlertRevisao = styled.Text`
