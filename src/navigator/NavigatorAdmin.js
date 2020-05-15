@@ -53,7 +53,7 @@ function HomeBottomTabNavigator() {
           backgroundColor: commonStyles.colors.secundaria,
           paddingVertical: 10,
           height: 70,
-          marginTop: 5,
+          // marginTop: 5,
         },
       }}
     >
