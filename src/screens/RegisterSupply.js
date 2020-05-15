@@ -3,9 +3,9 @@ import {
   View,
   Text,
   StyleSheet,
-  Alert,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
 
@@ -49,8 +49,8 @@ function RegisterSupply({ route, navigation, ...props }) {
       setKmError('Quilometragem inválida');
       valid = false;
     }
-    if (isNaN(litros)) {
-      setLtError('Litragem inválida');
+    if (isNaN(litros) || litros <= 0) {
+      setLtError('Quantidade inválida');
       valid = false;
     }
     return valid;
@@ -93,7 +93,7 @@ function RegisterSupply({ route, navigation, ...props }) {
         Keyboard.dismiss();
       }}
     >
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <GeneralStatusBarColor
           backgroundColor={commonStyles.colors.secundaria}
           barStyle="ligth-content"
@@ -148,7 +148,7 @@ function RegisterSupply({ route, navigation, ...props }) {
           title="Concluir"
           name="check"
         />
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }
