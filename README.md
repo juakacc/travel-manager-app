@@ -1,6 +1,12 @@
 # Viagens PMO - APP :blue_car:
 
-<a href="https://github.com/juakacc/travel-manager/releases/download/v1.2.1/viagensPMO-1.2.1.apk" style="padding: 10px; background-color: #a50; color: #fff; border-radius: 5px; text-decoration: none;">:arrow_down: Baixe e instale</a>
+Versão em produção, testada **(RECOMENDADA)**:
+
+### [:arrow_right: Versão Estável :arrow_left:](https://github.com/juakacc/travel-manager/releases/download/v1.2.1/viagensPMO-1.2.1.apk)
+
+Release da versão que está em desenvolvimento, com novas features, em teste:
+
+#### [Versão Beta :man_technologist:](https://github.com/juakacc/travel-manager-app/releases/download/v1.5.0/ViagensPMO-1.5.0.apk)
 
 Aplicativo para gerenciamento de frota de veículos entre motoristas.
 
@@ -33,4 +39,4 @@ npx react-native run-android
 
 **Suzélio Aníbal** - business
 
-we :pencil: with :heart:
+We :pencil: with :heart:
