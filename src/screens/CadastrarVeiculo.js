@@ -50,41 +50,57 @@ class CadastrarVeiculo extends React.Component {
   };
 
   componentDidMount = () => {
-    const { itemId: veiculoId } = this.props.route.params;
+    const { navigation, route } = this.props;
 
-    if (veiculoId) {
-      this.setState({ isLoading: true });
-      axios
-        .get(`veiculos/${veiculoId}`)
-        .then(res => {
-          const {
-            nome,
-            placa,
-            renavam,
-            marca,
-            modelo,
-            quilometragem,
-            cnh_requerida,
-          } = res.data;
+    this._focusListener = navigation.addListener('focus', () => {
+      const { params } = route;
 
-          this.setState({
-            nome,
-            placa,
-            renavam,
-            marca,
-            modelo,
-            quilometragem,
-            cnh_requerida,
-            isEdit: true,
-            veiculoId,
-            isLoading: false,
-          });
-        })
-        .catch(err => {
-          this.props.set_mensagem(err);
-          this.setState({ isLoading: false });
+      if (params) {
+        const { itemId } = params;
+
+        if (itemId) {
+          this.getVeiculo(itemId);
+        }
+      }
+    });
+  };
+
+  componentWillUnmount = () => {
+    this._focusListener();
+  };
+
+  getVeiculo = veiculoId => {
+    this.setState({ isLoading: true });
+    axios
+      .get(`veiculos/${veiculoId}`)
+      .then(res => {
+        const {
+          nome,
+          placa,
+          renavam,
+          marca,
+          modelo,
+          quilometragem,
+          cnh_requerida,
+        } = res.data;
+
+        this.setState({
+          nome,
+          placa,
+          renavam,
+          marca,
+          modelo,
+          quilometragem,
+          cnh_requerida,
+          isEdit: true,
+          veiculoId,
+          isLoading: false,
         });
-    }
+      })
+      .catch(err => {
+        this.props.set_mensagem(err);
+        this.setState({ isLoading: false });
+      });
   };
 
   isValid = () => {

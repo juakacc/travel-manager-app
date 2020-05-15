@@ -51,35 +51,44 @@ class CadastrarPessoa extends React.Component {
   }
 
   componentDidMount = () => {
-    this._focusListener = this.props.navigation.addListener('focus', () => {
-      const { editThis, itemId } = this.props.route.params;
+    const { navigation, route, motorista } = this.props;
 
-      const motoristaId = editThis ? this.props.motorista.id : itemId;
+    this._focusListener = navigation.addListener('focus', () => {
+      const { params } = route;
 
-      if (motoristaId) {
-        this.setState({ isLoading: true });
-        axios
-          .get(`motoristas/${motoristaId}`)
-          .then(res => {
-            const { nome, apelido, cnh, categoria, telefone } = res.data;
+      if (params) {
+        const { editThis, itemId } = params;
+        const motoristaId = editThis ? motorista.id : itemId;
 
-            this.setState({
-              nome,
-              apelido,
-              cnh,
-              categoria,
-              telefone,
-              isEdit: true,
-              motoristaId,
-              isLoading: false,
-            });
-          })
-          .catch(err => {
-            this.props.set_mensagem(err);
-            this.setState({ isLoading: false });
-          });
+        if (motoristaId) {
+          this.getMotorista(motoristaId);
+        }
       }
     });
+  };
+
+  getMotorista = motoristaId => {
+    this.setState({ isLoading: true });
+    axios
+      .get(`motoristas/${motoristaId}`)
+      .then(res => {
+        const { nome, apelido, cnh, categoria, telefone } = res.data;
+
+        this.setState({
+          nome,
+          apelido,
+          cnh,
+          categoria,
+          telefone,
+          isEdit: true,
+          motoristaId,
+          isLoading: false,
+        });
+      })
+      .catch(err => {
+        this.props.set_mensagem(err);
+        this.setState({ isLoading: false });
+      });
   };
 
   componentWillUnmount = () => {

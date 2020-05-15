@@ -18,7 +18,7 @@ import { headerOptions } from './utils';
 import DisposicaoAtualStack from './DisposicaoAtualStack';
 import ViagemStack from './ViagemStack';
 import LogoutStack from './LogoutStack';
-import commonStyles from '../commonStyles';
+import tabBarOptions from './tabBarOptions';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,18 +43,7 @@ function HomeBottomTabNavigator() {
     <Tab.Navigator
       initialRouteName="Home"
       tabBarOptions={{
-        keyboardHidesTabBar: true,
-        activeTintColor: '#fff',
-        inactiveTintColor: '#4F2500',
-        labelStyle: {
-          fontSize: 14,
-        },
-        style: {
-          backgroundColor: commonStyles.colors.secundaria,
-          paddingVertical: 10,
-          height: 70,
-          // marginTop: 5,
-        },
+        ...tabBarOptions,
       }}
     >
       <Tab.Screen
