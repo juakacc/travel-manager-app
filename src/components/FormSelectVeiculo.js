@@ -79,7 +79,7 @@ export default class FormSelectVeiculo extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: commonStyles.colors.secundaria,
+    backgroundColor: commonStyles.colors.secondary.main,
     borderRadius: 5,
     // height: 150,
     marginVertical: 5,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   txtInfo: {
     textAlign: 'center',
-    color: '#f00',
+    color: commonStyles.colors.danger,
   },
   txtSemVeiculo: {
     margin: 10,

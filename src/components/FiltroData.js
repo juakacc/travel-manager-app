@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     fontSize: 16,
     color: 'white',
-    backgroundColor: commonStyles.colors.secundaria,
+    backgroundColor: commonStyles.colors.secondary.main,
     borderRadius: 10,
     padding: 10,
     height: 40,

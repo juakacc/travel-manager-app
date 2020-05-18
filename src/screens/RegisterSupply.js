@@ -95,7 +95,7 @@ function RegisterSupply({ route, navigation, ...props }) {
     >
       <ScrollView style={styles.container}>
         <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
+          backgroundColor={commonStyles.colors.secondary.main}
           barStyle="ligth-content"
         />
         <Titulo titulo="Cadastro de abastecimento" />

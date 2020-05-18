@@ -6,7 +6,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import comumStyles from '../styles';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import commonStyles from '../commonStyles';
@@ -24,13 +23,13 @@ export default props => {
         <ActivityIndicator
           animating
           size="small"
-          color={commonStyles.colors.secundaria}
+          color={commonStyles.colors.secondary.main}
         />
       ) : (
         <View style={styles.btnView}>
           {props.name && <Icon name={props.name} size={20} />}
           {props.title && (
-            <Text style={[comumStyles.btnText]}>{' ' + props.title}</Text>
+            <Text style={styles.buttonTxt}>{' ' + props.title}</Text>
           )}
         </View>
       )}
@@ -45,7 +44,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 10,
     borderRadius: 10,
-    backgroundColor: commonStyles.colors.principal,
+    backgroundColor: commonStyles.colors.primary.main,
+  },
+  buttonTxt: {
+    fontSize: 20,
   },
   btnView: {
     flexDirection: 'row',

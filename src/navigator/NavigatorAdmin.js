@@ -19,6 +19,7 @@ import DisposicaoAtualStack from './DisposicaoAtualStack';
 import ViagemStack from './ViagemStack';
 import LogoutStack from './LogoutStack';
 import tabBarOptions from './tabBarOptions';
+import commonStyles from '../commonStyles';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -113,7 +114,7 @@ export default function DrawerNavigator() {
     <Drawer.Navigator
       drawerPosition="right"
       drawerContentOptions={{
-        activeTintColor: '#a50',
+        activeTintColor: commonStyles.colors.secondary.main,
       }}
       drawerStyle={{
         width: 200,

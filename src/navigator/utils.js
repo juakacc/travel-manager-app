@@ -10,7 +10,7 @@ export const headerOptions = (navigation, btnBack = false) => {
     headerTitle: () => <Header />,
     headerTitleAlign: 'center',
     headerStyle: {
-      backgroundColor: commonStyles.colors.principal,
+      backgroundColor: commonStyles.colors.primary.main,
     },
     headerRight: () => <BotaoDrawer navigation={navigation} />,
   };

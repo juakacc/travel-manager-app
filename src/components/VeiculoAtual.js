@@ -61,7 +61,7 @@ export default class VeiculoAtual extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: commonStyles.colors.secundaria,
+    backgroundColor: commonStyles.colors.secondary.main,
     marginVertical: 5,
     borderRadius: 5,
     padding: 5,
@@ -77,10 +77,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
+    color: commonStyles.colors.gray.white,
   },
   txtInfo: {
     textAlign: 'center',
-    color: '#f00',
+    color: commonStyles.colors.danger,
   },
 });

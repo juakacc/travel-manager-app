@@ -100,7 +100,7 @@ class IniciarViagem extends React.Component {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <KeyboardAvoidingView style={styles.container}>
           <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secundaria}
+            backgroundColor={commonStyles.colors.secondary.main}
             barStyle="ligth-content"
           />
           <Spinner visible={this.props.isSubmetendo} />

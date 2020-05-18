@@ -6,11 +6,15 @@ import commonStyles from '../commonStyles';
 export default function (props) {
   return (
     <FloatingAction
-      color={commonStyles.colors.principal}
+      color={commonStyles.colors.primary.main}
       visible={props.visible}
       showBackground={false}
       floatingIcon={
-        <Icon name="plus" color={commonStyles.colors.secundaria} size={20} />
+        <Icon
+          name="plus"
+          color={commonStyles.colors.secondary.main}
+          size={20}
+        />
       }
       onPressMain={() => {
         props.navigation.navigate(props.toScreen);

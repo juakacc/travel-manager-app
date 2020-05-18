@@ -187,7 +187,7 @@ class CadastrarVeiculo extends React.Component {
         style={styles.container}
       >
         <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
+          backgroundColor={commonStyles.colors.secondary.main}
           barStyle="ligth-content"
         />
         <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />

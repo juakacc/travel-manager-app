@@ -2,13 +2,13 @@ import commonStyles from '../commonStyles';
 
 export default tabBarOptions = {
   keyboardHidesTabBar: true,
-  activeTintColor: '#fff',
-  inactiveTintColor: '#4F2500',
+  activeTintColor: commonStyles.colors.gray.white,
+  inactiveTintColor: commonStyles.colors.secondary.dark,
   labelStyle: {
     fontSize: 14,
   },
   style: {
-    backgroundColor: commonStyles.colors.secundaria,
+    backgroundColor: commonStyles.colors.secondary.main,
     paddingBottom: 5,
     height: 70,
   },

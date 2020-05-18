@@ -70,7 +70,7 @@ class DetalharViagem extends React.Component {
     return (
       <View style={styles.container}>
         <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
+          backgroundColor={commonStyles.colors.secondary.main}
           barStyle="ligth-content"
         />
         <Spinner visible={isLoading} />
@@ -137,7 +137,7 @@ class DetalharViagem extends React.Component {
             <Icon
               name="car-side"
               size={50}
-              color={commonStyles.colors.secundaria}
+              color={commonStyles.colors.secondary.main}
             />
           </Animated.View>
         )}

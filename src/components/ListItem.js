@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
     margin: 5,
-    backgroundColor: commonStyles.colors.secundaria,
+    backgroundColor: commonStyles.colors.secondary.main,
     borderRadius: 5,
     flexDirection: 'row',
     alignContent: 'space-between',

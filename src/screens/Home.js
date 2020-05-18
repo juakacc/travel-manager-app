@@ -155,11 +155,11 @@ class Home extends React.Component {
           <Icon
             name="gas-pump"
             size={20}
-            color={commonStyles.colors.secundaria}
+            color={commonStyles.colors.secondary.main}
           />
         ),
         name: 'bt_fuel',
-        color: commonStyles.colors.principal,
+        color: commonStyles.colors.primary.main,
       },
       {
         text: 'Serviço',
@@ -167,18 +167,18 @@ class Home extends React.Component {
           <Icon
             name="wrench"
             size={20}
-            color={commonStyles.colors.secundaria}
+            color={commonStyles.colors.secondary.main}
           />
         ),
         name: 'bt_service',
-        color: commonStyles.colors.principal,
+        color: commonStyles.colors.primary.main,
       },
     ];
 
     const icon = (
       <Icon
         name="plus"
-        color={commonStyles.colors.secundaria}
+        color={commonStyles.colors.secondary.main}
         size={20}
         style={fabOpen ? { transform: [{ rotate: '45deg' }] } : {}}
       />
@@ -188,7 +188,7 @@ class Home extends React.Component {
       <View style={styles.container}>
         <PTRView onRefresh={this.loadViagem}>
           <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secundaria}
+            backgroundColor={commonStyles.colors.secondary.main}
             barStyle="ligth-content"
           />
           <PullRefresh />
@@ -223,7 +223,7 @@ class Home extends React.Component {
             onOpen={() => this.setState({ fabOpen: true })}
             onClose={() => this.setState({ fabOpen: false })}
             overlayColor={'rgba(170, 85, 0, 0.5)'}
-            color={commonStyles.colors.principal}
+            color={commonStyles.colors.primary.main}
           />
         )}
       </View>
@@ -250,8 +250,8 @@ const styles = StyleSheet.create({
     ...commonStyles.container,
   },
   textAlert: {
-    color: '#fff',
-    backgroundColor: '#f00',
+    color: commonStyles.colors.gray.white,
+    backgroundColor: commonStyles.colors.danger,
     padding: 10,
     borderRadius: 5,
     textAlign: 'center',

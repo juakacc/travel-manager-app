@@ -49,7 +49,7 @@ class ListPessoas extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
+          backgroundColor={commonStyles.colors.secondary.main}
           barStyle="ligth-content"
         />
 

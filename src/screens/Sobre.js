@@ -24,7 +24,7 @@ export default class Sobre extends React.Component {
             <Icon
               name="road"
               size={35}
-              color={commonStyles.colors.secundaria}
+              color={commonStyles.colors.secondary.main}
             />{' '}
             Viagens PMO
           </Text>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: commonStyles.colors.principalClaro,
+    backgroundColor: commonStyles.colors.primary.light,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -64,10 +64,10 @@ const styles = StyleSheet.create({
   },
   containerInfo: {
     alignItems: 'center',
-    color: commonStyles.colors.secundaria,
+    color: commonStyles.colors.secondary.main,
   },
   texto: {
-    color: commonStyles.colors.secundaria,
+    color: commonStyles.colors.secondary.main,
     fontSize: 16,
     fontWeight: 'bold',
   },

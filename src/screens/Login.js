@@ -111,7 +111,7 @@ class Login extends React.Component {
               <Icon
                 name="road"
                 size={35}
-                color={commonStyles.colors.secundaria}
+                color={commonStyles.colors.secondary.main}
               />{' '}
               Viagens PMO
             </Text>
@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
   inputs: {
     height: 45,
     marginLeft: 16,
-    // borderBottomColor: '#FFFFFF',
     flex: 1,
   },
   inputIcon: {
@@ -224,8 +223,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     width: 250,
-    borderRadius: 15,
-    backgroundColor: commonStyles.colors.principal,
   },
   titulo: {
     fontSize: 30,

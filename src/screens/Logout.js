@@ -44,7 +44,7 @@ class Logout extends React.Component {
         ]}
       >
         <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
+          backgroundColor={commonStyles.colors.secondary.main}
           barStyle="ligth-content"
         />
         <Text>Deseja realmente sair da aplicação? </Text>

@@ -64,7 +64,7 @@ class DisposicaoAtual extends React.Component {
     return (
       <View style={styles.container}>
         <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
+          backgroundColor={commonStyles.colors.secondary.main}
           barStyle="ligth-content"
         />
 
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
     ...commonStyles.container,
   },
   textAlert: {
-    color: '#fff',
-    backgroundColor: '#f00',
+    color: commonStyles.colors.gray.white,
+    backgroundColor: commonStyles.colors.danger,
     padding: 5,
     margin: 2,
     borderRadius: 5,
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   title: {
-    color: '#000',
+    color: commonStyles.colors.gray.black,
     fontFamily: 'shelter',
     fontWeight: 'bold',
     fontSize: 14,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   veiculo: {
-    color: '#777',
+    color: commonStyles.colors.gray.main,
     fontSize: 11,
     textAlign: 'center',
   },

@@ -91,7 +91,7 @@ class ConcluirViagem extends React.Component {
       return false;
     }
 
-    if (km_final < km_inicial) {
+    if (parseFloat(km_final) < parseFloat(km_inicial)) {
       this.setState({
         errQuilometragem:
           'A quilometragem final não pode ser menor que a inicial!',
@@ -140,7 +140,7 @@ class ConcluirViagem extends React.Component {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
           <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secundaria}
+            backgroundColor={commonStyles.colors.secondary.main}
             barStyle="ligth-content"
           />
           <Spinner visible={this.props.isSubmetendo} />
@@ -176,7 +176,9 @@ class ConcluirViagem extends React.Component {
             value={`${this.state.km_final}`}
             onChangeText={km_final => this.setState({ km_final })}
             disabled={this.state.sem_movimentacao}
-            disabledInputStyle={{ backgroundColor: '#a50' }}
+            disabledInputStyle={{
+              backgroundColor: commonStyles.colors.secondary.main,
+            }}
           />
 
           <Input
