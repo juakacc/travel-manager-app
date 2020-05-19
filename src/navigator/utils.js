@@ -28,7 +28,12 @@ const Header = () => {
   return (
     <View>
       <Text style={{ fontSize: 24 }}>
-        <Icon name="road" size={30} color="#a50" /> Viagens PMO
+        <Icon
+          name="road"
+          size={30}
+          color={commonStyles.colors.secondary.main}
+        />{' '}
+        Viagens PMO
       </Text>
     </View>
   );

@@ -169,7 +169,11 @@ export default function DrawerNavigator() {
         options={{
           title: 'Sair',
           drawerIcon: () => (
-            <Ionicons name="ios-power" size={25} color="#f00" />
+            <Ionicons
+              name="ios-power"
+              size={25}
+              color={commonStyles.colors.danger}
+            />
           ),
         }}
       />

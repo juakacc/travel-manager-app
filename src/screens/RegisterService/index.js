@@ -190,7 +190,11 @@ function RegisterService({ route, navigation, ...props }) {
           <TouchableOpacity onPress={() => setShowDatePicker(true)}>
             <View>
               <DateShowRevisao>
-                <Icon name="calendar-check" color="#a50" size={20} />
+                <Icon
+                  name="calendar-check"
+                  color={commonStyles.colors.secondary.main}
+                  size={20}
+                />
                 {`  ${dateShow}`}
               </DateShowRevisao>
             </View>

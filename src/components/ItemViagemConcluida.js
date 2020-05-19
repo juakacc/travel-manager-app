@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import commonStyles from '../commonStyles';
 
 class ItemViagemConcluida extends React.Component {
   detalharViagem = () => {
@@ -9,11 +10,9 @@ class ItemViagemConcluida extends React.Component {
   };
 
   render() {
-    const color = this.props.viagem.chegada ? '#A9F5A9' : '#A9BCF5';
-
     return (
       <TouchableOpacity
-        style={[styles.container, { backgroundColor: color }]}
+        style={[styles.container]}
         onPress={this.detalharViagem}
       >
         <View style={styles.viewVeiculo}>
@@ -34,10 +33,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     marginVertical: 3,
-    borderRadius: 5,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+    borderRadius: 5,
+    borderColor: commonStyles.colors.secondary.main,
+    borderWidth: 2,
   },
   viewVeiculo: {
     flex: 1,
@@ -47,7 +48,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  veiculo: {
+    color: commonStyles.colors.secondary.main,
+    fontSize: 14,
+  },
   motorista: {
+    color: commonStyles.colors.secondary.main,
+    fontSize: 14,
     fontWeight: 'bold',
   },
 });

@@ -116,18 +116,21 @@ class ListItem extends React.Component {
         {this.props.isEdit ? (
           <View style={styles.viewEdit}>
             <TouchableOpacity onPress={this.editar} style={styles.btnEdit}>
-              <Icon name="edit" size={20} color="yellow" />
+              <Icon name="edit" size={20} color="white" />
             </TouchableOpacity>
           </View>
         ) : (
           <View style={styles.viewEdit}>
             <TouchableOpacity onPress={this.mostrar} style={styles.btnEdit}>
-              <Icon name="info-circle" size={20} color="yellow" />
+              <Icon name="info-circle" size={20} color="white" />
             </TouchableOpacity>
           </View>
         )}
 
-        <Modal isVisible={this.state.isVisible} backdropColor="#a50">
+        <Modal
+          isVisible={this.state.isVisible}
+          backdropColor={commonStyles.colors.secondary.main}
+        >
           <View style={styles.modalContainer}>
             {this.state.infos.map(item => {
               return (
