@@ -16,6 +16,7 @@ import VeiculoAtual from '../components/VeiculoAtual';
 import FormSelectVeiculo from '../components/FormSelectVeiculo';
 import PullRefresh from '../components/PullRefresh';
 import ViagemAtual from '../components/ViagemAtual';
+import ShowRevisoes from '../components/ShowRevisoes';
 
 const textArray = [
   'NÃO ULTRAPASSE EM LUGAR INDEVIDO',
@@ -30,6 +31,7 @@ class Home extends React.Component {
 
   state = {
     viagem: null,
+    revisoes: [],
     veiculos: [],
     isLoading: false,
     indice_msg: 0,
@@ -81,6 +83,7 @@ class Home extends React.Component {
             isLoading: false,
           });
         }
+        this.loadRevisoes(res.data.veiculo);
       })
       .catch(err => {
         if (this._isMounted) {
@@ -111,6 +114,21 @@ class Home extends React.Component {
       .catch(err => {
         this.props.set_mensagem(err);
         this.setLoading(false);
+      });
+  };
+
+  loadRevisoes = veiculo => {
+    axios
+      .get(`veiculos/${veiculo.id}/revisoes`)
+      .then(res => {
+        if (this._isMounted) {
+          this.setState({
+            revisoes: res.data,
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
@@ -204,6 +222,10 @@ class Home extends React.Component {
           >
             {alerta}
           </Animated.Text>
+
+          {this.state.revisoes.length > 0 && (
+            <ShowRevisoes revisoes={this.state.revisoes} />
+          )}
 
           <Spinner visible={isLoading} />
 
