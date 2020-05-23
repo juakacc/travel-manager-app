@@ -192,7 +192,7 @@ class Home extends React.Component {
             barStyle="ligth-content"
           />
           <PullRefresh />
-          <Header />
+          {/* <Header /> */}
           <Animated.Text
             useNativeDriver
             style={[

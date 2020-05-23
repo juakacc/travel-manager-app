@@ -86,7 +86,6 @@ function RegisterService({ route, navigation, ...props }) {
       const event = {
         quilometragem: km,
         descricao: description,
-        veiculo: veiculo.id,
         revisao: {
           quilometragem: nextKm,
           descricao: description,
@@ -99,7 +98,7 @@ function RegisterService({ route, navigation, ...props }) {
       setLoading(true);
       setSub(true);
       axios
-        .post('/servicos', event)
+        .post(`/veiculos/${veiculo.id}/servicos`, event)
         .then(res => {
           setSub(false);
           setLoading(false);

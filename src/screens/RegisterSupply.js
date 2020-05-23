@@ -62,13 +62,12 @@ function RegisterSupply({ route, navigation, ...props }) {
         quilometragem: km,
         quantidade: litros,
         tipo,
-        veiculo: veiculo.id,
       };
 
       setLoading(true);
       setSub(true);
       axios
-        .post('/abastecimentos', event)
+        .post(`/veiculos/${veiculo.id}/abastecimentos`, event)
         .then(res => {
           setLoading(false);
           setSub(false);
