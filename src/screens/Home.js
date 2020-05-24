@@ -145,17 +145,19 @@ class Home extends React.Component {
   }
 
   fabPressed = name => {
-    const { veiculo } = this.state.viagem;
+    const { viagem } = this.state;
 
     switch (name) {
       case 'bt_service':
         this.props.navigation.navigate('RegisterService', {
-          veiculo: veiculo,
+          veiculo: viagem?.veiculo,
+          isAdmin: this.props.motorista.permissoes.includes('admin'),
         });
         break;
       case 'bt_fuel':
         this.props.navigation.navigate('RegisterSupply', {
-          veiculo: veiculo,
+          veiculo: viagem?.veiculo,
+          isAdmin: this.props.motorista.permissoes.includes('admin'),
         });
         break;
     }
@@ -170,7 +172,7 @@ class Home extends React.Component {
       fabOpen,
       revisoes,
     } = this.state;
-    const { navigation } = this.props;
+    const { navigation, motorista } = this.props;
     const alerta = textArray[indice_msg % textArray.length];
 
     const actions = [
@@ -248,7 +250,7 @@ class Home extends React.Component {
           <ViagemAtual viagem={viagem} />
         </PTRView>
 
-        {viagem?.veiculo && (
+        {(viagem?.veiculo || motorista.permissoes.includes('admin')) && (
           <FloatingAction
             actions={actions}
             onPressItem={this.fabPressed}

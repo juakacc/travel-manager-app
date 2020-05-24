@@ -6,8 +6,10 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
+import RNPickerSelect from 'react-native-picker-select';
 
 import axios from 'axios';
 import { setMensagem } from '../store/actions/mensagem';
@@ -27,23 +29,59 @@ function usePrevious(value) {
 }
 
 function RegisterSupply({ route, navigation, ...props }) {
-  const [veiculo, setVeiculo] = useState(route.params.veiculo);
-  const [km, setKm] = useState(veiculo.quilometragem);
+  const [veiculo, setVeiculo] = useState(null);
+  const [veiculos, setVeiculos] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const [km, setKm] = useState(0);
   const [litros, setLitros] = useState(0);
   const [tipo, setTipo] = useState('gasolina');
+
+  const [veiculoError, setVeiculoError] = useState('');
   const [kmError, setKmError] = useState('');
   const [ltError, setLtError] = useState('');
+
   const [isLoading, setLoading] = useState(false);
   const [isSub, setSub] = useState(false);
+  const [isLoaded, setLoaded] = useState(false);
 
   const litrosTxt = useRef(null);
+
+  useEffect(() => {
+    const { veiculo, isAdmin } = route.params;
+
+    if (veiculo) {
+      setVeiculo(veiculo);
+      setKm(veiculo.quilometragem);
+      setLoaded(true);
+    } else if (isAdmin) {
+      setIsAdmin(true);
+      setLoaded(false);
+      axios
+        .get('/veiculos')
+        .then(res => {
+          setVeiculos(res.data);
+          setLoaded(true);
+        })
+        .catch(err => {
+          console.log(err);
+          setLoaded(true);
+        });
+    }
+  }, []);
 
   const prevLoading = usePrevious(isLoading);
 
   const isValid = () => {
     setKmError('');
     setLtError('');
+    setVeiculoError('');
     let valid = true;
+
+    if (!veiculo?.id) {
+      setVeiculoError('Selecione um veículo, por favor');
+      valid = false;
+    }
 
     if (isNaN(km)) {
       setKmError('Quilometragem inválida');
@@ -86,69 +124,103 @@ function RegisterSupply({ route, navigation, ...props }) {
     }
   }, [isLoading]);
 
+  const changeVeiculo = value => {
+    const veiculoSelecionado = veiculos.filter(item => item.id === value)[0];
+    setVeiculo(veiculoSelecionado);
+    setKm(veiculoSelecionado.quilometragem);
+  };
+
+  const placeholder = {
+    label: 'Selecione um veículo...',
+    value: null,
+    color: '#9EA0A4',
+  };
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-    >
-      <ScrollView style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secondary.main}
-          barStyle="ligth-content"
-        />
-        <Titulo titulo="Cadastro de abastecimento" />
+    <>
+      {isLoaded && (
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Keyboard.dismiss();
+          }}
+        >
+          <ScrollView style={styles.container}>
+            <GeneralStatusBarColor
+              backgroundColor={commonStyles.colors.secondary.main}
+              barStyle="ligth-content"
+            />
+            <Titulo titulo="Cadastro de abastecimento" />
 
-        <Text style={styles.txtVeiculo}>
-          Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
-        </Text>
+            {isAdmin && veiculos.length > 0 ? (
+              <>
+                <Text style={styles.veiculoTitle}>Selecione um veículo</Text>
+                <RNPickerSelect
+                  onValueChange={value => changeVeiculo(value)}
+                  value={veiculo?.id}
+                  placeholder={placeholder}
+                  items={veiculos.map(v => ({
+                    label: v.nome,
+                    value: v.id,
+                  }))}
+                />
+                <Text style={styles.veiculoError}>{veiculoError}</Text>
+              </>
+            ) : (
+              <Text style={styles.txtVeiculo}>
+                Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
+              </Text>
+            )}
 
-        <Input
-          keyboardType="numeric"
-          label="Quilometragem *"
-          value={`${km}`}
-          errorMessage={kmError}
-          returnKeyType="next"
-          onSubmitEditing={() => litrosTxt.current.focus()}
-          blurOnSubmit={false}
-          onChangeText={km => setKm(km)}
-        />
+            <Input
+              keyboardType="numeric"
+              label="Quilometragem *"
+              value={`${km}`}
+              errorMessage={kmError}
+              returnKeyType="next"
+              onSubmitEditing={() => litrosTxt.current.focus()}
+              blurOnSubmit={false}
+              onChangeText={km => setKm(km)}
+            />
 
-        <Text style={styles.tipo}>Tipo do combustível *</Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-          <CheckBox
-            title="Gasolina"
-            checked={tipo === 'gasolina'}
-            onPress={() => setTipo('gasolina')}
-          />
+            <Text style={styles.tipo}>Tipo do combustível *</Text>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
+            >
+              <CheckBox
+                title="Gasolina"
+                checked={tipo === 'gasolina'}
+                onPress={() => setTipo('gasolina')}
+              />
 
-          <CheckBox
-            title="Diesel"
-            checked={tipo === 'diesel'}
-            onPress={() => setTipo('diesel')}
-          />
-        </View>
+              <CheckBox
+                title="Diesel"
+                checked={tipo === 'diesel'}
+                onPress={() => setTipo('diesel')}
+              />
+            </View>
 
-        <Input
-          keyboardType="numeric"
-          label="Litros *"
-          value={litros !== 0 ? `${litros}` : ''}
-          errorMessage={ltError}
-          returnKeyType="done"
-          ref={litrosTxt}
-          blurOnSubmit={false}
-          onSubmitEditing={save}
-          onChangeText={litros => setLitros(litros)}
-        />
+            <Input
+              keyboardType="numeric"
+              label="Litros *"
+              value={litros !== 0 ? `${litros}` : ''}
+              errorMessage={ltError}
+              returnKeyType="done"
+              ref={litrosTxt}
+              blurOnSubmit={false}
+              onSubmitEditing={save}
+              onChangeText={litros => setLitros(litros)}
+            />
 
-        <Botao
-          onPress={save}
-          isSubmetendo={isSub}
-          title="Concluir"
-          name="check"
-        />
-      </ScrollView>
-    </TouchableWithoutFeedback>
+            <Botao
+              onPress={save}
+              isSubmetendo={isSub}
+              title="Concluir"
+              name="check"
+            />
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      )}
+    </>
   );
 }
 
@@ -171,6 +243,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     marginBottom: 10,
+  },
+  veiculoError: {
+    fontSize: 13,
+    color: commonStyles.colors.danger,
+    marginLeft: 10,
+  },
+  veiculoTitle: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: commonStyles.colors.gray.main,
+    marginLeft: 10,
   },
   tipo: {
     marginLeft: 10,
