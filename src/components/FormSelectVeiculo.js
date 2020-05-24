@@ -62,9 +62,6 @@ export default class FormSelectVeiculo extends React.Component {
               title="Pegar Veículo"
               name="key"
             />
-            {/* <Text style={styles.txtInfo}>
-              Ao escolher um veículo será registrado o momento da saída
-            </Text> */}
           </View>
         ) : (
           <Text style={styles.txtSemVeiculo}>
@@ -81,7 +78,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: commonStyles.colors.secondary.main,
     borderRadius: 5,
-    // height: 150,
     marginVertical: 5,
     padding: 5,
     paddingVertical: 10,

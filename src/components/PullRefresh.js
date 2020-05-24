@@ -13,5 +13,6 @@ export default function PullRefresh(props) {
 const styles = StyleSheet.create({
   textoAviso: {
     alignSelf: 'center',
+    marginBottom: 5,
   },
 });
