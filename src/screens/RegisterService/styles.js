@@ -1,6 +1,8 @@
 import styled from 'styled-components/native';
 import { StyleSheet } from 'react-native';
 
+import commonStyles from '../../commonStyles';
+
 export const Container = styled.ScrollView`
   flex: 1;
   padding: 5px;
@@ -64,5 +66,16 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     color: 'gray',
+  },
+  veiculoError: {
+    fontSize: 13,
+    color: commonStyles.colors.danger,
+    marginLeft: 10,
+  },
+  veiculoTitle: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: commonStyles.colors.gray.main,
+    marginLeft: 10,
   },
 });

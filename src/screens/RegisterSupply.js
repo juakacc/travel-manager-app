@@ -6,7 +6,6 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
-  Alert,
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
@@ -127,7 +126,7 @@ function RegisterSupply({ route, navigation, ...props }) {
   const changeVeiculo = value => {
     const veiculoSelecionado = veiculos.filter(item => item.id === value)[0];
     setVeiculo(veiculoSelecionado);
-    setKm(veiculoSelecionado.quilometragem);
+    setKm(veiculoSelecionado?.quilometragem || 0);
   };
 
   const placeholder = {

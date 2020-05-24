@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import RNPickerSelect from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -38,7 +39,10 @@ function usePrevious(value) {
 
 function RegisterService({ route, navigation, ...props }) {
   const [veiculo, setVeiculo] = useState(null);
+  const [veiculos, setVeiculos] = useState([]);
   const [revisao, setRevisao] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   const [km, setKm] = useState(0);
   const [nextKm, setNextKm] = useState(0);
 
@@ -47,6 +51,7 @@ function RegisterService({ route, navigation, ...props }) {
   const [date, setDate] = useState(new Date(moment()));
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const [veiculoError, setVeiculoError] = useState('');
   const [kmError, setKmError] = useState('');
   const [nextKmError, setNextKmError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
@@ -54,22 +59,38 @@ function RegisterService({ route, navigation, ...props }) {
   const [showRevision, setShowRevision] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isSub, setSub] = useState(false);
+  const [isLoaded, setLoaded] = useState(false);
 
   const prevLoading = usePrevious(isLoading);
   const descriptionTxt = useRef(null);
 
   useEffect(() => {
-    const { veiculo, revisao } = route.params;
+    const { veiculo, revisao, isAdmin } = route.params;
 
     if (veiculo) {
       setVeiculo(veiculo);
       setKm(veiculo.quilometragem);
       setNextKm(veiculo.quilometragem);
+      setLoaded(true);
     } else if (revisao) {
       setRevisao(revisao);
       setDescription(revisao.descricao);
       setKm(revisao.quilometragem || 0);
       setNextKm(revisao.quilometragem || 0);
+      setLoaded(true);
+    } else if (isAdmin) {
+      setIsAdmin(true);
+      setLoaded(false);
+      axios
+        .get('/veiculos')
+        .then(res => {
+          setVeiculos(res.data);
+          setLoaded(true);
+        })
+        .catch(err => {
+          console.log(err);
+          setLoaded(true);
+        });
     }
   }, []);
 
@@ -77,8 +98,13 @@ function RegisterService({ route, navigation, ...props }) {
     setKmError('');
     setNextKmError('');
     setDescriptionError('');
-
+    setVeiculoError('');
     let valid = true;
+
+    if (!veiculo?.id) {
+      setVeiculoError('Selecione um veículo, por favor');
+      valid = false;
+    }
 
     if (isNaN(km)) {
       setKmError('Quilometragem atual inválida');
@@ -155,107 +181,138 @@ function RegisterService({ route, navigation, ...props }) {
     setShowDatePicker(false);
     if (event.type === 'set') {
       const currentDate = selectedDate || date;
-      // setShow(Platform.OS === 'ios');
 
       setDate(currentDate);
       setDateShow(moment(currentDate).format('DD/MM/YYYY'));
     }
   };
 
+  const changeVeiculo = value => {
+    const veiculoSelecionado = veiculos.filter(item => item.id === value)[0];
+    setVeiculo(veiculoSelecionado);
+    setKm(veiculoSelecionado?.quilometragem || 0);
+  };
+
+  const placeholder = {
+    label: 'Selecione um veículo...',
+    value: null,
+    color: '#9EA0A4',
+  };
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-    >
-      <Container>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secondary.main}
-          barStyle="ligth-content"
-        />
-        <Titulo titulo="Cadastro de serviço" />
-
-        {veiculo && (
-          <Text style={styles.txtVeiculo}>
-            Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
-          </Text>
-        )}
-
-        <Input
-          keyboardType="numeric"
-          label="KM atual *"
-          value={`${km}`}
-          errorMessage={kmError}
-          returnKeyType="next"
-          onSubmitEditing={() => descriptionTxt.current.focus()}
-          blurOnSubmit={false}
-          onChangeText={value => {
-            setKm(value);
-            setNextKm(value);
+    <>
+      {isLoaded && (
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Keyboard.dismiss();
           }}
-        />
-
-        <Input
-          label="Descrição *"
-          value={description}
-          ref={descriptionTxt}
-          errorMessage={descriptionError}
-          onChangeText={value => setDescription(value)}
-        />
-
-        <CheckBox
-          title="Agendar revisão?"
-          checked={showRevision}
-          onPress={() => setShowRevision(!showRevision)}
-        />
-
-        <ContainerRevisao show={showRevision}>
-          <TituloRevisao>Troca/Revisão</TituloRevisao>
-
-          <Input
-            keyboardType="numeric"
-            label="Próximo KM"
-            value={`${nextKm}`}
-            errorMessage={nextKmError}
-            onChangeText={value => setNextKm(value)}
-          />
-
-          <TextAlertRevisao>
-            Altere a data caso o veículo realize revisão por data
-          </TextAlertRevisao>
-
-          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <View>
-              <DateShowRevisao>
-                <Icon
-                  name="calendar-check"
-                  color={commonStyles.colors.secondary.main}
-                  size={20}
-                />
-                {`  ${dateShow || '___/___/_____'}`}
-              </DateShowRevisao>
-            </View>
-          </TouchableOpacity>
-
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
+        >
+          <Container>
+            <GeneralStatusBarColor
+              backgroundColor={commonStyles.colors.secondary.main}
+              barStyle="ligth-content"
             />
-          )}
-        </ContainerRevisao>
+            <Titulo titulo="Cadastro de serviço" />
 
-        <Botao
-          onPress={save}
-          isSubmetendo={isSub}
-          title="Concluir"
-          name="check"
-        />
-      </Container>
-    </TouchableWithoutFeedback>
+            {isAdmin && veiculos.length > 0 ? (
+              <>
+                <Text style={styles.veiculoTitle}>Selecione um veículo</Text>
+                <RNPickerSelect
+                  onValueChange={value => changeVeiculo(value)}
+                  value={veiculo?.id}
+                  placeholder={placeholder}
+                  items={veiculos.map(v => ({
+                    label: v.nome,
+                    value: v.id,
+                  }))}
+                />
+                <Text style={styles.veiculoError}>{veiculoError}</Text>
+              </>
+            ) : (
+              veiculo && (
+                <Text style={styles.txtVeiculo}>
+                  Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
+                </Text>
+              )
+            )}
+
+            <Input
+              keyboardType="numeric"
+              label="KM atual *"
+              value={`${km}`}
+              errorMessage={kmError}
+              returnKeyType="next"
+              onSubmitEditing={() => descriptionTxt.current.focus()}
+              blurOnSubmit={false}
+              onChangeText={value => {
+                setKm(value);
+                setNextKm(value);
+              }}
+            />
+
+            <Input
+              label="Descrição *"
+              value={description}
+              ref={descriptionTxt}
+              errorMessage={descriptionError}
+              onChangeText={value => setDescription(value)}
+            />
+
+            <CheckBox
+              title="Agendar revisão?"
+              checked={showRevision}
+              onPress={() => setShowRevision(!showRevision)}
+            />
+
+            <ContainerRevisao show={showRevision}>
+              <TituloRevisao>Troca/Revisão</TituloRevisao>
+
+              <Input
+                keyboardType="numeric"
+                label="Próximo KM"
+                value={`${nextKm}`}
+                errorMessage={nextKmError}
+                onChangeText={value => setNextKm(value)}
+              />
+
+              <TextAlertRevisao>
+                Altere a data caso o veículo realize revisão por data
+              </TextAlertRevisao>
+
+              <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                <View>
+                  <DateShowRevisao>
+                    <Icon
+                      name="calendar-check"
+                      color={commonStyles.colors.secondary.main}
+                      size={20}
+                    />
+                    {`  ${dateShow || '___/___/_____'}`}
+                  </DateShowRevisao>
+                </View>
+              </TouchableOpacity>
+
+              {showDatePicker && (
+                <DateTimePicker
+                  value={date}
+                  mode="date"
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+            </ContainerRevisao>
+
+            <Botao
+              onPress={save}
+              isSubmetendo={isSub}
+              title="Concluir"
+              name="check"
+            />
+          </Container>
+        </TouchableWithoutFeedback>
+      )}
+    </>
   );
 }
 
