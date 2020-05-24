@@ -37,22 +37,41 @@ function usePrevious(value) {
 }
 
 function RegisterService({ route, navigation, ...props }) {
-  const [veiculo, setVeiculo] = useState(route.params.veiculo);
-  const [km, setKm] = useState(veiculo.quilometragem);
-  const [nextKm, setNextKm] = useState(km);
+  const [veiculo, setVeiculo] = useState(null);
+  const [revisao, setRevisao] = useState(null);
+  const [km, setKm] = useState(0);
+  const [nextKm, setNextKm] = useState(0);
+
   const [description, setDescription] = useState('');
-  const [dateShow, setDateShow] = useState('___/___/_____');
+  const [dateShow, setDateShow] = useState(null);
   const [date, setDate] = useState(new Date(moment()));
   const [showDatePicker, setShowDatePicker] = useState(false);
+
   const [kmError, setKmError] = useState('');
   const [nextKmError, setNextKmError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+
+  const [showRevision, setShowRevision] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isSub, setSub] = useState(false);
-  const [showRevision, setShowRevision] = useState(false);
 
   const prevLoading = usePrevious(isLoading);
   const descriptionTxt = useRef(null);
+
+  useEffect(() => {
+    const { veiculo, revisao } = route.params;
+
+    if (veiculo) {
+      setVeiculo(veiculo);
+      setKm(veiculo.quilometragem);
+      setNextKm(veiculo.quilometragem);
+    } else if (revisao) {
+      setRevisao(revisao);
+      setDescription(revisao.descricao);
+      setKm(revisao.quilometragem || 0);
+      setNextKm(revisao.quilometragem || 0);
+    }
+  }, []);
 
   const isValid = () => {
     setKmError('');
@@ -93,21 +112,38 @@ function RegisterService({ route, navigation, ...props }) {
         },
       };
 
+      if (!dateShow) delete event.revisao.momento;
       if (!showRevision) delete event.revisao;
 
       setLoading(true);
       setSub(true);
-      axios
-        .post(`/veiculos/${veiculo.id}/servicos`, event)
-        .then(res => {
-          setSub(false);
-          setLoading(false);
-          props.onSetMensagem('Serviço salvo com sucesso');
-        })
-        .catch(err => {
-          setSub(false);
-          props.onSetMensagem(err);
-        });
+      if (veiculo) {
+        // gravando serviço
+        axios
+          .post(`/veiculos/${veiculo.id}/servicos`, event)
+          .then(res => {
+            setSub(false);
+            setLoading(false);
+            props.onSetMensagem('Serviço salvo com sucesso');
+          })
+          .catch(err => {
+            setSub(false);
+            props.onSetMensagem(err);
+          });
+      } else {
+        // revisão
+        axios
+          .put(`/servicos/${revisao.servico.id}/revisoes/${revisao.id}`, event)
+          .then(res => {
+            setSub(false);
+            setLoading(false);
+            props.onSetMensagem('Revisão registrada com sucesso');
+          })
+          .catch(err => {
+            setSub(false);
+            props.onSetMensagem(err);
+          });
+      }
     }
   };
 
@@ -139,9 +175,11 @@ function RegisterService({ route, navigation, ...props }) {
         />
         <Titulo titulo="Cadastro de serviço" />
 
-        <Text style={styles.txtVeiculo}>
-          Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
-        </Text>
+        {veiculo && (
+          <Text style={styles.txtVeiculo}>
+            Veículo: <Text style={styles.veiculo}>{veiculo.nome}</Text>
+          </Text>
+        )}
 
         <Input
           keyboardType="numeric"
@@ -194,7 +232,7 @@ function RegisterService({ route, navigation, ...props }) {
                   color={commonStyles.colors.secondary.main}
                   size={20}
                 />
-                {`  ${dateShow}`}
+                {`  ${dateShow || '___/___/_____'}`}
               </DateShowRevisao>
             </View>
           </TouchableOpacity>

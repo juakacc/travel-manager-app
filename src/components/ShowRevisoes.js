@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import commonStyles from '../commonStyles';
 
 const useInterval = (callback, delay) => {
@@ -18,7 +18,7 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-export default function ShowRevisoes({ revisoes }) {
+export default function ShowRevisoes({ revisoes, veiculo, navigation }) {
   const [show, setShow] = useState(0);
 
   useInterval(() => {
@@ -29,9 +29,16 @@ export default function ShowRevisoes({ revisoes }) {
   return (
     <View>
       <Text>Revisões pendentes para esse veículo:</Text>
-      <View style={styles.containerButton}>
+      <TouchableOpacity
+        style={styles.containerButton}
+        onPress={() =>
+          navigation.navigate('ListRevisions', {
+            veiculo,
+          })
+        }
+      >
         <Text style={styles.text}>{revisoes[show].descricao}</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }

@@ -162,7 +162,14 @@ class Home extends React.Component {
   };
 
   render() {
-    const { viagem, veiculos, isLoading, indice_msg, fabOpen } = this.state;
+    const {
+      viagem,
+      veiculos,
+      isLoading,
+      indice_msg,
+      fabOpen,
+      revisoes,
+    } = this.state;
     const { navigation } = this.props;
     const alerta = textArray[indice_msg % textArray.length];
 
@@ -223,8 +230,12 @@ class Home extends React.Component {
             {alerta}
           </Animated.Text>
 
-          {this.state.revisoes.length > 0 && (
-            <ShowRevisoes revisoes={this.state.revisoes} />
+          {revisoes.length > 0 && (
+            <ShowRevisoes
+              revisoes={revisoes}
+              veiculo={viagem.veiculo}
+              navigation={navigation}
+            />
           )}
 
           <Spinner visible={isLoading} />

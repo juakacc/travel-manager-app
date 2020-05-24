@@ -7,6 +7,7 @@ import ConcluirViagem from '../screens/ConcluirViagem';
 import { headerOptions } from './utils';
 import RegisterSupply from '../screens/RegisterSupply';
 import RegisterService from '../screens/RegisterService';
+import ListRevisions from '../screens/ListRevisions';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ export default function () {
       <Stack.Screen component={ConcluirViagem} name="ConcluirViagem" />
       <Stack.Screen component={RegisterSupply} name="RegisterSupply" />
       <Stack.Screen component={RegisterService} name="RegisterService" />
+      <Stack.Screen component={ListRevisions} name="ListRevisions" />
     </Stack.Navigator>
   );
 }
