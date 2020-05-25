@@ -80,7 +80,6 @@ class Home extends React.Component {
         if (this._isMounted) {
           this.setState({
             viagem: res.data,
-            isLoading: false,
           });
         }
         this.loadRevisoes(res.data.veiculo);
@@ -124,11 +123,13 @@ class Home extends React.Component {
         if (this._isMounted) {
           this.setState({
             revisoes: res.data,
+            isLoading: false,
           });
         }
       })
       .catch(err => {
         console.log(err);
+        this.setLoading(false);
       });
   };
 
@@ -212,56 +213,62 @@ class Home extends React.Component {
     );
 
     return (
-      <View style={styles.container}>
-        <PTRView onRefresh={this.loadViagem}>
-          <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secondary.main}
-            barStyle="ligth-content"
-          />
-          <PullRefresh />
-          {/* <Header /> */}
-          <Animated.Text
-            useNativeDriver
-            style={[
-              styles.textAlert,
-              {
-                opacity: this.state.fadeIn,
-              },
-            ]}
-          >
-            {alerta}
-          </Animated.Text>
+      <>
+        <Spinner visible={isLoading} />
+        {!isLoading && (
+          <View style={styles.container}>
+            <PTRView onRefresh={this.loadViagem}>
+              <GeneralStatusBarColor
+                backgroundColor={commonStyles.colors.secondary.main}
+                barStyle="ligth-content"
+              />
+              <PullRefresh />
+              {/* <Header /> */}
+              <Animated.Text
+                useNativeDriver
+                style={[
+                  styles.textAlert,
+                  {
+                    opacity: this.state.fadeIn,
+                  },
+                ]}
+              >
+                {alerta}
+              </Animated.Text>
 
-          {revisoes.length > 0 && (
-            <ShowRevisoes
-              revisoes={revisoes}
-              veiculo={viagem.veiculo}
-              navigation={navigation}
-            />
-          )}
+              {viagem && revisoes.length > 0 && (
+                <ShowRevisoes
+                  revisoes={revisoes}
+                  veiculo={viagem.veiculo}
+                  navigation={navigation}
+                />
+              )}
 
-          <Spinner visible={isLoading} />
+              {viagem ? (
+                <VeiculoAtual viagem={viagem} navigation={navigation} />
+              ) : (
+                <FormSelectVeiculo
+                  navigation={navigation}
+                  veiculos={veiculos}
+                />
+              )}
+              <ViagemAtual viagem={viagem} />
+            </PTRView>
 
-          {viagem ? (
-            <VeiculoAtual viagem={viagem} navigation={navigation} />
-          ) : (
-            <FormSelectVeiculo navigation={navigation} veiculos={veiculos} />
-          )}
-          <ViagemAtual viagem={viagem} />
-        </PTRView>
-
-        {(viagem?.veiculo || motorista.permissoes.includes('admin')) && (
-          <FloatingAction
-            actions={actions}
-            onPressItem={this.fabPressed}
-            floatingIcon={icon}
-            onOpen={() => this.setState({ fabOpen: true })}
-            onClose={() => this.setState({ fabOpen: false })}
-            overlayColor={'rgba(170, 85, 0, 0.5)'}
-            color={commonStyles.colors.primary.main}
-          />
+            {(viagem?.veiculo || motorista.permissoes.includes('admin')) && (
+              <FloatingAction
+                actions={actions}
+                onPressItem={this.fabPressed}
+                floatingIcon={icon}
+                onOpen={() => this.setState({ fabOpen: true })}
+                onClose={() => this.setState({ fabOpen: false })}
+                overlayColor={'rgba(170, 85, 0, 0.5)'}
+                color={commonStyles.colors.primary.main}
+              />
+            )}
+          </View>
         )}
-      </View>
+      </>
     );
   }
 }

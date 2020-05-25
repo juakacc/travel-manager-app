@@ -31,7 +31,7 @@ export const TextAlertRevisao = styled.Text`
   font-size: 14px;
   font-weight: bold;
   color: #f00;
-  align-self: center;
+  text-align: center;
   margin-top: 10px;
 `;
 

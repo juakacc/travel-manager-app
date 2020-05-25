@@ -23,11 +23,9 @@ export default function ListRevisions({ route, navigation }) {
       axios
         .get(`veiculos/${route.params.veiculo.id}/revisoes`)
         .then(res => {
+          if (res.data.length === 0) navigation.goBack();
           setRevisoes(res.data);
           setLoading(false);
-          if (revisoes.length === 0) {
-            navigation.goBack();
-          }
         })
         .catch(err => {
           console.log(err);

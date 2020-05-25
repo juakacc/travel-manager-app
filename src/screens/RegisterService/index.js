@@ -101,9 +101,11 @@ function RegisterService({ route, navigation, ...props }) {
     setVeiculoError('');
     let valid = true;
 
-    if (!veiculo?.id) {
-      setVeiculoError('Selecione um veículo, por favor');
-      valid = false;
+    if (!revisao) {
+      if (!veiculo?.id) {
+        setVeiculoError('Selecione um veículo, por favor');
+        valid = false;
+      }
     }
 
     if (isNaN(km)) {
@@ -147,7 +149,7 @@ function RegisterService({ route, navigation, ...props }) {
         // gravando serviço
         axios
           .post(`/veiculos/${veiculo.id}/servicos`, event)
-          .then(res => {
+          .then(() => {
             setSub(false);
             setLoading(false);
             props.onSetMensagem('Serviço salvo com sucesso');
