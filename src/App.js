@@ -38,7 +38,7 @@ class App extends Component {
         <NavigationContainer>
           <Stack.Navigator headerMode="none">
             {user.token ? (
-              getNavigator(user.permissoes.includes('admin'))
+              getNavigator(user.permissoes.includes('admin'), user.apelido)
             ) : (
               <Stack.Screen component={Login} name="Login" />
             )}

@@ -6,10 +6,14 @@ import Motorista from './NavigatorMotorista';
 
 const Stack = createStackNavigator();
 
-export default function getNavigator(admin) {
+export default function getNavigator(admin, apelido) {
   return admin ? (
-    <Stack.Screen component={Admin} name="App" />
+    <Stack.Screen component={Admin} name="App" initialParams={{ apelido }} />
   ) : (
-    <Stack.Screen component={Motorista} name="App" />
+    <Stack.Screen
+      component={Motorista}
+      name="App"
+      initialParams={{ apelido }}
+    />
   );
 }

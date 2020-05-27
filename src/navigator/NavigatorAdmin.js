@@ -20,6 +20,7 @@ import ViagemStack from './ViagemStack';
 import LogoutStack from './LogoutStack';
 import tabBarOptions from './tabBarOptions';
 import commonStyles from '../commonStyles';
+import CustomDrawerContent from './TitleDrawer';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -109,15 +110,19 @@ function VeiculoStack() {
   );
 }
 
-export default function DrawerNavigator() {
+export default function DrawerNavigator({ route }) {
   return (
     <Drawer.Navigator
       drawerPosition="right"
       drawerContentOptions={{
         activeTintColor: commonStyles.colors.secondary.main,
       }}
+      drawerContent={props => (
+        <CustomDrawerContent {...props} {...route.params} />
+      )}
       drawerStyle={{
         width: 200,
+        height: '85%',
         borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
         elevation: 5,

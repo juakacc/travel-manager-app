@@ -223,7 +223,6 @@ class Home extends React.Component {
                 barStyle="ligth-content"
               />
               <PullRefresh />
-              {/* <Header /> */}
               <Animated.Text
                 useNativeDriver
                 style={[
