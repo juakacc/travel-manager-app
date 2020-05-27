@@ -160,12 +160,14 @@ const styles = StyleSheet.create({
   },
   infoTitle: {
     fontWeight: 'bold',
+    color: commonStyles.colors.secondary.main,
     fontSize: 14,
   },
   infoValue: {
     fontSize: 15,
     marginLeft: 10,
     marginBottom: 10,
+    color: commonStyles.colors.secondary.main,
   },
 });
 
