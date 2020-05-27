@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
 import commonStyles from '../commonStyles';
 
@@ -9,6 +10,7 @@ export const headerOptions = (navigation, btnBack = false) => {
   const header = {
     headerTitle: () => <Header />,
     headerTitleAlign: 'center',
+    headerTintColor: commonStyles.colors.gray.white,
     headerStyle: {
       backgroundColor: commonStyles.colors.secondary.main,
     },
@@ -38,7 +40,7 @@ const Header = () => {
 const BotaoDrawer = ({ navigation }) => (
   <Ionicons
     name="ios-options"
-    size={30}
+    size={25}
     style={{ marginRight: 10 }}
     color={commonStyles.colors.gray.white}
     onPress={() => navigation.toggleDrawer()}
@@ -46,11 +48,11 @@ const BotaoDrawer = ({ navigation }) => (
 );
 
 const BotaoVoltar = ({ navigation }) => (
-  <Icon
-    name="home"
+  <Feather
+    name="arrow-left"
     size={25}
     color={commonStyles.colors.gray.white}
     style={{ marginLeft: 20 }}
-    onPress={() => navigation.navigate('Home')}
+    onPress={() => navigation.goBack()}
   />
 );

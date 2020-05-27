@@ -1,12 +1,8 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Linking,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, Text, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import Botao from '../components/Botao';
 import config from '../conf';
 import commonStyles from '../commonStyles';
 
@@ -19,24 +15,16 @@ export default class Sobre extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View>
-          <Text style={styles.titulo}>
-            <Icon
-              name="road"
-              size={35}
-              color={commonStyles.colors.secondary.main}
-            />{' '}
-            Viagens PMO
-          </Text>
-        </View>
+        <Text style={styles.titulo}>
+          <Icon name="road" size={35} color={commonStyles.colors.gray.white} />{' '}
+          Viagens PMO
+        </Text>
 
-        <View style={styles.containerInfo}>
-          <TouchableOpacity onPress={this.enviarMsg}>
-            <Text style={[styles.texto, styles.button]}>
-              Dúvidas, sugestões e reclamações?
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <Botao
+          onPress={this.enviarMsg}
+          title="Dúvidas, sugestões?"
+          color={commonStyles.colors.gray.white}
+        />
 
         <View style={styles.containerInfo}>
           <Text style={styles.texto}>
@@ -53,25 +41,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: commonStyles.colors.primary.light,
+    backgroundColor: commonStyles.colors.secondary.main,
     padding: 20,
-    alignItems: 'center',
     justifyContent: 'space-around',
   },
   titulo: {
     fontSize: 30,
     fontWeight: 'bold',
+    textAlign: 'center',
+    color: commonStyles.colors.gray.white,
   },
   containerInfo: {
     alignItems: 'center',
-    color: commonStyles.colors.secondary.main,
   },
   texto: {
-    color: commonStyles.colors.secondary.main,
+    color: commonStyles.colors.gray.white,
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  button: {
-    fontSize: 20,
   },
 });

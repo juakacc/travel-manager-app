@@ -117,7 +117,12 @@ class Login extends React.Component {
             </Text>
 
             <View style={styles.inputContainer}>
-              <Icon style={styles.inputIcon} name="user-alt" size={20} />
+              <Icon
+                style={styles.inputIcon}
+                name="user-alt"
+                size={20}
+                color={commonStyles.colors.gray.white}
+              />
               <TextInput
                 style={styles.inputs}
                 placeholder="Apelido"
@@ -135,7 +140,12 @@ class Login extends React.Component {
             </View>
 
             <View style={styles.inputContainer}>
-              <Icon style={styles.inputIcon} name="user-lock" size={20} />
+              <Icon
+                style={styles.inputIcon}
+                name="user-lock"
+                size={20}
+                color={commonStyles.colors.gray.white}
+              />
               <TextInput
                 style={styles.inputs}
                 placeholder="Senha"
@@ -156,6 +166,7 @@ class Login extends React.Component {
                 <Icon
                   name={this.state.mostrar ? 'eye' : 'eye-slash'}
                   size={20}
+                  color={commonStyles.colors.gray.white}
                 />
               </TouchableOpacity>
             </View>

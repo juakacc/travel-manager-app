@@ -146,6 +146,7 @@ class ListItem extends React.Component {
               title="Esconder"
               onPress={this.closeModal}
               style={{ width: 200 }}
+              color={commonStyles.colors.gray.white}
               name="minus-circle"
             />
           </View>

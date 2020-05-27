@@ -53,6 +53,7 @@ class Logout extends React.Component {
           name="sign-out-alt"
           title="Sair"
           style={styles.button}
+          color={commonStyles.colors.danger}
           onPress={() => this.logout()}
         />
       </Animated.View>
@@ -68,8 +69,6 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 100,
-    color: 'white',
-    backgroundColor: '#F54E2A',
   },
 });
 
