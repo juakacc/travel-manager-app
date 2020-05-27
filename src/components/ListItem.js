@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import commonStyles from '../commonStyles';
 import Modal from 'react-native-modal';
-import Botao from './Botao';
-
 import axios from 'axios';
 import { connect } from 'react-redux';
+
+import Botao from './Botao';
+import commonStyles from '../commonStyles';
 import { setMensagem } from '../store/actions/mensagem';
 
 class ListItem extends React.Component {
@@ -24,11 +24,12 @@ class ListItem extends React.Component {
   };
 
   mostrar = () => {
-    const isPessoa = this.props.editScreen === 'CadastrarPessoa';
+    const { editScreen, item } = this.props;
+    const isPessoa = editScreen === 'CadastrarPessoa';
 
     if (isPessoa) {
       axios
-        .get(`motoristas/${this.props.item.id}`)
+        .get(`motoristas/${item.id}`)
         .then(motorista => {
           this.setState({
             isVisible: true,
@@ -62,7 +63,7 @@ class ListItem extends React.Component {
         });
     } else {
       axios
-        .get(`veiculos/${this.props.item.id}`)
+        .get(`veiculos/${item.id}`)
         .then(veiculo => {
           this.setState({
             isVisible: true,
@@ -107,25 +108,26 @@ class ListItem extends React.Component {
   };
 
   render() {
+    const { isEdit, item } = this.props;
+
     return (
       <View style={styles.container}>
         <View style={styles.nomeMotorista}>
-          <Text style={styles.txtNome}>{this.props.item.title}</Text>
+          <Text style={styles.txtNome}>{item.title}</Text>
         </View>
 
-        {this.props.isEdit ? (
-          <View style={styles.viewEdit}>
-            <TouchableOpacity onPress={this.editar} style={styles.btnEdit}>
-              <Icon name="edit" size={20} color="white" />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.viewEdit}>
-            <TouchableOpacity onPress={this.mostrar} style={styles.btnEdit}>
-              <Icon name="info-circle" size={20} color="white" />
-            </TouchableOpacity>
-          </View>
-        )}
+        <View style={styles.viewEdit}>
+          <TouchableOpacity
+            onPress={isEdit ? this.editar : this.mostrar}
+            style={styles.btnEdit}
+          >
+            <Icon
+              name={isEdit ? 'edit' : 'info-circle'}
+              size={20}
+              color={commonStyles.colors.secondary.main}
+            />
+          </TouchableOpacity>
+        </View>
 
         <Modal
           isVisible={this.state.isVisible}
@@ -165,14 +167,15 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
     margin: 5,
-    backgroundColor: commonStyles.colors.secondary.main,
+    borderWidth: 2,
+    borderColor: commonStyles.colors.secondary.main,
     borderRadius: 5,
     flexDirection: 'row',
     alignContent: 'space-between',
     alignItems: 'center',
   },
   txtNome: {
-    color: 'white',
+    color: commonStyles.colors.secondary.main,
     fontSize: 20,
   },
   nomeMotorista: {

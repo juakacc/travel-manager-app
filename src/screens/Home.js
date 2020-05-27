@@ -183,11 +183,11 @@ class Home extends React.Component {
           <Icon
             name="gas-pump"
             size={20}
-            color={commonStyles.colors.secondary.main}
+            color={commonStyles.colors.gray.white}
           />
         ),
         name: 'bt_fuel',
-        color: commonStyles.colors.primary.main,
+        color: commonStyles.colors.secondary.main,
       },
       {
         text: 'Serviço',
@@ -195,18 +195,18 @@ class Home extends React.Component {
           <Icon
             name="wrench"
             size={20}
-            color={commonStyles.colors.secondary.main}
+            color={commonStyles.colors.gray.white}
           />
         ),
         name: 'bt_service',
-        color: commonStyles.colors.primary.main,
+        color: commonStyles.colors.secondary.main,
       },
     ];
 
     const icon = (
       <Icon
         name="plus"
-        color={commonStyles.colors.secondary.main}
+        color={commonStyles.colors.gray.white}
         size={20}
         style={fabOpen ? { transform: [{ rotate: '45deg' }] } : {}}
       />
@@ -263,7 +263,7 @@ class Home extends React.Component {
                 onOpen={() => this.setState({ fabOpen: true })}
                 onClose={() => this.setState({ fabOpen: false })}
                 overlayColor={'rgba(170, 85, 0, 0.5)'}
-                color={commonStyles.colors.primary.main}
+                color={commonStyles.colors.secondary.main}
               />
             )}
           </View>

@@ -48,6 +48,7 @@ class UltimasViagens extends React.Component {
             />
           )}
           keyExtractor={item => `${item.id}`}
+          showsVerticalScrollIndicator={false}
           ListEmptyComponent={<SemResultado />}
         />
       </View>

@@ -12,7 +12,7 @@ export default {
     },
     secondary: {
       main: '#AA5500',
-      light: '#D4700C',
+      light: '#FFBF80',
       dark: '#4D2600',
     },
     gray: {

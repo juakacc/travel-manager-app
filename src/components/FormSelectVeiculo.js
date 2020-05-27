@@ -61,6 +61,7 @@ export default class FormSelectVeiculo extends React.Component {
               onPress={this.enviarVeiculo}
               title="Pegar Veículo"
               name="key"
+              color={commonStyles.colors.gray.white}
             />
           </View>
         ) : (
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: commonStyles.colors.secondary.main,
     borderRadius: 5,
     marginVertical: 5,
-    padding: 5,
+    padding: 10,
     paddingVertical: 10,
   },
   title: {

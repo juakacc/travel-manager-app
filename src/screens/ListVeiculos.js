@@ -73,6 +73,7 @@ class ListVeiculos extends React.Component {
           }
           onRefresh={() => this.loadVeiculos()}
           refreshing={this.state.isLoading}
+          showsVerticalScrollIndicator={false}
           onScroll={event => {
             const currentOffset = event.nativeEvent.contentOffset.y;
             const direction =
