@@ -8,6 +8,7 @@ import { headerOptions } from './utils';
 import RegisterSupply from '../screens/RegisterSupply';
 import RegisterService from '../screens/RegisterService';
 import ListRevisions from '../screens/ListRevisions';
+import SelecionarVeiculo from '../screens/SelecionarVeiculo';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ export default function () {
       })}
     >
       <Stack.Screen component={Home} name="Viagem" />
+      <Stack.Screen component={SelecionarVeiculo} name="SelecionarVeiculo" />
       <Stack.Screen component={IniciarViagem} name="IniciarViagem" />
       <Stack.Screen component={ConcluirViagem} name="ConcluirViagem" />
       <Stack.Screen component={RegisterSupply} name="RegisterSupply" />

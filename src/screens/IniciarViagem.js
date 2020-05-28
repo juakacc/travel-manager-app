@@ -10,14 +10,13 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Input } from 'react-native-elements';
-
 import moment from 'moment';
+import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 import Titulo from '../components/Titulo';
-
-import axios from 'axios';
-import Spinner from 'react-native-loading-spinner-overlay';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 
 class IniciarViagem extends React.Component {
@@ -25,6 +24,7 @@ class IniciarViagem extends React.Component {
     quilometragem: 0,
     descricao: '',
     veiculoId: 0,
+    isLoaded: false,
 
     veiculoNome: '',
 
@@ -58,22 +58,25 @@ class IniciarViagem extends React.Component {
 
     if (!veiculoId) {
       this.props.setMensagem('Veículo inválido');
-      this.props.navigation.navigate('Viagem');
+      this.props.navigation.navigate('SelecionarVeiculo');
     } else {
       this.setState({ veiculoId }, this.carregarVeiculo);
     }
   };
 
   carregarVeiculo = () => {
+    this.setState({ isLoaded: false });
     axios
       .get(`veiculos/${this.state.veiculoId}`)
       .then(res => {
         this.setState({
           veiculoNome: res.data.nome,
           quilometragem: res.data.quilometragem,
+          isLoaded: true,
         });
       })
       .catch(err => {
+        this.setState({ isLoaded: true });
         this.props.setMensagem('Veículo inválido');
         this.props.navigation.navigate('Viagem');
         console.log(err);
@@ -96,59 +99,76 @@ class IniciarViagem extends React.Component {
   };
 
   render() {
+    const {
+      isLoaded,
+      veiculoNome,
+      quilometragem,
+      errQuilometragem,
+      descricao,
+    } = this.state;
+
+    const { isSubmetendo } = this.props;
+
     return (
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView style={styles.container}>
-          <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secondary.main}
-            barStyle="ligth-content"
-          />
-          <Spinner visible={this.props.isSubmetendo} />
+      <>
+        <Spinner visible={!isLoaded} />
+        {isLoaded && (
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <KeyboardAvoidingView style={styles.container}>
+              <GeneralStatusBarColor
+                backgroundColor={commonStyles.colors.secondary.main}
+                barStyle="ligth-content"
+              />
+              <Spinner visible={isSubmetendo} />
 
-          <Titulo titulo="Iniciar Viagem" />
+              <Titulo titulo="Iniciar Viagem" />
 
-          <Text style={styles.txtVeiculo}>
-            Veículo:
-            <Text style={styles.veiculo}> {this.state.veiculoNome}</Text>
-          </Text>
+              <Botao
+                onPress={() => this.props.navigation.goBack()}
+                title={veiculoNome}
+                name="arrow-left"
+              />
 
-          <Text style={styles.title}>
-            Qual a quilometragem atual registrada no veículo?
-          </Text>
-          <Text style={styles.title}>
-            (Altere o valor prosposto para o valor marcado no painel do veículo)
-          </Text>
+              <Text style={styles.title}>
+                Qual a quilometragem atual registrada no veículo?
+              </Text>
+              <Text style={styles.title}>
+                (Altere o valor prosposto para o valor marcado no painel do
+                veículo)
+              </Text>
 
-          <Input
-            keyboardType="numeric"
-            label="Quilometragem *"
-            placeholder="KM atual do veículo"
-            value={`${this.state.quilometragem}`}
-            errorMessage={this.state.errQuilometragem}
-            returnKeyType="next"
-            onSubmitEditing={() => this.input_02.focus()}
-            blurOnSubmit={false}
-            onChangeText={quilometragem => this.setState({ quilometragem })}
-          />
+              <Input
+                keyboardType="numeric"
+                label="Quilometragem *"
+                placeholder="KM atual do veículo"
+                value={`${quilometragem}`}
+                errorMessage={errQuilometragem}
+                returnKeyType="next"
+                onSubmitEditing={() => this.input_02.focus()}
+                blurOnSubmit={false}
+                onChangeText={quilometragem => this.setState({ quilometragem })}
+              />
 
-          <Input
-            label="Comentário (opcional)"
-            value={this.state.descricao}
-            placeholder="Comentário sobre a viagem"
-            returnKeyType="done"
-            ref={input => (this.input_02 = input)}
-            onSubmitEditing={this.iniciarViagem}
-            onChangeText={descricao => this.setState({ descricao })}
-          />
+              <Input
+                label="Comentário (opcional)"
+                value={descricao}
+                placeholder="Comentário sobre a viagem"
+                returnKeyType="done"
+                ref={input => (this.input_02 = input)}
+                onSubmitEditing={this.iniciarViagem}
+                onChangeText={descricao => this.setState({ descricao })}
+              />
 
-          <Botao
-            onPress={this.iniciarViagem}
-            isSubmetendo={this.props.isSubmetendo}
-            title="Iniciar viagem"
-            name="route"
-          />
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+              <Botao
+                onPress={this.iniciarViagem}
+                isSubmetendo={isSubmetendo}
+                title="Iniciar viagem"
+                name="route"
+              />
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        )}
+      </>
     );
   }
 }
@@ -160,14 +180,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     textAlign: 'center',
-    marginBottom: 10,
-  },
-  veiculo: {
-    color: 'red',
-  },
-  txtVeiculo: {
-    textAlign: 'center',
-    fontSize: 20,
     marginBottom: 10,
   },
 });

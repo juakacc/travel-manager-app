@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import Header from '../components/Header';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
 import ItemViagemConcluida from '../components/ItemViagemConcluida';

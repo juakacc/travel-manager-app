@@ -9,7 +9,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { setMensagem } from '../store/actions/mensagem';
 
-import Header from '../components/Header';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
 import VeiculoAtual from '../components/VeiculoAtual';
@@ -32,7 +31,6 @@ class Home extends React.Component {
   state = {
     viagem: null,
     revisoes: [],
-    veiculos: [],
     isLoading: false,
     indice_msg: 0,
 
@@ -85,34 +83,14 @@ class Home extends React.Component {
         this.loadRevisoes(res.data.veiculo);
       })
       .catch(err => {
-        if (this._isMounted) {
-          this.setState({ viagem: null });
-        }
+        // this.props.set_mensagem(err);
 
-        if (err.response && err.response.status === 404) {
-          // Não encontrou viagem
-          this.loadVeiculos();
-        } else {
-          this.props.set_mensagem(err);
-          this.setLoading(false);
-        }
-      });
-  };
-
-  loadVeiculos = () => {
-    axios
-      .get('veiculos/disponiveis')
-      .then(res => {
         if (this._isMounted) {
           this.setState({
-            veiculos: res.data,
+            viagem: null,
             isLoading: false,
           });
         }
-      })
-      .catch(err => {
-        this.props.set_mensagem(err);
-        this.setLoading(false);
       });
   };
 
@@ -167,14 +145,15 @@ class Home extends React.Component {
   render() {
     const {
       viagem,
-      veiculos,
       isLoading,
       indice_msg,
       fabOpen,
       revisoes,
+      fadeIn,
     } = this.state;
     const { navigation, motorista } = this.props;
     const alerta = textArray[indice_msg % textArray.length];
+    const isAdmin = motorista.permissoes.includes('admin');
 
     const actions = [
       {
@@ -228,7 +207,7 @@ class Home extends React.Component {
                 style={[
                   styles.textAlert,
                   {
-                    opacity: this.state.fadeIn,
+                    opacity: fadeIn,
                   },
                 ]}
               >
@@ -246,15 +225,12 @@ class Home extends React.Component {
               {viagem ? (
                 <VeiculoAtual viagem={viagem} navigation={navigation} />
               ) : (
-                <FormSelectVeiculo
-                  navigation={navigation}
-                  veiculos={veiculos}
-                />
+                <FormSelectVeiculo navigation={navigation} />
               )}
               <ViagemAtual viagem={viagem} />
             </PTRView>
 
-            {(viagem?.veiculo || motorista.permissoes.includes('admin')) && (
+            {(viagem?.veiculo || isAdmin) && (
               <FloatingAction
                 actions={actions}
                 onPressItem={this.fabPressed}
