@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
 import ItemViagemConcluida from '../components/ItemViagemConcluida';
 import SemResultado from '../components/SemResultado';
@@ -62,11 +61,6 @@ class DisposicaoAtual extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secondary.main}
-          barStyle="ligth-content"
-        />
-
         <PullRefresh />
         <Titulo titulo="Viagens em andamento" />
 

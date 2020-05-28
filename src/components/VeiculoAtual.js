@@ -53,6 +53,7 @@ export default class VeiculoAtual extends React.Component {
           onPress={() => this.concluirViagem()}
           title="Entregar veículo"
           name="key"
+          color={commonStyles.colors.gray.white}
         />
       </View>
     );
@@ -64,8 +65,7 @@ const styles = StyleSheet.create({
     backgroundColor: commonStyles.colors.secondary.main,
     marginVertical: 5,
     borderRadius: 5,
-    padding: 5,
-    paddingVertical: 10,
+    padding: 10,
   },
   title: {
     fontWeight: 'bold',

@@ -19,7 +19,6 @@ import { setMensagem } from '../store/actions/mensagem';
 import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 
 const estadoInicial = {
   nome: '',
@@ -190,10 +189,6 @@ class CadastrarPessoa extends React.Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secondary.main}
-            barStyle="ligth-content"
-          />
           <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />
 
           <Titulo titulo={titulo} />

@@ -4,7 +4,6 @@ import { Text, StyleSheet, Animated, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { userLoggout } from '../store/actions/user';
 
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 
@@ -43,10 +42,6 @@ class Logout extends React.Component {
           },
         ]}
       >
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secondary.main}
-          barStyle="ligth-content"
-        />
         <Text>Deseja realmente sair da aplicação? </Text>
 
         <Botao

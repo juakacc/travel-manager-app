@@ -8,7 +8,7 @@ import Titulo from '../components/Titulo';
 import { connect } from 'react-redux';
 import { setMensagem } from '../store/actions/mensagem';
 import Spinner from 'react-native-loading-spinner-overlay';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+
 import commonStyles from '../commonStyles';
 
 class ListPessoas extends React.Component {
@@ -48,11 +48,6 @@ class ListPessoas extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secondary.main}
-          barStyle="ligth-content"
-        />
-
         <Spinner visible={this.state.isLoading} />
 
         <Titulo titulo="Motoristas cadastrados" />

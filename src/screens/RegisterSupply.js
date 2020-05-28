@@ -13,7 +13,6 @@ import RNPickerSelect from 'react-native-picker-select';
 import axios from 'axios';
 import { setMensagem } from '../store/actions/mensagem';
 
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
@@ -144,10 +143,6 @@ function RegisterSupply({ route, navigation, ...props }) {
           }}
         >
           <ScrollView style={styles.container}>
-            <GeneralStatusBarColor
-              backgroundColor={commonStyles.colors.secondary.main}
-              barStyle="ligth-content"
-            />
             <Titulo titulo="Cadastro de abastecimento" />
 
             {isAdmin && veiculos.length > 0 ? (

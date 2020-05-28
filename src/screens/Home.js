@@ -9,7 +9,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { setMensagem } from '../store/actions/mensagem';
 
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
 import VeiculoAtual from '../components/VeiculoAtual';
 import FormSelectVeiculo from '../components/FormSelectVeiculo';
@@ -197,10 +196,6 @@ class Home extends React.Component {
         {!isLoading && (
           <View style={styles.container}>
             <PTRView onRefresh={this.loadViagem}>
-              <GeneralStatusBarColor
-                backgroundColor={commonStyles.colors.secondary.main}
-                barStyle="ligth-content"
-              />
               <PullRefresh />
               <Animated.Text
                 useNativeDriver

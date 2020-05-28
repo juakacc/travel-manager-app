@@ -18,7 +18,7 @@ import { setMensagem } from '../store/actions/mensagem';
 
 import { concluirViagem } from '../store/actions/viagem';
 import Titulo from '../components/Titulo';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
 
@@ -139,10 +139,6 @@ class ConcluirViagem extends React.Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secondary.main}
-            barStyle="ligth-content"
-          />
           <Spinner visible={this.props.isSubmetendo} />
 
           <Titulo titulo="Concluir Viagem" />

@@ -15,7 +15,6 @@ import axios from 'axios';
 import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo';
 import { setMensagem } from '../store/actions/mensagem';
 
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import Botao from '../components/Botao';
 import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
@@ -186,10 +185,6 @@ class CadastrarVeiculo extends React.Component {
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         style={styles.container}
       >
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secondary.main}
-          barStyle="ligth-content"
-        />
         <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />
 
         <Titulo titulo="Cadastro de Veículo" />

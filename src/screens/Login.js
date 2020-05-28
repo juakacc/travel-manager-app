@@ -101,7 +101,7 @@ class Login extends React.Component {
             })}
           >
             <GeneralStatusBarColor
-              backgroundColor="white"
+              backgroundColor={commonStyles.colors.gray.white}
               barStyle="dark-content"
             />
 

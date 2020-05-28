@@ -15,7 +15,6 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import { setMensagem } from '../../store/actions/mensagem';
-import GeneralStatusBarColor from '../../components/GeneralStatusBarColor';
 import Titulo from '../../components/Titulo';
 import commonStyles from '../../commonStyles';
 import Botao from '../../components/Botao';
@@ -210,10 +209,6 @@ function RegisterService({ route, navigation, ...props }) {
           }}
         >
           <Container>
-            <GeneralStatusBarColor
-              backgroundColor={commonStyles.colors.secondary.main}
-              barStyle="ligth-content"
-            />
             <Titulo titulo="Cadastro de serviço" />
 
             {isAdmin && veiculos.length > 0 ? (

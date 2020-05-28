@@ -17,7 +17,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 import Titulo from '../components/Titulo';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 
 class IniciarViagem extends React.Component {
   state = {
@@ -115,10 +114,6 @@ class IniciarViagem extends React.Component {
         {isLoaded && (
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <KeyboardAvoidingView style={styles.container}>
-              <GeneralStatusBarColor
-                backgroundColor={commonStyles.colors.secondary.main}
-                barStyle="ligth-content"
-              />
               <Spinner visible={isSubmetendo} />
 
               <Titulo titulo="Iniciar Viagem" />
