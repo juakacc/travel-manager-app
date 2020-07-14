@@ -5,7 +5,7 @@ import axios from 'axios';
 import Titulo from '../components/Titulo';
 import ItemVeiculo from '../components/ItemVeiculo';
 import commonStyles from '../commonStyles';
-import Spinner from 'react-native-loading-spinner-overlay';
+import Loader from '../components/Loader';
 
 export default function SelecionarVeiculo({ navigation }) {
   const [veiculos, setVeiculos] = useState([]);
@@ -30,7 +30,7 @@ export default function SelecionarVeiculo({ navigation }) {
 
   return (
     <>
-      <Spinner visible={!isLoaded} />
+      <Loader isLoading={!isLoaded} />
       {isLoaded && (
         <SafeAreaView style={styles.container}>
           <Titulo titulo="Selecione um veículo" />

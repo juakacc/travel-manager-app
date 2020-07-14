@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
 import PTRView from 'react-native-pull-to-refresh';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { FloatingAction } from 'react-native-floating-action';
@@ -15,6 +14,7 @@ import FormSelectVeiculo from '../components/FormSelectVeiculo';
 import PullRefresh from '../components/PullRefresh';
 import ViagemAtual from '../components/ViagemAtual';
 import ShowRevisoes from '../components/ShowRevisoes';
+import Loader from '../components/Loader';
 
 const textArray = [
   'NÃO ULTRAPASSE EM LUGAR INDEVIDO',
@@ -192,7 +192,7 @@ class Home extends React.Component {
 
     return (
       <>
-        <Spinner visible={isLoading} />
+        <Loader isLoading={isLoading} />
         {!isLoading && (
           <View style={styles.container}>
             <PTRView onRefresh={this.loadViagem}>
