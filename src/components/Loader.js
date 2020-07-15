@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 
-export default function Loader({ isLoading }) {
+const Loader = ({ isLoading }) => {
   return (
     isLoading && (
       <View style={styles.modalBackground}>
@@ -16,7 +16,7 @@ export default function Loader({ isLoading }) {
       </View>
     )
   );
-}
+};
 
 const styles = StyleSheet.create({
   modalBackground: {
@@ -30,3 +30,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
 });
+
+export default Loader;

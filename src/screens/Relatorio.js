@@ -1,11 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
-import UltimasViagens from '../components/UltimasViagens';
-import Spinner from 'react-native-loading-spinner-overlay';
 
+import UltimasViagens from '../components/UltimasViagens';
 import Titulo from '../components/Titulo';
 import FiltroData from '../components/FiltroData';
-
 import commonStyles from '../commonStyles';
 
 export default class Relatorio extends React.Component {

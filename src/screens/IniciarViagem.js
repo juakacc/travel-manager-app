@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { iniciarViagem } from '../store/actions/viagem';
-import { setMensagem } from '../store/actions/mensagem';
 import {
   Keyboard,
   StyleSheet,
@@ -12,11 +10,13 @@ import {
 import { Input } from 'react-native-elements';
 import moment from 'moment';
 import axios from 'axios';
-import Spinner from 'react-native-loading-spinner-overlay';
 
+import { iniciarViagem } from '../store/actions/viagem';
+import { setMensagem } from '../store/actions/mensagem';
 import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 import Titulo from '../components/Titulo';
+import Loader from '../components/Loader';
 
 class IniciarViagem extends React.Component {
   state = {
@@ -108,62 +108,61 @@ class IniciarViagem extends React.Component {
 
     const { isSubmetendo } = this.props;
 
-    return (
-      <>
-        <Spinner visible={!isLoaded} />
-        {isLoaded && (
-          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <KeyboardAvoidingView style={styles.container}>
-              <Spinner visible={isSubmetendo} />
+    const isLoading = !isLoaded || isSubmetendo;
 
-              <Titulo titulo="Iniciar Viagem" />
+    return isLoading ? (
+      <Loader isLoading={isLoading} />
+    ) : (
+      isLoaded && (
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <KeyboardAvoidingView style={styles.container}>
+            <Titulo titulo="Iniciar Viagem" />
 
-              <Botao
-                onPress={() => this.props.navigation.goBack()}
-                title={veiculoNome}
-                name="arrow-left"
-              />
+            <Botao
+              onPress={() => this.props.navigation.goBack()}
+              title={veiculoNome}
+              name="arrow-left"
+            />
 
-              <Text style={styles.title}>
-                Qual a quilometragem atual registrada no veículo?
-              </Text>
-              <Text style={styles.title}>
-                (Altere o valor prosposto para o valor marcado no painel do
-                veículo)
-              </Text>
+            <Text style={styles.title}>
+              Qual a quilometragem atual registrada no veículo?
+            </Text>
+            <Text style={styles.title}>
+              (Altere o valor prosposto para o valor marcado no painel do
+              veículo)
+            </Text>
 
-              <Input
-                keyboardType="numeric"
-                label="Quilometragem *"
-                placeholder="KM atual do veículo"
-                value={`${quilometragem}`}
-                errorMessage={errQuilometragem}
-                returnKeyType="next"
-                onSubmitEditing={() => this.input_02.focus()}
-                blurOnSubmit={false}
-                onChangeText={quilometragem => this.setState({ quilometragem })}
-              />
+            <Input
+              keyboardType="numeric"
+              label="Quilometragem *"
+              placeholder="KM atual do veículo"
+              value={`${quilometragem}`}
+              errorMessage={errQuilometragem}
+              returnKeyType="next"
+              onSubmitEditing={() => this.input_02.focus()}
+              blurOnSubmit={false}
+              onChangeText={quilometragem => this.setState({ quilometragem })}
+            />
 
-              <Input
-                label="Comentário (opcional)"
-                value={descricao}
-                placeholder="Comentário sobre a viagem"
-                returnKeyType="done"
-                ref={input => (this.input_02 = input)}
-                onSubmitEditing={this.iniciarViagem}
-                onChangeText={descricao => this.setState({ descricao })}
-              />
+            <Input
+              label="Comentário (opcional)"
+              value={descricao}
+              placeholder="Comentário sobre a viagem"
+              returnKeyType="done"
+              ref={input => (this.input_02 = input)}
+              onSubmitEditing={this.iniciarViagem}
+              onChangeText={descricao => this.setState({ descricao })}
+            />
 
-              <Botao
-                onPress={this.iniciarViagem}
-                isSubmetendo={isSubmetendo}
-                title="Iniciar viagem"
-                name="route"
-              />
-            </KeyboardAvoidingView>
-          </TouchableWithoutFeedback>
-        )}
-      </>
+            <Botao
+              onPress={this.iniciarViagem}
+              isSubmetendo={isSubmetendo}
+              title="Iniciar viagem"
+              name="route"
+            />
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      )
     );
   }
 }

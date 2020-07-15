@@ -9,16 +9,15 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
-import Spinner from 'react-native-loading-spinner-overlay';
-
 import { connect } from 'react-redux';
 import axios from 'axios';
+
 import { salvar_usuario, editar_usuario } from '../store/actions/user';
 import { setMensagem } from '../store/actions/mensagem';
-
 import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
+import Loader from '../components/Loader';
 
 const estadoInicial = {
   nome: '',
@@ -180,17 +179,18 @@ class CadastrarPessoa extends React.Component {
   };
 
   render() {
-    const titulo = this.state.isEdit
-      ? 'Edição de Pessoa'
-      : 'Cadastro de Pessoa';
+    const { isEdit, isLoading } = this.state;
+    const { isSubmetendo } = this.props;
 
-    const { isEdit } = this.state;
+    const titulo = isEdit ? 'Edição de Pessoa' : 'Cadastro de Pessoa';
 
-    return (
+    const isLoadingOf = isSubmetendo || isLoading;
+
+    return isLoadingOf ? (
+      <Loader isLoading={isLoadingOf} />
+    ) : (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />
-
           <Titulo titulo={titulo} />
 
           <ScrollView>

@@ -6,17 +6,16 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
+import axios from 'axios';
+import { connect } from 'react-redux';
 
 import commonStyles from '../commonStyles';
+import { setMensagem } from '../store/actions/mensagem';
 import ItemViagemConcluida from '../components/ItemViagemConcluida';
 import SemResultado from '../components/SemResultado';
-
-import axios from 'axios';
-import { setMensagem } from '../store/actions/mensagem';
-import { connect } from 'react-redux';
 import Titulo from '../components/Titulo';
 import PullRefresh from '../components/PullRefresh';
+import Loader from '../components/Loader';
 
 class DisposicaoAtual extends React.Component {
   _isMounted = false;
@@ -59,34 +58,38 @@ class DisposicaoAtual extends React.Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <PullRefresh />
-        <Titulo titulo="Viagens em andamento" />
+    const { isLoading, viagens } = this.state;
 
-        <Spinner visible={this.state.isLoading} />
+    return isLoading ? (
+      <Loader isLoading={isLoading} />
+    ) : (
+      <>
+        <View style={styles.container}>
+          <PullRefresh />
+          <Titulo titulo="Viagens em andamento" />
 
-        <FlatList
-          data={this.state.viagens}
-          renderItem={({ item }) => (
-            <ItemViagemConcluida
-              viagem={item}
-              navigation={this.props.navigation}
-            />
-          )}
-          keyExtractor={item => `${item.id}`}
-          onRefresh={() => this.carregarViagens()}
-          refreshing={this.state.isLoading}
-          ListEmptyComponent={
-            <TouchableOpacity onPress={this.carregarViagens}>
-              <View style={styles.viewSemResultado}>
-                <SemResultado />
-                <Text>Toque para atualizar</Text>
-              </View>
-            </TouchableOpacity>
-          }
-        />
-      </View>
+          <FlatList
+            data={viagens}
+            renderItem={({ item }) => (
+              <ItemViagemConcluida
+                viagem={item}
+                navigation={this.props.navigation}
+              />
+            )}
+            keyExtractor={item => `${item.id}`}
+            onRefresh={() => this.carregarViagens()}
+            refreshing={isLoading}
+            ListEmptyComponent={
+              <TouchableOpacity onPress={this.carregarViagens}>
+                <View style={styles.viewSemResultado}>
+                  <SemResultado />
+                  <Text>Toque para atualizar</Text>
+                </View>
+              </TouchableOpacity>
+            }
+          />
+        </View>
+      </>
     );
   }
 }

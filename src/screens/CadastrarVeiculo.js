@@ -8,15 +8,14 @@ import {
 } from 'react-native';
 import { Input } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-import Spinner from 'react-native-loading-spinner-overlay';
-
 import { connect } from 'react-redux';
 import axios from 'axios';
+
 import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo';
 import { setMensagem } from '../store/actions/mensagem';
-
 import Botao from '../components/Botao';
 import Titulo from '../components/Titulo';
+import Loader from '../components/Loader';
 import commonStyles from '../commonStyles';
 
 class CadastrarVeiculo extends React.Component {
@@ -180,13 +179,17 @@ class CadastrarVeiculo extends React.Component {
   };
 
   render() {
-    return (
+    const { isLoading } = this.state;
+    const { isSubmetendo } = this.props;
+    const isLoadingOf = isSubmetendo || isLoading;
+
+    return isLoadingOf ? (
+      <Loader isLoading={isLoadingOf} />
+    ) : (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         style={styles.container}
       >
-        <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />
-
         <Titulo titulo="Cadastro de Veículo" />
 
         <ScrollView>

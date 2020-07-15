@@ -1,13 +1,13 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, FlatList, Text } from 'react-native';
 import axios from 'axios';
+import { connect } from 'react-redux';
+
 import ListItem from '../components/ListItem';
 import Titulo from '../components/Titulo';
-
-import { connect } from 'react-redux';
 import { setMensagem } from '../store/actions/mensagem';
-import Spinner from 'react-native-loading-spinner-overlay';
 import ActionButton from '../components/ActionButton';
+import Loader from '../components/Loader';
 import commonStyles from '../commonStyles';
 
 class ListVeiculos extends React.Component {
@@ -46,10 +46,12 @@ class ListVeiculos extends React.Component {
   }
 
   render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Spinner visible={this.state.isLoading} />
+    const { isLoading } = this.state;
 
+    return isLoading ? (
+      <Loader isLoading={isLoading} />
+    ) : (
+      <SafeAreaView style={styles.container}>
         <Titulo titulo="Veículos cadastrados" />
 
         <FlatList
@@ -67,7 +69,7 @@ class ListVeiculos extends React.Component {
             <Text style={styles.semItens}>Nenhum item a ser exibido</Text>
           }
           onRefresh={() => this.loadVeiculos()}
-          refreshing={this.state.isLoading}
+          refreshing={isLoading}
           showsVerticalScrollIndicator={false}
           onScroll={event => {
             const currentOffset = event.nativeEvent.contentOffset.y;

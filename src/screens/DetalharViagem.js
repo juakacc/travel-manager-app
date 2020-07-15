@@ -1,18 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
-
+import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import NumberFormat from 'react-number-format';
+
 import { setMensagem } from '../store/actions/mensagem';
 import commonStyles from '../commonStyles';
 import functions from '../functions';
 import Titulo from '../components/Titulo';
-
-import NumberFormat from 'react-number-format';
-import Spinner from 'react-native-loading-spinner-overlay';
-
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { Dimensions } from 'react-native';
+import Loader from '../components/Loader';
 
 class DetalharViagem extends React.Component {
   state = {
@@ -67,10 +64,10 @@ class DetalharViagem extends React.Component {
   render() {
     const { viagem, isLoading } = this.state;
 
-    return (
+    return isLoading ? (
+      <Loader isLoading={isLoading} />
+    ) : (
       <View style={styles.container}>
-        <Spinner visible={isLoading} />
-
         <Titulo titulo={`Detalhes da Viagem #${viagem.id}`} />
 
         <Text style={styles.infoTitle}>Motorista: </Text>

@@ -14,12 +14,11 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Spinner from 'react-native-loading-spinner-overlay';
+import { connect } from 'react-redux';
 
 import { login } from '../store/actions/user';
 import { setMensagem } from '../store/actions/mensagem';
-import { connect } from 'react-redux';
-
+import Loader from '../components/Loader';
 import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
@@ -79,7 +78,11 @@ class Login extends React.Component {
   };
 
   render() {
-    return (
+    const { isSubmetendo } = this.props;
+
+    return isSubmetendo ? (
+      <Loader isLoading={isSubmetendo} />
+    ) : (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Animated.View
           style={[
@@ -104,8 +107,6 @@ class Login extends React.Component {
               backgroundColor={commonStyles.colors.gray.white}
               barStyle="dark-content"
             />
-
-            <Spinner visible={this.props.isSubmetendo} />
 
             <Text style={styles.titulo}>
               <Icon

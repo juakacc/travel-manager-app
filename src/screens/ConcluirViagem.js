@@ -8,17 +8,13 @@ import {
   Alert,
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
-import Spinner from 'react-native-loading-spinner-overlay';
-
 import moment from 'moment';
-
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setMensagem } from '../store/actions/mensagem';
 
+import { setMensagem } from '../store/actions/mensagem';
 import { concluirViagem } from '../store/actions/viagem';
 import Titulo from '../components/Titulo';
-
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
 
@@ -136,12 +132,15 @@ class ConcluirViagem extends React.Component {
   };
 
   render() {
-    return (
+    const { isSubmetendo } = this.props;
+
+    return isSubmetendo ? (
+      <Loader isLoading={isSubmetendo} />
+    ) : (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <Spinner visible={this.props.isSubmetendo} />
-
           <Titulo titulo="Concluir Viagem" />
+
           <Text style={styles.title}>
             Complete os dados a seguir sobre a viagem
           </Text>
