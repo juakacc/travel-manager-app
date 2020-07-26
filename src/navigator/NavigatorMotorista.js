@@ -15,6 +15,7 @@ import LogoutStack from './LogoutStack';
 import tabBarOptions from './tabBarOptions';
 import commonStyles from '../commonStyles';
 import CustomDrawerContent from './TitleDrawer';
+import DetailVehicle from '../screens/DetailVehicle';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -48,6 +49,7 @@ function VeiculoStack() {
       })}
     >
       <Stack.Screen component={ListVeiculos} name="VeiculosScreen" />
+      <Stack.Screen component={DetailVehicle} name="DetailVehicle" />
     </Stack.Navigator>
   );
 }

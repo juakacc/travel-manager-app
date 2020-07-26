@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import DisposicaoAtual from '../screens/DisposicaoAtual';
 import { headerOptions } from './utils';
 import DetalharViagem from '../screens/DetalharViagem';
+import DetailVehicle from '../screens/DetailVehicle';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ export default function () {
     >
       <Stack.Screen component={DisposicaoAtual} name="DisposicaoAtual" />
       <Stack.Screen component={DetalharViagem} name="ViagemDetalhes" />
+      <Stack.Screen component={DetailVehicle} name="DetailVehicle" />
     </Stack.Navigator>
   );
 }

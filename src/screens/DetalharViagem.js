@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -61,6 +61,10 @@ class DetalharViagem extends React.Component {
     ).start();
   };
 
+  showVehicleDetails = () => {
+    this.props.navigation.navigate("DetailVehicle");
+  }
+
   render() {
     const { viagem, isLoading } = this.state;
 
@@ -73,8 +77,10 @@ class DetalharViagem extends React.Component {
         <Text style={styles.infoTitle}>Motorista: </Text>
         <Text style={styles.infoValue}>{viagem.motorista.nome}</Text>
 
-        <Text style={styles.infoTitle}>Veículo: </Text>
-        <Text style={styles.infoValue}>{viagem.veiculo.nome}</Text>
+        <TouchableOpacity onPress={this.showVehicleDetails}>
+          <Text style={styles.infoTitle}>Veículo: </Text>
+          <Text style={styles.infoValue}>{viagem.veiculo.nome}</Text>
+        </TouchableOpacity>
 
         {viagem.descricao ? (
           <View>
