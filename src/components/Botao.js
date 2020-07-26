@@ -6,49 +6,60 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import comumStyles from '../styles';
-
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
 import commonStyles from '../commonStyles';
 
-export default props => {
-  const s = props.style ? props.style : {};
+export default function Button({
+  style,
+  onPress,
+  isSubmetendo,
+  name,
+  title,
+  color,
+}) {
+  const s = style ? style : {};
+  const c = color || commonStyles.colors.secondary.main;
 
   return (
     <TouchableOpacity
-      style={[styles.buttonContainer, s]}
-      onPress={props.onPress}
-      disabled={props.isSubmetendo}
+      style={[styles(c).buttonContainer, s]}
+      onPress={onPress}
+      disabled={isSubmetendo}
     >
-      {props.isSubmetendo ? (
+      {isSubmetendo ? (
         <ActivityIndicator
-          animating={true}
+          animating
           size="small"
-          color={commonStyles.colors.secundaria}
+          color={commonStyles.colors.secondary.main}
         />
       ) : (
-        <View style={styles.btnView}>
-          {props.name && <Icon name={props.name} size={20} />}
-          {props.title && (
-            <Text style={[comumStyles.btnText]}>{' ' + props.title}</Text>
-          )}
+        <View style={styles(c).btnView}>
+          {name && <Icon name={name} size={20} color={c} />}
+          {title && <Text style={styles(c).buttonTxt}>{' ' + title}</Text>}
         </View>
       )}
     </TouchableOpacity>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  buttonContainer: {
-    height: 40,
-    justifyContent: 'center',
-    marginVertical: 10,
-    borderRadius: 10,
-    backgroundColor: commonStyles.colors.principal,
-  },
-  btnView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const styles = color =>
+  StyleSheet.create({
+    buttonContainer: {
+      height: 40,
+      justifyContent: 'center',
+      marginVertical: 10,
+      borderRadius: 10,
+      borderColor: color,
+      borderWidth: 2,
+    },
+    buttonTxt: {
+      fontSize: 20,
+      color: color,
+    },
+    btnView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });

@@ -1,14 +1,13 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, FlatList, Text } from 'react-native';
-import ActionButton from '../components/ActionButton';
+import { connect } from 'react-redux';
 import axios from 'axios';
+
+import ActionButton from '../components/ActionButton';
 import ListItem from '../components/ListItem';
 import Titulo from '../components/Titulo';
-
-import { connect } from 'react-redux';
+import Loader from '../components/Loader';
 import { setMensagem } from '../store/actions/mensagem';
-import Spinner from 'react-native-loading-spinner-overlay';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
 
 class ListPessoas extends React.Component {
@@ -36,25 +35,22 @@ class ListPessoas extends React.Component {
   };
 
   componentDidMount() {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this._focusListener = this.props.navigation.addListener('focus', () => {
       this.loadMotoristas();
     });
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this._focusListener();
   }
 
   render() {
-    return (
+    const { isLoading } = this.state;
+
+    return isLoading ? (
+      <Loader isLoading={isLoading} />
+    ) : (
       <SafeAreaView style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
-
-        <Spinner visible={this.state.isLoading} />
-
         <Titulo titulo="Motoristas cadastrados" />
 
         <FlatList
@@ -72,7 +68,8 @@ class ListPessoas extends React.Component {
             <Text style={styles.semItens}>Nenhum item a ser exibido</Text>
           }
           onRefresh={() => this.loadMotoristas()}
-          refreshing={this.state.isLoading}
+          refreshing={isLoading}
+          showsVerticalScrollIndicator={false}
           onScroll={event => {
             const currentOffset = event.nativeEvent.contentOffset.y;
             const direction =

@@ -4,7 +4,6 @@ import { Text, StyleSheet, Animated, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { userLoggout } from '../store/actions/user';
 
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 
@@ -26,7 +25,6 @@ class Logout extends React.Component {
 
   logout = () => {
     this.props.onLogout();
-    this.props.navigation.navigate('Auth');
   };
 
   render() {
@@ -44,16 +42,13 @@ class Logout extends React.Component {
           },
         ]}
       >
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
         <Text>Deseja realmente sair da aplicação? </Text>
 
         <Botao
           name="sign-out-alt"
           title="Sair"
           style={styles.button}
+          color={commonStyles.colors.danger}
           onPress={() => this.logout()}
         />
       </Animated.View>
@@ -69,8 +64,6 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 100,
-    color: 'white',
-    backgroundColor: '#F54E2A',
   },
 });
 

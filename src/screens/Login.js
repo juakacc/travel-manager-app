@@ -14,12 +14,11 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Spinner from 'react-native-loading-spinner-overlay';
+import { connect } from 'react-redux';
 
 import { login } from '../store/actions/user';
 import { setMensagem } from '../store/actions/mensagem';
-import { connect } from 'react-redux';
-
+import Loader from '../components/Loader';
 import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
@@ -79,7 +78,11 @@ class Login extends React.Component {
   };
 
   render() {
-    return (
+    const { isSubmetendo } = this.props;
+
+    return isSubmetendo ? (
+      <Loader isLoading={isSubmetendo} />
+    ) : (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Animated.View
           style={[
@@ -101,23 +104,26 @@ class Login extends React.Component {
             })}
           >
             <GeneralStatusBarColor
-              backgroundColor="white"
+              backgroundColor={commonStyles.colors.gray.white}
               barStyle="dark-content"
             />
-
-            <Spinner visible={this.props.isSubmetendo} />
 
             <Text style={styles.titulo}>
               <Icon
                 name="road"
                 size={35}
-                color={commonStyles.colors.secundaria}
+                color={commonStyles.colors.secondary.main}
               />{' '}
               Viagens PMO
             </Text>
 
             <View style={styles.inputContainer}>
-              <Icon style={styles.inputIcon} name="user-alt" size={20} />
+              <Icon
+                style={styles.inputIcon}
+                name="user-alt"
+                size={20}
+                color={commonStyles.colors.gray.white}
+              />
               <TextInput
                 style={styles.inputs}
                 placeholder="Apelido"
@@ -135,7 +141,12 @@ class Login extends React.Component {
             </View>
 
             <View style={styles.inputContainer}>
-              <Icon style={styles.inputIcon} name="user-lock" size={20} />
+              <Icon
+                style={styles.inputIcon}
+                name="user-lock"
+                size={20}
+                color={commonStyles.colors.gray.white}
+              />
               <TextInput
                 style={styles.inputs}
                 placeholder="Senha"
@@ -156,6 +167,7 @@ class Login extends React.Component {
                 <Icon
                   name={this.state.mostrar ? 'eye' : 'eye-slash'}
                   size={20}
+                  color={commonStyles.colors.gray.white}
                 />
               </TouchableOpacity>
             </View>
@@ -205,7 +217,6 @@ const styles = StyleSheet.create({
   inputs: {
     height: 45,
     marginLeft: 16,
-    // borderBottomColor: '#FFFFFF',
     flex: 1,
   },
   inputIcon: {
@@ -224,8 +235,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     width: 250,
-    borderRadius: 15,
-    backgroundColor: commonStyles.colors.principal,
   },
   titulo: {
     fontSize: 30,

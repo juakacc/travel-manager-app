@@ -1,12 +1,18 @@
 import React from 'react';
+
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import Sobre from '../screens/Sobre';
+import Relatorio from '../screens/Relatorio';
+
 import ListVeiculos from '../screens/ListVeiculos';
+import CadastrarVeiculo from '../screens/CadastrarVeiculo';
+import ListPessoas from '../screens/ListPessoas';
 import CadastrarPessoa from '../screens/CadastrarPessoa';
+import DetalharViagem from '../screens/DetalharViagem';
+import Sobre from '../screens/Sobre';
 
 import { headerOptions } from './utils';
 import DisposicaoAtualStack from './DisposicaoAtualStack';
@@ -20,34 +26,16 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-function PessoasStack() {
+function RelatorioStack() {
   return (
     <Stack.Navigator
-      initialRouteName="PessoasScreen"
+      initialRouteName="Relatorio"
       screenOptions={({ navigation }) => ({
-        ...headerOptions(navigation, true),
+        ...headerOptions(navigation),
       })}
     >
-      <Stack.Screen
-        component={CadastrarPessoa}
-        name="CadastrarPessoa"
-        initialParams={{
-          editThis: true,
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function VeiculoStack() {
-  return (
-    <Stack.Navigator
-      initialRouteName="VeiculosScreen"
-      screenOptions={({ navigation }) => ({
-        ...headerOptions(navigation, true),
-      })}
-    >
-      <Stack.Screen component={ListVeiculos} name="VeiculosScreen" />
+      <Stack.Screen component={Relatorio} name="Relatorio" />
+      <Stack.Screen component={DetalharViagem} name="ViagemDetalhes" />
     </Stack.Navigator>
   );
 }
@@ -80,7 +68,45 @@ function HomeBottomTabNavigator() {
           ),
         }}
       />
+      <Tab.Screen
+        component={RelatorioStack}
+        name="Viagens"
+        options={{
+          title: 'Relatórios',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="ios-albums" size={30} color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
+  );
+}
+
+function PessoasStack() {
+  return (
+    <Stack.Navigator
+      initialRouteName="PessoasScreen"
+      screenOptions={({ navigation }) => ({
+        ...headerOptions(navigation, true),
+      })}
+    >
+      <Stack.Screen component={ListPessoas} name="PessoasScreen" />
+      <Stack.Screen component={CadastrarPessoa} name="CadastrarPessoa" />
+    </Stack.Navigator>
+  );
+}
+
+function VeiculoStack() {
+  return (
+    <Stack.Navigator
+      initialRouteName="VeiculosScreen"
+      screenOptions={({ navigation }) => ({
+        ...headerOptions(navigation, true),
+      })}
+    >
+      <Stack.Screen component={ListVeiculos} name="VeiculosScreen" />
+      <Stack.Screen component={CadastrarVeiculo} name="CadastrarVeiculo" />
+    </Stack.Navigator>
   );
 }
 
@@ -113,22 +139,22 @@ export default function DrawerNavigator({ route }) {
         }}
       />
       <Drawer.Screen
+        component={PessoasStack}
+        name="Pessoas"
+        options={{
+          title: 'Pessoas',
+          drawerIcon: ({ color }) => (
+            <Ionicons name="ios-person-add" size={25} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
         component={VeiculoStack}
         name="Veiculos"
         options={{
           title: 'Veículos',
           drawerIcon: ({ color }) => (
             <Ionicons name="ios-car" size={25} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        component={PessoasStack}
-        name="Pessoas"
-        options={{
-          title: 'Atualizar Dados',
-          drawerIcon: ({ color }) => (
-            <Ionicons name="ios-create" size={25} color={color} />
           ),
         }}
       />

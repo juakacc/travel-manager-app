@@ -15,7 +15,7 @@ class UltimasViagens extends React.Component {
 
   componentDidMount() {
     const { navigation } = this.props;
-    this.focusListener = navigation.addListener('didFocus', () => {
+    this._focusListener = navigation.addListener('focus', () => {
       this.props.componentOk(false);
       axios
         .get('viagens?status=concluida')
@@ -31,7 +31,7 @@ class UltimasViagens extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this._focusListener();
   }
 
   render() {
@@ -48,6 +48,7 @@ class UltimasViagens extends React.Component {
             />
           )}
           keyExtractor={item => `${item.id}`}
+          showsVerticalScrollIndicator={false}
           ListEmptyComponent={<SemResultado />}
         />
       </View>

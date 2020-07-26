@@ -9,17 +9,15 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
-import Spinner from 'react-native-loading-spinner-overlay';
-
-import { salvar_usuario, editar_usuario } from '../store/actions/user';
-import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import { salvar_usuario, editar_usuario } from '../store/actions/user';
+import { setMensagem } from '../store/actions/mensagem';
 import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import Loader from '../components/Loader';
 
 const estadoInicial = {
   nome: '',
@@ -51,50 +49,53 @@ class CadastrarPessoa extends React.Component {
   }
 
   componentDidMount = () => {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      const editThis = this.props.navigation.getParam('editThis');
+    const { navigation, route, motorista } = this.props;
 
-      const motoristaId = editThis
-        ? this.props.motorista.id
-        : this.props.navigation.getParam('itemId');
+    this._focusListener = navigation.addListener('focus', () => {
+      const { params } = route;
 
-      if (motoristaId) {
-        this.setState({ isLoading: true });
-        axios
-          .get(`motoristas/${motoristaId}`)
-          .then(res => {
-            const { nome, apelido, cnh, categoria, telefone } = res.data;
+      if (params) {
+        const { editThis, itemId } = params;
+        const motoristaId = editThis ? motorista.id : itemId;
 
-            this.setState({
-              nome,
-              apelido,
-              cnh,
-              categoria,
-              telefone,
-              isEdit: true,
-              motoristaId,
-              isLoading: false,
-            });
-          })
-          .catch(err => {
-            this.props.set_mensagem(err);
-            this.setState({ isLoading: false });
-          });
+        if (motoristaId) {
+          this.getMotorista(motoristaId);
+        }
       }
     });
   };
 
+  getMotorista = motoristaId => {
+    this.setState({ isLoading: true });
+    axios
+      .get(`motoristas/${motoristaId}`)
+      .then(res => {
+        const { nome, apelido, cnh, categoria, telefone } = res.data;
+
+        this.setState({
+          nome,
+          apelido,
+          cnh,
+          categoria,
+          telefone,
+          isEdit: true,
+          motoristaId,
+          isLoading: false,
+        });
+      })
+      .catch(err => {
+        this.props.set_mensagem(err);
+        this.setState({ isLoading: false });
+      });
+  };
+
   componentWillUnmount = () => {
-    this.focusListener.remove();
+    this._focusListener();
   };
 
   componentDidUpdate = prevProps => {
     if (prevProps.isLoading && !this.props.isLoading) {
-      if (this.props.navigation.getParam('editThis')) {
-        this.props.navigation.navigate('Home');
-      } else {
-        this.props.navigation.navigate('PessoasScreen');
-      }
+      this.props.navigation.goBack();
     }
   };
 
@@ -178,21 +179,18 @@ class CadastrarPessoa extends React.Component {
   };
 
   render() {
-    const titulo = this.state.isEdit
-      ? 'Edição de Pessoa'
-      : 'Cadastro de Pessoa';
+    const { isEdit, isLoading } = this.state;
+    const { isSubmetendo } = this.props;
 
-    const { isEdit } = this.state;
+    const titulo = isEdit ? 'Edição de Pessoa' : 'Cadastro de Pessoa';
 
-    return (
+    const isLoadingOf = isSubmetendo || isLoading;
+
+    return isLoadingOf ? (
+      <Loader isLoading={isLoadingOf} />
+    ) : (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secundaria}
-            barStyle="ligth-content"
-          />
-          <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />
-
           <Titulo titulo={titulo} />
 
           <ScrollView>
@@ -204,6 +202,7 @@ class CadastrarPessoa extends React.Component {
               onSubmitEditing={() => this.apelido.focus()}
               blurOnSubmit={false}
               onChangeText={nome => this.setState({ nome })}
+              autoFocus
             />
 
             <Input

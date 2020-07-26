@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-
-import Navigator from './navigator/Navigator';
-import NavigatorMotorista from './navigator/NavigatorMotorista';
-import NavigatorService from './navigator/NavigatorService';
+import { ToastAndroid } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-community/async-storage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import { connect } from 'react-redux';
 import { setMensagem } from './store/actions/mensagem';
-import { ToastAndroid } from 'react-native';
+import { userLogged } from './store/actions/user';
+import Login from './screens/Login';
+import getNavigator from './navigator';
 
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+const Stack = createStackNavigator();
 
 class App extends Component {
   componentDidUpdate = () => {
@@ -18,41 +21,45 @@ class App extends Component {
     }
   };
 
-  render() {
-    if (this.props.isAdmin) {
-      return (
-        <SafeAreaProvider>
-          <Navigator
-            ref={navigatorRef => {
-              NavigatorService.setTopLevelNavigator(navigatorRef);
-            }}
-          />
-        </SafeAreaProvider>
-      );
-    } else {
-      return (
-        <SafeAreaProvider>
-          <NavigatorMotorista
-            ref={navigatorRef => {
-              NavigatorService.setTopLevelNavigator(navigatorRef);
-            }}
-          />
-        </SafeAreaProvider>
-      );
+  componentDidMount = async () => {
+    const json = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(json) || {};
+
+    if (userData.token) {
+      this.props.onUserLogged(userData);
     }
+  };
+
+  render() {
+    const { user } = this.props;
+
+    return (
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Stack.Navigator headerMode="none">
+            {user.token ? (
+              getNavigator(user.permissoes.includes('admin'), user.apelido)
+            ) : (
+              <Stack.Screen component={Login} name="Login" />
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    );
   }
 }
 
 const mapStateToProps = ({ mensagem, user }) => {
   return {
     message: mensagem.message,
-    isAdmin: user.permissoes.includes('admin'),
+    user: user,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     clearMessage: () => dispatch(setMensagem('')),
+    onUserLogged: user => dispatch(userLogged(user)),
   };
 };
 

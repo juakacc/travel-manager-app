@@ -92,16 +92,14 @@ class FiltroData extends React.Component {
         <Text style={styles.title}>Realize uma filtragem:</Text>
 
         <View style={styles.form}>
-          <View>
-            <TouchableHighlight onPress={this.showDatepicker}>
-              <Text style={styles.dateTimeSelect}>
-                <Icon name="calendar-alt" size={18} color="white" />{' '}
-                {functions.getDateString(this.state.datetime) + ' '}
-                <Icon name="clock" size={18} color="white" />{' '}
-                {functions.getTimeString(this.state.datetime)}
-              </Text>
-            </TouchableHighlight>
-          </View>
+          <TouchableHighlight onPress={this.showDatepicker}>
+            <Text style={styles.dateTimeSelect}>
+              <Icon name="calendar-alt" size={18} color="white" />{' '}
+              {functions.getDateString(this.state.datetime) + ' '}
+              <Icon name="clock" size={18} color="white" />{' '}
+              {functions.getTimeString(this.state.datetime)}
+            </Text>
+          </TouchableHighlight>
 
           <Botao
             style={styles.botao}
@@ -150,11 +148,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   dateTimeSelect: {
+    elevation: 3,
     fontSize: 16,
     color: 'white',
-    backgroundColor: commonStyles.colors.secundaria,
+    backgroundColor: commonStyles.colors.secondary.main,
     borderRadius: 10,
     padding: 10,
+    height: 40,
   },
   resultados: {
     marginTop: 10,

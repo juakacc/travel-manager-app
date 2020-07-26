@@ -1,15 +1,14 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, FlatList, Text } from 'react-native';
 import axios from 'axios';
+import { connect } from 'react-redux';
+
 import ListItem from '../components/ListItem';
 import Titulo from '../components/Titulo';
-
-import { connect } from 'react-redux';
 import { setMensagem } from '../store/actions/mensagem';
-import Spinner from 'react-native-loading-spinner-overlay';
 import ActionButton from '../components/ActionButton';
+import Loader from '../components/Loader';
 import commonStyles from '../commonStyles';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 
 class ListVeiculos extends React.Component {
   state = {
@@ -37,24 +36,22 @@ class ListVeiculos extends React.Component {
   };
 
   componentDidMount() {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this._focusListener = this.props.navigation.addListener('focus', () => {
       this.loadVeiculos();
     });
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this._focusListener();
   }
 
   render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
-        <Spinner visible={this.state.isLoading} />
+    const { isLoading } = this.state;
 
+    return isLoading ? (
+      <Loader isLoading={isLoading} />
+    ) : (
+      <SafeAreaView style={styles.container}>
         <Titulo titulo="Veículos cadastrados" />
 
         <FlatList
@@ -72,7 +69,8 @@ class ListVeiculos extends React.Component {
             <Text style={styles.semItens}>Nenhum item a ser exibido</Text>
           }
           onRefresh={() => this.loadVeiculos()}
-          refreshing={this.state.isLoading}
+          refreshing={isLoading}
+          showsVerticalScrollIndicator={false}
           onScroll={event => {
             const currentOffset = event.nativeEvent.contentOffset.y;
             const direction =

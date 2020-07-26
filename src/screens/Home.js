@@ -1,19 +1,20 @@
 import React from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
 import PTRView from 'react-native-pull-to-refresh';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { FloatingAction } from 'react-native-floating-action';
 
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setMensagem } from '../store/actions/mensagem';
 
-import Header from '../components/Header';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import commonStyles from '../commonStyles';
 import VeiculoAtual from '../components/VeiculoAtual';
 import FormSelectVeiculo from '../components/FormSelectVeiculo';
 import PullRefresh from '../components/PullRefresh';
 import ViagemAtual from '../components/ViagemAtual';
+import ShowRevisoes from '../components/ShowRevisoes';
+import Loader from '../components/Loader';
 
 const textArray = [
   'NÃO ULTRAPASSE EM LUGAR INDEVIDO',
@@ -28,25 +29,37 @@ class Home extends React.Component {
 
   state = {
     viagem: null,
-    veiculos: [],
+    revisoes: [],
     isLoading: false,
-    indice: 0,
+    indice_msg: 0,
 
     fadeIn: new Animated.Value(0),
+    fabOpen: false,
   };
 
   componentDidMount() {
     this._isMounted = true;
+    this.animar();
+
     this.timeout = setInterval(() => {
       if (this._isMounted) {
-        let indice = this.state.indice + 1;
-        this.setState({ indice });
+        let indice_msg = this.state.indice_msg + 1;
+        this.setState({ indice_msg });
       }
     }, 5000);
 
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this._focusListener = this.props.navigation.addListener('focus', () => {
       this.loadViagem();
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.motorista.id !== this.props.motorista.id) {
+      this.loadViagem();
+    }
+  }
+
+  animar = () => {
     Animated.sequence([
       Animated.delay(500),
       Animated.timing(this.state.fadeIn, {
@@ -54,48 +67,45 @@ class Home extends React.Component {
         duration: 1000,
       }),
     ]).start();
-  }
+  };
 
-  loadViagem = async () => {
+  loadViagem = () => {
     this.setLoading(true);
-
-    await axios
+    axios
       .get(`viagens/atual/${this.props.motorista.id}`)
       .then(res => {
         if (this._isMounted) {
           this.setState({
             viagem: res.data,
-            isLoading: false,
           });
         }
+        this.loadRevisoes(res.data.veiculo);
       })
       .catch(err => {
-        if (this._isMounted) {
-          this.setState({ viagem: null });
-        }
+        // this.props.set_mensagem(err);
 
-        if (err.response && err.response.status !== 404) {
-          this.props.set_mensagem(err);
-          this.setLoading(false);
-        } else {
-          this.loadVeiculos();
+        if (this._isMounted) {
+          this.setState({
+            viagem: null,
+            isLoading: false,
+          });
         }
       });
   };
 
-  loadVeiculos = async () => {
-    await axios
-      .get('veiculos/disponiveis')
+  loadRevisoes = veiculo => {
+    axios
+      .get(`veiculos/${veiculo.id}/revisoes`)
       .then(res => {
         if (this._isMounted) {
           this.setState({
-            veiculos: res.data,
+            revisoes: res.data,
             isLoading: false,
           });
         }
       })
       .catch(err => {
-        this.props.set_mensagem(err);
+        console.log(err);
         this.setLoading(false);
       });
   };
@@ -109,47 +119,126 @@ class Home extends React.Component {
   componentWillUnmount() {
     clearInterval(this.timeout);
     this._isMounted = false;
-    this.focusListener.remove();
+    this._focusListener();
   }
 
-  render() {
-    const alerta = textArray[this.state.indice % textArray.length];
+  fabPressed = name => {
+    const { viagem } = this.state;
 
-    const { viagem, veiculos, isLoading } = this.state;
-    const { navigation } = this.props;
+    switch (name) {
+      case 'bt_service':
+        this.props.navigation.navigate('RegisterService', {
+          veiculo: viagem?.veiculo,
+          isAdmin: this.props.motorista.permissoes.includes('admin'),
+        });
+        break;
+      case 'bt_fuel':
+        this.props.navigation.navigate('RegisterSupply', {
+          veiculo: viagem?.veiculo,
+          isAdmin: this.props.motorista.permissoes.includes('admin'),
+        });
+        break;
+    }
+  };
+
+  render() {
+    const {
+      viagem,
+      isLoading,
+      indice_msg,
+      fabOpen,
+      revisoes,
+      fadeIn,
+    } = this.state;
+    const { navigation, motorista } = this.props;
+    const alerta = textArray[indice_msg % textArray.length];
+    const isAdmin = motorista.permissoes.includes('admin');
+
+    const actions = [
+      {
+        text: 'Abastecimento',
+        icon: (
+          <Icon
+            name="gas-pump"
+            size={20}
+            color={commonStyles.colors.gray.white}
+          />
+        ),
+        name: 'bt_fuel',
+        color: commonStyles.colors.secondary.main,
+      },
+      {
+        text: 'Serviço',
+        icon: (
+          <Icon
+            name="wrench"
+            size={20}
+            color={commonStyles.colors.gray.white}
+          />
+        ),
+        name: 'bt_service',
+        color: commonStyles.colors.secondary.main,
+      },
+    ];
+
+    const icon = (
+      <Icon
+        name="plus"
+        color={commonStyles.colors.gray.white}
+        size={20}
+        style={fabOpen ? { transform: [{ rotate: '45deg' }] } : {}}
+      />
+    );
 
     return (
-      <PTRView onRefresh={this.loadViagem}>
-        <View style={styles.container}>
-          <GeneralStatusBarColor
-            backgroundColor={commonStyles.colors.secundaria}
-            barStyle="ligth-content"
-          />
+      <>
+        <Loader isLoading={isLoading} />
+        {!isLoading && (
+          <View style={styles.container}>
+            <PTRView onRefresh={this.loadViagem}>
+              <PullRefresh />
+              <Animated.Text
+                useNativeDriver
+                style={[
+                  styles.textAlert,
+                  {
+                    opacity: fadeIn,
+                  },
+                ]}
+              >
+                {alerta}
+              </Animated.Text>
 
-          <PullRefresh />
-          <Header />
-          <Animated.Text
-            useNativeDriver
-            style={[
-              styles.textAlert,
-              {
-                opacity: this.state.fadeIn,
-              },
-            ]}
-          >
-            {alerta}
-          </Animated.Text>
+              {viagem && revisoes.length > 0 && (
+                <ShowRevisoes
+                  revisoes={revisoes}
+                  veiculo={viagem.veiculo}
+                  navigation={navigation}
+                />
+              )}
 
-          <Spinner visible={isLoading} />
+              {viagem ? (
+                <VeiculoAtual viagem={viagem} navigation={navigation} />
+              ) : (
+                <FormSelectVeiculo navigation={navigation} />
+              )}
+              <ViagemAtual viagem={viagem} />
+            </PTRView>
 
-          {viagem ? (
-            <VeiculoAtual viagem={viagem} navigation={navigation} />
-          ) : (
-            <FormSelectVeiculo navigation={navigation} veiculos={veiculos} />
-          )}
-          <ViagemAtual viagem={viagem} />
-        </View>
-      </PTRView>
+            {(viagem?.veiculo || isAdmin) && (
+              <FloatingAction
+                actions={actions}
+                onPressItem={this.fabPressed}
+                floatingIcon={icon}
+                onOpen={() => this.setState({ fabOpen: true })}
+                onClose={() => this.setState({ fabOpen: false })}
+                overlayColor={'rgba(170, 85, 0, 0.5)'}
+                color={commonStyles.colors.secondary.main}
+              />
+            )}
+          </View>
+        )}
+      </>
     );
   }
 }
@@ -173,8 +262,8 @@ const styles = StyleSheet.create({
     ...commonStyles.container,
   },
   textAlert: {
-    color: '#fff',
-    backgroundColor: '#f00',
+    color: commonStyles.colors.gray.white,
+    backgroundColor: commonStyles.colors.danger,
     padding: 10,
     borderRadius: 5,
     textAlign: 'center',

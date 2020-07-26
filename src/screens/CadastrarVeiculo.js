@@ -8,16 +8,14 @@ import {
 } from 'react-native';
 import { Input } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-import Spinner from 'react-native-loading-spinner-overlay';
-
-import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo';
-import { setMensagem } from '../store/actions/mensagem';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import { salvar_veiculo, editar_veiculo } from '../store/actions/veiculo';
+import { setMensagem } from '../store/actions/mensagem';
 import Botao from '../components/Botao';
 import Titulo from '../components/Titulo';
+import Loader from '../components/Loader';
 import commonStyles from '../commonStyles';
 
 class CadastrarVeiculo extends React.Component {
@@ -45,46 +43,62 @@ class CadastrarVeiculo extends React.Component {
 
   componentDidUpdate = prevProps => {
     if (prevProps.isLoading && !this.props.isLoading) {
-      this.props.navigation.navigate('VeiculosScreen');
+      this.props.navigation.goBack();
     }
   };
 
   componentDidMount = () => {
-    const veiculoId = this.props.navigation.getParam('itemId');
+    const { navigation, route } = this.props;
 
-    if (veiculoId) {
-      this.setState({ isLoading: true });
-      axios
-        .get(`veiculos/${veiculoId}`)
-        .then(res => {
-          const {
-            nome,
-            placa,
-            renavam,
-            marca,
-            modelo,
-            quilometragem,
-            cnh_requerida,
-          } = res.data;
+    this._focusListener = navigation.addListener('focus', () => {
+      const { params } = route;
 
-          this.setState({
-            nome,
-            placa,
-            renavam,
-            marca,
-            modelo,
-            quilometragem,
-            cnh_requerida,
-            isEdit: true,
-            veiculoId,
-            isLoading: false,
-          });
-        })
-        .catch(err => {
-          this.props.set_mensagem(err);
-          this.setState({ isLoading: false });
+      if (params) {
+        const { itemId } = params;
+
+        if (itemId) {
+          this.getVeiculo(itemId);
+        }
+      }
+    });
+  };
+
+  componentWillUnmount = () => {
+    this._focusListener();
+  };
+
+  getVeiculo = veiculoId => {
+    this.setState({ isLoading: true });
+    axios
+      .get(`veiculos/${veiculoId}`)
+      .then(res => {
+        const {
+          nome,
+          placa,
+          renavam,
+          marca,
+          modelo,
+          quilometragem,
+          cnh_requerida,
+        } = res.data;
+
+        this.setState({
+          nome,
+          placa,
+          renavam,
+          marca,
+          modelo,
+          quilometragem,
+          cnh_requerida,
+          isEdit: true,
+          veiculoId,
+          isLoading: false,
         });
-    }
+      })
+      .catch(err => {
+        this.props.set_mensagem(err);
+        this.setState({ isLoading: false });
+      });
   };
 
   isValid = () => {
@@ -165,17 +179,17 @@ class CadastrarVeiculo extends React.Component {
   };
 
   render() {
-    return (
+    const { isLoading } = this.state;
+    const { isSubmetendo } = this.props;
+    const isLoadingOf = isSubmetendo || isLoading;
+
+    return isLoadingOf ? (
+      <Loader isLoading={isLoadingOf} />
+    ) : (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         style={styles.container}
       >
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
-        <Spinner visible={this.props.isSubmetendo || this.state.isLoading} />
-
         <Titulo titulo="Cadastro de Veículo" />
 
         <ScrollView>
@@ -187,6 +201,7 @@ class CadastrarVeiculo extends React.Component {
             onSubmitEditing={() => this.placa.focus()}
             blurOnSubmit={false}
             onChangeText={nome => this.setState({ nome })}
+            autoFocus
           />
 
           <Input

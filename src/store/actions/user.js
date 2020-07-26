@@ -19,11 +19,12 @@ export const setUser = user => {
 };
 
 export const userLogged = user => {
-  return async dispatch => {
-    await AsyncStorage.setItem('userData', JSON.stringify(user));
-    axios.defaults.headers.common = { Authorization: `Bearer ${user.token}` };
-    dispatch(setUser(user));
-    dispatch(usuario_carregado());
+  return dispatch => {
+    AsyncStorage.setItem('userData', JSON.stringify(user)).then(() => {
+      axios.defaults.headers.common = { Authorization: `Bearer ${user.token}` };
+      dispatch(setUser(user));
+      dispatch(usuario_carregado());
+    });
   };
 };
 

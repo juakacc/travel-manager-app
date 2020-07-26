@@ -4,6 +4,7 @@ import NumberFormat from 'react-number-format';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import functions from '../functions';
+import commonStyles from '../commonStyles';
 
 export default function ViagemAtual({ viagem }) {
   if (viagem) {
@@ -29,7 +30,11 @@ export default function ViagemAtual({ viagem }) {
     return (
       <View style={[styles.detalhesView, styles.semResultado]}>
         <Text style={styles.txtSemResultado}>Sem viagem no momento</Text>
-        <Icon name="home" size={50} />
+        <Icon
+          name="home"
+          size={50}
+          color={commonStyles.colors.secondary.main}
+        />
       </View>
     );
   }
@@ -60,5 +65,6 @@ const styles = StyleSheet.create({
   txtSemResultado: {
     fontSize: 18,
     marginBottom: 10,
+    color: commonStyles.colors.secondary.main,
   },
 });

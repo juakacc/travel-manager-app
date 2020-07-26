@@ -1,18 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
-
+import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import NumberFormat from 'react-number-format';
+
 import { setMensagem } from '../store/actions/mensagem';
 import commonStyles from '../commonStyles';
 import functions from '../functions';
 import Titulo from '../components/Titulo';
-
-import NumberFormat from 'react-number-format';
-import Spinner from 'react-native-loading-spinner-overlay';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { Dimensions } from 'react-native';
+import Loader from '../components/Loader';
 
 class DetalharViagem extends React.Component {
   state = {
@@ -36,7 +33,7 @@ class DetalharViagem extends React.Component {
   };
 
   componentDidMount = async () => {
-    const idViagem = this.props.navigation.getParam('idViagem');
+    const { idViagem } = this.props.route.params;
 
     if (idViagem) {
       // this.setState({ isLoading: true });
@@ -67,14 +64,10 @@ class DetalharViagem extends React.Component {
   render() {
     const { viagem, isLoading } = this.state;
 
-    return (
+    return isLoading ? (
+      <Loader isLoading={isLoading} />
+    ) : (
       <View style={styles.container}>
-        <GeneralStatusBarColor
-          backgroundColor={commonStyles.colors.secundaria}
-          barStyle="ligth-content"
-        />
-        <Spinner visible={isLoading} />
-
         <Titulo titulo={`Detalhes da Viagem #${viagem.id}`} />
 
         <Text style={styles.infoTitle}>Motorista: </Text>
@@ -137,7 +130,7 @@ class DetalharViagem extends React.Component {
             <Icon
               name="car-side"
               size={50}
-              color={commonStyles.colors.secundaria}
+              color={commonStyles.colors.secondary.main}
             />
           </Animated.View>
         )}
@@ -160,12 +153,14 @@ const styles = StyleSheet.create({
   },
   infoTitle: {
     fontWeight: 'bold',
+    color: commonStyles.colors.secondary.main,
     fontSize: 14,
   },
   infoValue: {
     fontSize: 15,
     marginLeft: 10,
     marginBottom: 10,
+    color: commonStyles.colors.secondary.main,
   },
 });
 
