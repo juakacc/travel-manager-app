@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import ActionButton from '../components/ActionButton';
-import ListItem from '../components/ListItem';
 import Titulo from '../components/Titulo';
 import Loader from '../components/Loader';
 import { setMensagem } from '../store/actions/mensagem';
 import commonStyles from '../commonStyles';
+import ListItemPerson from '../components/ListItemPerson';
 
 class ListPessoas extends React.Component {
   state = {
@@ -56,7 +56,7 @@ class ListPessoas extends React.Component {
         <FlatList
           data={this.state.motoristas}
           renderItem={({ item }) => (
-            <ListItem
+            <ListItemPerson
               navigation={this.props.navigation}
               isEdit={this.props.isAdmin}
               editScreen="CadastrarPessoa"

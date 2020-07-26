@@ -1,9 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import NumberFormat from 'react-number-format';
 
 import { setMensagem } from '../store/actions/mensagem';
 import commonStyles from '../commonStyles';
@@ -62,8 +68,10 @@ class DetalharViagem extends React.Component {
   };
 
   showVehicleDetails = () => {
-    this.props.navigation.navigate("DetailVehicle");
-  }
+    this.props.navigation.push('DetailVehicle', {
+      vehicleId: this.state.viagem.veiculo.id,
+    });
+  };
 
   render() {
     const { viagem, isLoading } = this.state;
@@ -95,12 +103,9 @@ class DetalharViagem extends React.Component {
         </Text>
 
         <Text style={styles.infoTitle}>KM registrado na saída: </Text>
-        <NumberFormat
-          value={viagem.km_inicial}
-          displayType={'text'}
-          thousandSeparator={true}
-          renderText={value => <Text style={styles.infoValue}>{value} KM</Text>}
-        />
+        <Text style={styles.infoValue}>
+          {functions.formatNumber(viagem.km_inicial)} KM
+        </Text>
 
         {viagem.chegada ? (
           <View>
@@ -110,14 +115,9 @@ class DetalharViagem extends React.Component {
             </Text>
 
             <Text style={styles.infoTitle}>KM registrado na chegada: </Text>
-            <NumberFormat
-              value={viagem.km_final}
-              displayType={'text'}
-              thousandSeparator={true}
-              renderText={value => (
-                <Text style={styles.infoValue}>{value} KM</Text>
-              )}
-            />
+            <Text style={styles.infoValue}>
+              {functions.formatNumber(viagem.km_final)} KM
+            </Text>
           </View>
         ) : (
           <Animated.View

@@ -6,28 +6,18 @@ import { connect } from 'react-redux';
 import commonStyles from '../commonStyles';
 import { setMensagem } from '../store/actions/mensagem';
 
-class ListItem extends React.Component {
-  state = {
-    isVisible: false,
-    infos: [],
-  };
-
-  editar = () => {
-    const { editScreen, item, navigation } = this.props;
-
-    navigation.push(editScreen, {
-      itemId: item.id,
-    });
-  };
+class ListItemVehicle extends React.Component {
 
   render() {
-    const { isEdit, item } = this.props;
+    const { item } = this.props;
 
     return (
       <TouchableOpacity 
         style={styles.container} 
         onPress={() => {
-          this.props.navigation.navigate('DetailVehicle')
+          this.props.navigation.push('DetailVehicle', {
+            vehicleId: item.id
+          })
       }}>
           <View style={styles.nomeMotorista}>
             <Text style={styles.txtNome}>{item.title}</Text>
@@ -35,7 +25,7 @@ class ListItem extends React.Component {
 
           <View style={styles.viewEdit}>
               <Icon
-                name={isEdit ? 'edit' : 'info-circle'}
+                name={'info-circle'}
                 size={20}
                 color={commonStyles.colors.secondary.main}
                 style={styles.btnEdit}
@@ -52,7 +42,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ListItem);
+export default connect(null, mapDispatchToProps)(ListItemVehicle);
 
 const styles = StyleSheet.create({
   container: {

@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import commonStyles from '../commonStyles';
 
-export default function Button({
+export default function Botao({
   style,
   onPress,
   isSubmetendo,

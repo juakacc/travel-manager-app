@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import commonStyles from '../commonStyles';
 
-export default function (props) {
+export default function ActionButton(props) {
   return (
     <FloatingAction
       color={commonStyles.colors.secondary.main}

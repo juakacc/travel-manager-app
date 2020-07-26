@@ -16,6 +16,10 @@ const functions = {
   getAddress: () => {
     return 'http://192.168.31.20:8080/';
   },
+
+  formatNumber: num => {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+  },
 };
 
 export default functions;

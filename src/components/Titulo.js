@@ -2,8 +2,8 @@ import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import commonStyles from '../commonStyles';
 
-export default function (props) {
-  return <Text style={styles.titulo}>{props.titulo}</Text>;
+export default function Titulo({ titulo }) {
+  return <Text style={styles.titulo}>{titulo}</Text>;
 }
 
 const styles = StyleSheet.create({

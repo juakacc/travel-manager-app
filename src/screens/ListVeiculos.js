@@ -3,12 +3,12 @@ import { SafeAreaView, StyleSheet, FlatList, Text } from 'react-native';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import ListItem from '../components/ListItem';
 import Titulo from '../components/Titulo';
 import { setMensagem } from '../store/actions/mensagem';
 import ActionButton from '../components/ActionButton';
 import Loader from '../components/Loader';
 import commonStyles from '../commonStyles';
+import ListItemVehicle from '../components/ListItemVehicle';
 
 class ListVeiculos extends React.Component {
   state = {
@@ -57,7 +57,7 @@ class ListVeiculos extends React.Component {
         <FlatList
           data={this.state.veiculos}
           renderItem={({ item }) => (
-            <ListItem
+            <ListItemVehicle
               navigation={this.props.navigation}
               isEdit={this.props.isAdmin}
               editScreen="CadastrarVeiculo"

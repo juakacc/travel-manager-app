@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import NumberFormat from 'react-number-format';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import functions from '../functions';
@@ -18,12 +17,7 @@ export default function ViagemAtual({ viagem }) {
         </Text>
 
         <Text style={styles.infoTitle}>KM registrado na saída: </Text>
-        <NumberFormat
-          value={viagem.km_inicial}
-          displayType={'text'}
-          thousandSeparator={true}
-          renderText={value => <Text style={styles.infoValue}>{value} KM</Text>}
-        />
+        <Text>{functions.formatNumber(viagem.km_inicial)} KM</Text>
       </View>
     );
   } else {
