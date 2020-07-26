@@ -24,25 +24,26 @@ class ListItemPerson extends React.Component {
     const { isEdit, item } = this.props;
 
     return (
-      <TouchableOpacity 
-        style={styles.container} 
+      <TouchableOpacity
+        style={styles.container}
         onPress={() => {
-          this.props.navigation.navigate('DetailVehicle', {
-            vehicleId: item.id
-          })
-      }}>
-          <View style={styles.nomeMotorista}>
-            <Text style={styles.txtNome}>{item.title}</Text>
-          </View>
+          this.props.navigation.navigate('DetailPerson', {
+            personId: item.id,
+          });
+        }}
+      >
+        <View style={styles.nomeMotorista}>
+          <Text style={styles.txtNome}>{item.title}</Text>
+        </View>
 
-          <View style={styles.viewEdit}>
-              <Icon
-                name={isEdit ? 'edit' : 'info-circle'}
-                size={20}
-                color={commonStyles.colors.secondary.main}
-                style={styles.btnEdit}
-              />
-          </View>
+        <View style={styles.viewEdit}>
+          <Icon
+            name={isEdit ? 'edit' : 'info-circle'}
+            size={20}
+            color={commonStyles.colors.secondary.main}
+            style={styles.btnEdit}
+          />
+        </View>
       </TouchableOpacity>
     );
   }

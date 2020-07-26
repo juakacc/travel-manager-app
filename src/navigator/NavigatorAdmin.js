@@ -22,6 +22,7 @@ import tabBarOptions from './tabBarOptions';
 import commonStyles from '../commonStyles';
 import CustomDrawerContent from './TitleDrawer';
 import DetailVehicle from '../screens/DetailVehicle';
+import DetailPerson from '../screens/DetailPerson';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -94,6 +95,7 @@ function PessoasStack() {
       })}
     >
       <Stack.Screen component={ListPessoas} name="PessoasScreen" />
+      <Stack.Screen component={DetailPerson} name="DetailPerson" />
       <Stack.Screen component={CadastrarPessoa} name="CadastrarPessoa" />
     </Stack.Navigator>
   );

@@ -7,30 +7,30 @@ import commonStyles from '../commonStyles';
 import { setMensagem } from '../store/actions/mensagem';
 
 class ListItemVehicle extends React.Component {
-
   render() {
     const { item } = this.props;
 
     return (
-      <TouchableOpacity 
-        style={styles.container} 
+      <TouchableOpacity
+        style={styles.container}
         onPress={() => {
           this.props.navigation.push('DetailVehicle', {
-            vehicleId: item.id
-          })
-      }}>
-          <View style={styles.nomeMotorista}>
-            <Text style={styles.txtNome}>{item.title}</Text>
-          </View>
+            vehicleId: item.id,
+          });
+        }}
+      >
+        <View style={styles.nomeMotorista}>
+          <Text style={styles.txtNome}>{item.title}</Text>
+        </View>
 
-          <View style={styles.viewEdit}>
-              <Icon
-                name={'info-circle'}
-                size={20}
-                color={commonStyles.colors.secondary.main}
-                style={styles.btnEdit}
-              />
-          </View>
+        <View style={styles.viewEdit}>
+          <Icon
+            name={'info-circle'}
+            size={20}
+            color={commonStyles.colors.secondary.main}
+            style={styles.btnEdit}
+          />
+        </View>
       </TouchableOpacity>
     );
   }
