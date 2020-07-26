@@ -12,8 +12,8 @@ import moment from 'moment';
 
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setMensagem } from '../store/actions/mensagem';
 
+import { setMensagem } from '../store/actions/mensagem';
 import ItemViagemConcluida from './ItemViagemConcluida';
 import Botao from './Botao';
 import functions from '../functions';
@@ -119,30 +119,30 @@ class FiltroData extends React.Component {
           />
         )}
 
-        <View style={styles.resultados}>
-          <FlatList
-            data={this.state.viagens}
-            renderItem={({ item }) => (
-              <ItemViagemConcluida
-                viagem={item}
-                navigation={this.props.navigation}
-              />
-            )}
-            keyExtractor={item => `${item.id}`}
-            ListEmptyComponent={<SemResultado />}
-          />
-        </View>
+        <FlatList
+          data={this.state.viagens}
+          renderItem={({ item }) => (
+            <ItemViagemConcluida
+              viagem={item}
+              navigation={this.props.navigation}
+            />
+          )}
+          keyExtractor={item => `${item.id}`}
+          ListEmptyComponent={<SemResultado />}
+        />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   botao: {
-    width: 150,
+    width: 100,
     height: 45,
   },
-  container: {},
   title: {
     fontWeight: 'bold',
     fontSize: 15,
@@ -155,10 +155,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     height: 40,
-  },
-  resultados: {
-    marginTop: 10,
-    height: 175,
   },
   form: {
     flexDirection: 'row',

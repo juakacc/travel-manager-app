@@ -14,15 +14,15 @@ export default class Relatorio extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <View>
-          <Titulo titulo="Relatórios" />
+        {/* <View> */}
+        <Titulo titulo="Relatórios" />
 
-          <UltimasViagens
-            navigation={this.props.navigation}
-            componentOk={v => this.setState({ componentOk: v })}
-          />
-          <FiltroData navigation={this.props.navigation} />
-        </View>
+        <UltimasViagens
+          navigation={this.props.navigation}
+          componentOk={v => this.setState({ componentOk: v })}
+        />
+        <FiltroData navigation={this.props.navigation} />
+        {/* </View> */}
       </SafeAreaView>
     );
   }
@@ -31,5 +31,6 @@ export default class Relatorio extends React.Component {
 const styles = StyleSheet.create({
   container: {
     ...commonStyles.container,
+    flex: 1,
   },
 });
