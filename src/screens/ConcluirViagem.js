@@ -8,7 +8,6 @@ import {
   Alert,
 } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
-import moment from 'moment';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
@@ -100,31 +99,15 @@ class ConcluirViagem extends React.Component {
 
   concluir = () => {
     if (this.isValid()) {
-      const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm');
-
-      const {
-        id,
-        saida,
-        descricao,
-        km_inicial,
-        km_final,
-        veiculo,
-        motorista,
-        sem_movimentacao,
-      } = this.state;
+      const { id, descricao, km_final, sem_movimentacao } = this.state;
 
       const dados = {
         id: id,
         viagem: {
-          saida: saida,
-          chegada: dataAtual,
           descricao: sem_movimentacao
             ? `Sem movimentação: ${descricao}`
             : descricao,
-          km_inicial: km_inicial,
           km_final: km_final,
-          veiculo: veiculo,
-          motorista: motorista,
         },
       };
       this.props.onConcluirViagem(dados);

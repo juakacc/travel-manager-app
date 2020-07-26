@@ -8,7 +8,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Input } from 'react-native-elements';
-import moment from 'moment';
 import axios from 'axios';
 
 import { iniciarViagem } from '../store/actions/viagem';
@@ -84,14 +83,10 @@ class IniciarViagem extends React.Component {
 
   iniciarViagem = () => {
     if (this.isValid()) {
-      const dataAtual = moment().format('YYYY-MM-DD[T]HH:mm');
-
       const viagem = {
-        saida: dataAtual,
         descricao: this.state.descricao,
         km_inicial: this.state.quilometragem,
         veiculo: this.state.veiculoId,
-        motorista: this.props.motorista.id,
       };
       this.props.onIniciarViagem(viagem);
     }
