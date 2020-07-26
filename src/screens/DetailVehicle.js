@@ -12,6 +12,7 @@ const DetailVehicle = ({
   route: {
     params: { vehicleId },
   },
+  navigation,
 }) => {
   const [vehicle, setVehicle] = useState({
     nome: 'Teste',
@@ -74,13 +75,19 @@ const DetailVehicle = ({
         <Text style={styles.infoTitle}>Disponível para viagem?</Text>
         <Text style={styles.infoValue}>{disponivel ? 'SIM' : 'NÃO'}</Text>
       </ScrollView>
-      <ActionButton />
+      <ActionButton
+        icon="pencil-alt"
+        navigation={navigation}
+        toScreen="CadastrarVeiculo"
+        params={{ itemId: vehicleId }}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingHorizontal: 10,
   },
   infoTitle: {

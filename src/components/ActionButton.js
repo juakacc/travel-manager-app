@@ -4,17 +4,23 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import commonStyles from '../commonStyles';
 
-export default function ActionButton(props) {
+export default function ActionButton({
+  visible,
+  icon,
+  navigation,
+  toScreen,
+  params,
+}) {
   return (
     <FloatingAction
       color={commonStyles.colors.secondary.main}
-      visible={props.visible}
+      visible={visible}
       showBackground={false}
       floatingIcon={
-        <Icon name="plus" color={commonStyles.colors.gray.white} size={20} />
+        <Icon name={icon} color={commonStyles.colors.gray.white} size={20} />
       }
       onPressMain={() => {
-        props.navigation.navigate(props.toScreen);
+        navigation.navigate(toScreen, params);
       }}
     />
   );

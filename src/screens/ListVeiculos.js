@@ -88,6 +88,7 @@ class ListVeiculos extends React.Component {
 
         {this.props.isAdmin && (
           <ActionButton
+            icon="plus"
             visible={this.state.buttonIsVisible}
             navigation={this.props.navigation}
             toScreen="CadastrarVeiculo"

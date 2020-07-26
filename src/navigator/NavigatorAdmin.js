@@ -38,6 +38,7 @@ function RelatorioStack() {
       <Stack.Screen component={Relatorio} name="Relatorio" />
       <Stack.Screen component={DetalharViagem} name="ViagemDetalhes" />
       <Stack.Screen component={DetailVehicle} name="DetailVehicle" />
+      <Stack.Screen component={CadastrarVeiculo} name="CadastrarVeiculo" />
     </Stack.Navigator>
   );
 }
