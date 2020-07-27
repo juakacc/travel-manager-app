@@ -16,6 +16,7 @@ import { concluirViagem } from '../store/actions/viagem';
 import Titulo from '../components/Titulo';
 import commonStyles from '../commonStyles';
 import Botao from '../components/Botao';
+import Loader from '../components/Loader';
 
 class ConcluirViagem extends React.Component {
   state = {
