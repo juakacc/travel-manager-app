@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
@@ -34,8 +26,6 @@ class DetalharViagem extends React.Component {
       },
     },
     isLoading: true,
-
-    fade: new Animated.Value(-100),
   };
 
   componentDidMount = async () => {
@@ -58,13 +48,6 @@ class DetalharViagem extends React.Component {
     } else {
       this.props.navigation.goBack();
     }
-
-    Animated.loop(
-      Animated.timing(this.state.fade, {
-        toValue: Dimensions.get('window').width,
-        duration: 4000,
-      }),
-    ).start();
   };
 
   showVehicleDetails = () => {
@@ -120,25 +103,14 @@ class DetalharViagem extends React.Component {
             </Text>
           </View>
         ) : (
-          <Animated.View
-            useNativeDriver
-            style={[
-              styles.viewAnimated,
-              {
-                transform: [
-                  {
-                    translateX: this.state.fade,
-                  },
-                ],
-              },
-            ]}
-          >
-            <Icon
-              name="car-side"
-              size={50}
-              color={commonStyles.colors.secondary.main}
+          <View style={styles.viewCar}>
+            <Image
+              source={require('../assets/car.gif')}
+              style={styles.carGif}
+              resizeMode="contain"
+              resizeMethod="resize"
             />
-          </Animated.View>
+          </View>
         )}
       </View>
     );
@@ -150,12 +122,18 @@ const styles = StyleSheet.create({
     ...commonStyles.container,
     paddingHorizontal: 10,
   },
+  carGif: {
+    height: 100,
+    width: 100,
+  },
+  viewCar: {
+    flex: 1,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
   info: {
     marginLeft: 10,
     marginVertical: 10,
-  },
-  viewAnimated: {
-    marginTop: 50,
   },
   infoTitle: {
     fontWeight: 'bold',
