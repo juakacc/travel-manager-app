@@ -21,7 +21,6 @@ import { setMensagem } from '../store/actions/mensagem';
 import Loader from '../components/Loader';
 import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
-import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import config from '../conf';
 
 class Login extends React.Component {
@@ -103,11 +102,6 @@ class Login extends React.Component {
               android: null,
             })}
           >
-            <GeneralStatusBarColor
-              backgroundColor={commonStyles.colors.gray.white}
-              barStyle="dark-content"
-            />
-
             <Text style={styles.titulo}>
               <Icon
                 name="road"

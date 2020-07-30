@@ -9,8 +9,6 @@ import { Provider } from 'react-redux';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import conf from './src/conf';
-import GeneralStatusBarColor from './src/components/GeneralStatusBarColor';
-import commonStyles from './src/commonStyles';
 
 axios.defaults.baseURL = conf.baseurl;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -32,10 +30,6 @@ const storeFunction = storeConfig();
 
 const Redux = () => (
   <Provider store={storeFunction}>
-    <GeneralStatusBarColor
-      backgroundColor={commonStyles.colors.secondary.main}
-      barStyle="ligth-content"
-    />
     <App />
   </Provider>
 );
