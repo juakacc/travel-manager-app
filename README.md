@@ -1,14 +1,16 @@
 # Viagens PMO - APP
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/juakacc/travel-manager-app) ![GitHub top language](https://img.shields.io/github/languages/top/juakacc/travel-manager-app) ![GitHub repo size](https://img.shields.io/github/repo-size/juakacc/travel-manager-app) ![GitHub All Releases](https://img.shields.io/github/downloads/juakacc/travel-manager-app/total) ![GitHub Release Date](https://img.shields.io/github/release-date/juakacc/travel-manager-app)
+
 Versão em produção, testada **(RECOMENDADA)**:
 
-### [Versão Estável](https://github.com/juakacc/travel-manager/releases/download/v1.2.1/viagensPMO-1.2.1.apk)
+[Versão Atual](https://github.com/juakacc/travel-manager-app/releases/download/v1.5.0/ViagensPMO-1.5.0.apk)
 
-Release da versão que está em desenvolvimento, com novas features, em teste:
+Versão antiga, caso seja necessário sua utilização:
 
-#### [Versão Beta](https://github.com/juakacc/travel-manager-app/releases/download/v1.5.0/ViagensPMO-1.5.0.apk)
+[Versão Antiga](https://github.com/juakacc/travel-manager/releases/download/v1.2.1/viagensPMO-1.2.1.apk)
 
-Aplicativo para gerenciamento de frota de veículos entre motoristas.
+Aplicativo para gerenciamento de frota de veículos entre motoristas. Desenvolvido utilizando React Native.
 
 ## Build
 
@@ -41,6 +43,6 @@ npx react-native run-android
 
 ## Equipe
 
-**Joaquim Aníbal** - development
+**Joaquim Aníbal** Development
 
-**Suzélio Aníbal** - business
+**Suzélio Aníbal** Business
