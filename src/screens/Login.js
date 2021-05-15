@@ -37,6 +37,7 @@ class Login extends React.Component {
       Animated.spring(this.state.positionY, {
         toValue: 0,
         bounciness: 20,
+        useNativeDriver: true,
       }),
     ]).start();
   }

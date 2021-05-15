@@ -19,6 +19,7 @@ class Logout extends React.Component {
         toValue: 0,
         speed: 5,
         bounciness: 15,
+        useNativeDriver: true,
       }),
     ]).start();
   }

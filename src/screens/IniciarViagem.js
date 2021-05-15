@@ -6,6 +6,7 @@ import {
   Text,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
 import { Input } from 'react-native-elements';
 import axios from 'axios';
@@ -113,48 +114,50 @@ class IniciarViagem extends React.Component {
           <KeyboardAvoidingView style={styles.container}>
             <Titulo titulo="Iniciar Viagem" />
 
-            <Botao
-              onPress={() => this.props.navigation.goBack()}
-              title={veiculoNome}
-              name="arrow-left"
-            />
+            <ScrollView>
+              <Botao
+                onPress={() => this.props.navigation.goBack()}
+                title={veiculoNome}
+                name="arrow-left"
+              />
 
-            <Text style={styles.title}>
-              Qual a quilometragem atual registrada no veículo?
-            </Text>
-            <Text style={styles.title}>
-              (Altere o valor prosposto para o valor marcado no painel do
-              veículo)
-            </Text>
+              <Text style={styles.title}>
+                Qual a quilometragem atual registrada no veículo?
+              </Text>
+              <Text style={styles.title}>
+                (Altere o valor prosposto para o valor marcado no painel do
+                veículo)
+              </Text>
 
-            <Input
-              keyboardType="numeric"
-              label="Quilometragem *"
-              placeholder="KM atual do veículo"
-              value={`${quilometragem}`}
-              errorMessage={errQuilometragem}
-              returnKeyType="next"
-              onSubmitEditing={() => this.input_02.focus()}
-              blurOnSubmit={false}
-              onChangeText={quilometragem => this.setState({ quilometragem })}
-            />
+              <Input
+                keyboardType="numeric"
+                label="Quilometragem *"
+                placeholder="KM atual do veículo"
+                value={`${quilometragem}`}
+                errorMessage={errQuilometragem}
+                returnKeyType="next"
+                onSubmitEditing={() => this.input_02.focus()}
+                blurOnSubmit={false}
+                onChangeText={quilometragem => this.setState({ quilometragem })}
+              />
 
-            <Input
-              label="Comentário (opcional)"
-              value={descricao}
-              placeholder="Comentário sobre a viagem"
-              returnKeyType="done"
-              ref={input => (this.input_02 = input)}
-              onSubmitEditing={this.iniciarViagem}
-              onChangeText={descricao => this.setState({ descricao })}
-            />
+              <Input
+                label="Comentário (opcional)"
+                value={descricao}
+                placeholder="Comentário sobre a viagem"
+                returnKeyType="done"
+                ref={input => (this.input_02 = input)}
+                onSubmitEditing={this.iniciarViagem}
+                onChangeText={descricao => this.setState({ descricao })}
+              />
 
-            <Botao
-              onPress={this.iniciarViagem}
-              isSubmetendo={isSubmetendo}
-              title="Iniciar viagem"
-              name="route"
-            />
+              <Botao
+                onPress={this.iniciarViagem}
+                isSubmetendo={isSubmetendo}
+                title="Iniciar viagem"
+                name="route"
+              />
+            </ScrollView>
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
       )

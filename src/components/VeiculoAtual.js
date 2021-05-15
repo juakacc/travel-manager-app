@@ -23,6 +23,7 @@ export default class VeiculoAtual extends React.Component {
         toValue: 0,
         speed: 3,
         bounciness: 20,
+        useNativeDriver: true,
       }),
     ]).start();
   }
