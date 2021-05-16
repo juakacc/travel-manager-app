@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "164903088943",
+    "project_id": "viagenspmo",
+    "storage_bucket": "viagenspmo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164903088943:android:e4957a29cfeb6a15e627da",
+        "android_client_info": {
+          "package_name": "com.viagenspmo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164903088943-9mnqiqmmea0hv79d3md2rsral7ar5r96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.viagenspmo",
+            "certificate_hash": "71f68265c50cf93cf87789be85987a09cd235477"
+          }
+        },
+        {
+          "client_id": "164903088943-k91cv0ebtb3fsri14t4a40cu3q413g4c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRI0n0uC87TLQGBzPDGkIMzJCBl6OpqfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164903088943-k91cv0ebtb3fsri14t4a40cu3q413g4c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
