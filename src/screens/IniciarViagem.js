@@ -17,6 +17,7 @@ import Botao from '../components/Botao';
 import commonStyles from '../commonStyles';
 import Titulo from '../components/Titulo';
 import Loader from '../components/Loader';
+import { Alert } from 'react-native';
 
 class IniciarViagem extends React.Component {
   state = {
@@ -84,12 +85,28 @@ class IniciarViagem extends React.Component {
 
   iniciarViagem = () => {
     if (this.isValid()) {
-      const viagem = {
-        descricao: this.state.descricao,
-        km_inicial: this.state.quilometragem,
-        veiculo: this.state.veiculoId,
-      };
-      this.props.onIniciarViagem(viagem);
+      Alert.alert(
+        "Confirmar",
+        this.state.quilometragem + "KM está correto?",
+        [
+          {
+            text: "Não",
+            onPress: () => {},
+            style: "cancel"
+          },
+          { 
+            text: "Sim", 
+            onPress: () => {
+              const viagem = {
+                descricao: this.state.descricao,
+                km_inicial: this.state.quilometragem,
+                veiculo: this.state.veiculoId,
+              };
+              this.props.onIniciarViagem(viagem);
+            }
+          }
+        ]
+      );
     }
   };
 

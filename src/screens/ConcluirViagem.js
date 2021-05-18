@@ -100,18 +100,34 @@ class ConcluirViagem extends React.Component {
 
   concluir = () => {
     if (this.isValid()) {
-      const { id, descricao, km_final, sem_movimentacao } = this.state;
+      Alert.alert(
+        "Confirmar",
+        this.state.km_final + "KM está correto?",
+        [
+          {
+            text: "Não",
+            onPress: () => {},
+            style: "cancel"
+          },
+          { 
+            text: "Sim", 
+            onPress: () => {
+              const { id, descricao, km_final, sem_movimentacao } = this.state;
 
-      const dados = {
-        id: id,
-        viagem: {
-          descricao: sem_movimentacao
-            ? `Sem movimentação: ${descricao}`
-            : descricao,
-          km_final: km_final,
-        },
-      };
-      this.props.onConcluirViagem(dados);
+              const dados = {
+                id: id,
+                viagem: {
+                  descricao: sem_movimentacao
+                    ? `Sem movimentação: ${descricao}`
+                    : descricao,
+                  km_final: km_final,
+                },
+              };
+              this.props.onConcluirViagem(dados);
+            }
+          }
+        ]
+      );
     }
   };
 
