@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import {
   INICIAR_VIAGEM,
   CONCLUIR_VIAGEM,
@@ -12,8 +14,7 @@ import {
 } from './actionTypes';
 
 import { setMensagem } from './mensagem';
-
-import axios from 'axios';
+import { agendar_notificacao, cancelar_notificacao, NTF_INICIAR_VIAGEM, NTF_LEMBRAR_CONCLUIR_VIAGEM, notificar } from '../../Notifications';
 
 export const viagemIniciada = viagem => {
   return {
@@ -57,6 +58,8 @@ export const iniciarViagem = viagem => {
         dispatch(setMensagem('Viagem iniciada. Siga as leis de trânsito'));
         dispatch(viagem_carregada());
         dispatch(submetido());
+        notificar(NTF_INICIAR_VIAGEM);
+        agendar_notificacao(NTF_LEMBRAR_CONCLUIR_VIAGEM, 60 * 60 * 24 * 1000);
       })
       .catch(err => {
         dispatch(setMensagem(err));
@@ -83,6 +86,7 @@ export const concluirViagem = viagem => {
         dispatch(setMensagem('Viagem concluída com sucesso'));
         dispatch(viagem_carregada());
         dispatch(submetido());
+        cancelar_notificacao(NTF_LEMBRAR_CONCLUIR_VIAGEM);
       })
       .catch(err => {
         dispatch(setMensagem(err));
