@@ -130,10 +130,10 @@ function RegisterService({ route, navigation, ...props }) {
   const save = () => {
     if (isValid()) {
       const event = {
-        quilometragem: km,
+        quilometragem: parseFloat(km),
         descricao: description,
         revisao: {
-          quilometragem: nextKm,
+          quilometragem: parseFloat(nextKm),
           descricao: description,
           momento: moment(date).format('YYYY-MM-DD[T]HH:mm:ss').toString(),
         },
