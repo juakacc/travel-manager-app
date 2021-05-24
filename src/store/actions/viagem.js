@@ -14,7 +14,7 @@ import {
 } from './actionTypes';
 
 import { setMensagem } from './mensagem';
-import { agendar_notificacao, cancelar_notificacao, NTF_INICIAR_VIAGEM, NTF_LEMBRAR_CONCLUIR_VIAGEM, notificar } from '../../Notifications';
+import { agendar_notificacao, cancelar_notificacao, NTF_INICIAR_VIAGEM, NTF_LEMBRAR_CONCLUIR_VIAGEM, notificar } from '../../notifications';
 
 export const viagemIniciada = viagem => {
   return {

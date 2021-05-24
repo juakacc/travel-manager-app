@@ -3,6 +3,7 @@ import PushNotification from "react-native-push-notification"
 export const NTF_INICIAR_VIAGEM = '1';
 export const NTF_AVISAR_REVISAO = '2';
 export const NTF_LEMBRAR_CONCLUIR_VIAGEM = '3';
+export const NTF_ESPECIFICO = '4';
 
 const getTitle = code => {
     switch (code) {
@@ -33,6 +34,15 @@ export const notificar = id => {
         title: getTitle(id),
         message: getMessage(id),
       // bigText: "My big text that will be shown when notification is expanded", // (optional) default: "message" prop
+    });
+}
+
+export const notificar_esp = (id, title, message) => {
+    PushNotification.localNotification({
+        id: id,
+        channelId: "notify-local",
+        title: title,
+        message: message
     });
 }
 

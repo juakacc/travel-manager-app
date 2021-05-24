@@ -41,14 +41,6 @@ class Home extends React.Component {
     this._isMounted = true;
     this.animar();
 
-    // const fcmToken = await messaging().getToken();
-    // if (fcmToken) {
-    //  console.log(fcmToken);
-    //  console.log("Your Firebase Token is:", fcmToken);
-    // } else {
-    //  console.log("Failed", "No token received");
-    // }
-
     this.timeout = setInterval(() => {
       if (this._isMounted) {
         let indice_msg = this.state.indice_msg + 1;
