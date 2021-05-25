@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import axios from 'axios';
 
 import { connect } from 'react-redux';
 import { notificar_esp, NTF_ESPECIFICO } from "./notifications";
@@ -46,8 +47,14 @@ function App({ user, message, ...props }) {
     }
 
     if (send) {
-      console.log('enviando token para o servidor:: ' + token);
-      // pega o retorno da api e salva no asyncstorage
+      axios.post('/login/save-token', { token })
+      .then(res => {
+        console.log('Salvando token localmente: ' + res.data.token);
+        AsyncStorage.setItem('tokenFCM', res.data.token);
+      })
+      .catch(err => {
+        console.log('Ocorreu um erro ao salvar um token!');
+      })
     }
   }
 
